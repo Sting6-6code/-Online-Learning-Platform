@@ -204,6 +204,9 @@ class Course{
 		bool hasCapacity(void);
 		bool hasActiveEnrollments(void);
 		
+		// Business methods
+		Enrollment* enroll(Student* student);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------

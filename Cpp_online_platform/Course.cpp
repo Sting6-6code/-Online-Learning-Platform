@@ -26,6 +26,7 @@ using namespace std;
 #include <vector>
 #include <cassert>
 #include <string>
+#include <ctime>
 
 
 
@@ -952,6 +953,54 @@ bool Course::hasActiveEnrollments(void){
     }
   }
   return false;
+}
+
+//------------------------
+// Business Methods
+//------------------------
+
+Enrollment* Course::enroll(Student* student){
+  // Only allow enrollment when course is in EnrollmentOpen or Waitlisted state
+  if(status != Status::EnrollmentOpen && status != Status::Waitlisted){
+    return nullptr;
+  }
+  
+  // Check if student is already enrolled
+  for(auto enrollment : *courseEnrollments){
+    if(enrollment->getStudent() == student){
+      return nullptr; // Already enrolled
+    }
+  }
+  
+  // Count current active enrollments
+  int activeCount = 0;
+  for(auto enrollment : *courseEnrollments){
+    if(enrollment->getStatus() == EnrollmentStatus::Active){
+      activeCount++;
+    }
+  }
+  
+  // Determine enrollment status based on capacity
+  EnrollmentStatus enrollmentStatus;
+  if(activeCount < capacity){
+    enrollmentStatus = EnrollmentStatus::Active;
+  } else {
+    enrollmentStatus = EnrollmentStatus::Waitlisted;
+  }
+  
+  // Generate enrollment ID
+  string studentId = static_cast<User*>(student)->getId();
+  string enrollmentId = "ENR_" + id + "_" + studentId;
+  
+  // Create enrollment with current time
+  tm* enrolledAt = new tm();
+  time_t now = time(nullptr);
+  localtime_r(&now, enrolledAt);
+  
+  // Create and return the enrollment
+  Enrollment* enrollment = new Enrollment(enrollmentId, enrollmentStatus, enrolledAt, student, this);
+  
+  return enrollment;
 }
 ;
 
