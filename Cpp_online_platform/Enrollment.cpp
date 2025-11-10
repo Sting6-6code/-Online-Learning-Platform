@@ -28,6 +28,11 @@ using namespace std;
 Enrollment::Enrollment(const string aId, EnrollmentStatus aStatus, tm* aEnrolledAt, Student* aStudent, Course* aCourse):
 		student(NULL),
 		course(NULL){
+  // OCL: EnrollmentOnlyAfterPublish - Course must not be in Draft status
+  if (aCourse != nullptr && aCourse->getStatus() == Status::Draft) {
+    throw std::invalid_argument("Cannot enroll in a Draft course");
+  }
+  
   this->id= aId;
   this->status= aStatus;
   this->enrolledAt= aEnrolledAt;
