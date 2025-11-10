@@ -22,6 +22,7 @@
 using namespace std;
 #include <ostream>
 #include <vector>
+#include <ctime>
 
 
 
@@ -30,6 +31,21 @@ using namespace std;
 //------------------------
 Assignment::Assignment(const string aId, const string aTitle, tm* aDeadline, const int aMaxScore, Course* aCourse):
 		course(NULL){
+  // Validate title is not empty
+  if (aTitle.empty()) {
+    throw std::invalid_argument("Assignment title cannot be empty");
+  }
+  
+  // Validate maxScore is positive
+  if (aMaxScore <= 0) {
+    throw std::invalid_argument("Assignment maxScore must be greater than 0");
+  }
+  
+  // Validate deadline is not null
+  if (aDeadline == nullptr) {
+    throw std::invalid_argument("Assignment deadline cannot be null");
+  }
+  
   this->id= aId;
   this->title= aTitle;
   this->deadline= aDeadline;
@@ -319,6 +335,20 @@ Assignment::~Assignment(){
   assignmentSubmissions->clear();
   delete assignmentSubmissions;
   delete course;  
+}
+
+//------------------------
+// Convenience Methods
+//------------------------
+
+bool Assignment::isOverdue(void){
+  time_t now = time(nullptr);
+  time_t deadlineTime = mktime(deadline);
+  return (now > deadlineTime);
+}
+
+int Assignment::getSubmissionCount(void){
+  return assignmentSubmissions->size();
 }
 
 void Assignment::deleteAssociatedObjects(void){

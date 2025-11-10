@@ -32,6 +32,16 @@ Submission::Submission(const string aId, tm* aSubmittedAt, const int aVersion, c
 		submissionGrade(NULL),
 		student(NULL),
 		assignment(NULL){
+  // Validate student is not null
+  if (aStudent == nullptr) {
+    throw std::invalid_argument("Submission student cannot be null");
+  }
+  
+  // Validate assignment is not null
+  if (aAssignment == nullptr) {
+    throw std::invalid_argument("Submission assignment cannot be null");
+  }
+  
   this->id= aId;
   this->submittedAt= aSubmittedAt;
   this->version= aVersion;

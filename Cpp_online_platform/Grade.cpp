@@ -12,6 +12,7 @@
 #include <model_Model.h>
 #include <Grade.h>
 #include <Submission.h>
+#include <Assignment.h>
 
 //------------------------
 //LIBRARY INCLUDES
@@ -26,6 +27,11 @@ using namespace std;
 //------------------------
 Grade::Grade(const string aId, const double aScore, const string aFeedback):
 		submission(NULL){
+  // Validate score is non-negative
+  if (aScore < 0) {
+    throw std::invalid_argument("Grade score cannot be negative");
+  }
+  
   this->id= aId;
   this->score= aScore;
   this->feedback= aFeedback;
@@ -99,6 +105,23 @@ bool Grade::setId(const string aNewId){
 
 bool Grade::setScore(double aNewScore){
   bool wasSet= false;
+  
+  // Validate score is non-negative
+  if (aNewScore < 0) {
+    return false;
+  }
+  
+  // Validate score does not exceed maxScore if submission is set
+  if (submission != nullptr) {
+    Assignment* assignment = submission->getAssignment();
+    if (assignment != nullptr) {
+      int maxScore = assignment->getMaxScore();
+      if (aNewScore > maxScore) {
+        return false;
+      }
+    }
+  }
+  
   this->score = aNewScore;
   wasSet= true;
   return wasSet;  
@@ -162,12 +185,34 @@ Grade::~Grade(){
   delete submission;  
 }
 
+//------------------------
+// Convenience Methods
+//------------------------
+
+double Grade::getPercentage(void){
+  if (submission == nullptr) {
+    return 0.0;
+  }
+  
+  Assignment* assignment = submission->getAssignment();
+  if (assignment == nullptr) {
+    return 0.0;
+  }
+  
+  int maxScore = assignment->getMaxScore();
+  if (maxScore == 0) {
+    return 0.0;
+  }
+  
+  return (score / maxScore) * 100.0;
+}
+
 void Grade::deleteAssociatedObjects(void){
   if(this->submission!= NULL){
     Submission* existingSubmission= this->submission;
     this->submission= NULL;
     existingSubmission->deleteAssociatedObjects();
-  }  
+  }
 }
 ;
 

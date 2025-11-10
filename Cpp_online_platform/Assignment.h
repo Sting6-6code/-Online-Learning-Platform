@@ -100,6 +100,11 @@ class Assignment{
 		bool addOrMoveAssignmentSubmissionAt(Submission* aNewAssignmentSubmission, int index);
 		Submission* addAssignmentSubmission(const string aId, tm* aSubmittedAt, const int aVersion, bool aCheckPassed, Grade* aSubmissionGrade, Student* aStudent);
 		Course* getCourse(void);
+		
+		// Convenience methods
+		bool isOverdue(void);
+		int getSubmissionCount(void);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------

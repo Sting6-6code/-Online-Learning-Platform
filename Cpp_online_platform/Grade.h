@@ -74,6 +74,10 @@ class Grade{
 		double getScore(void);
 		string getFeedback(void);
 		Submission* getSubmission(void);
+		
+		// Convenience methods
+		double getPercentage(void);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------
