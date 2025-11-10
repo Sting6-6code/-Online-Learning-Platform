@@ -6,9 +6,9 @@
 
 ## 📊 整体进度
 
-- **当前阶段**: 阶段 3 - 作业系统实现 ✅ (已完成)
-- **已完成任务**: 24 / 73
-- **完成百分比**: 32.9%
+- **当前阶段**: 阶段 4 - 支付与订阅系统 ✅ (已完成)
+- **已完成任务**: 33 / 73
+- **完成百分比**: 45.2%
 - **最后更新**: 2025-11-10
 
 ---
@@ -573,13 +573,123 @@ _无_
 
 ---
 
+## ✅ 阶段 4：支付与订阅系统 (9 个任务)
+
+### Task 4.1-4.2: Payment 类基础功能
+
+**完成时间**: 2025-11-10
+
+**实现内容**:
+
+- 构造函数验证：amount > 0、subscription 不为 null
+- 便捷方法：`isSuccessful()` - 判断支付是否成功
+- 状态转换方法：
+  - `markSucceeded()` - Pending → Succeeded (设置 paidAt)
+  - `markFailed()` - Pending → Failed
+
+**修改文件**:
+
+- `Payment.h`: 添加方法声明
+- `Payment.cpp`:
+  - 添加 `#include <ctime>`
+  - 实现构造函数验证
+  - 实现状态转换方法
+
+**测试结果**: ✅ 验证逻辑、状态转换正常
+
+---
+
+### Task 4.3: Refund 类基础功能
+
+**完成时间**: 2025-11-10
+
+**实现内容**:
+
+- 构造函数验证：amount > 0
+
+**修改文件**:
+
+- `Refund.cpp`: 添加金额验证
+
+**测试结果**: ✅ 负金额正确拒绝
+
+---
+
+### Task 4.4-4.5: Payment 退款方法
+
+**完成时间**: 2025-11-10
+
+**实现内容**:
+
+- `initiateRefund(amount)` - 发起退款：
+  - 守卫：status == Succeeded
+  - 守卫：amount <= payment.amount
+  - 守卫：paymentRefund == nullptr (防止重复退款)
+  - 创建 Refund 对象
+  - 状态转换：Succeeded → Refunding
+- `completeRefund()` - 完成退款：
+  - 守卫：status == Refunding
+  - 设置 refund->processedAt
+  - 状态转换：Refunding → Refunded
+
+**修改文件**:
+
+- `Payment.h`: 添加方法声明
+- `Payment.cpp`: 实现退款业务逻辑
+
+**测试结果**: ✅ 退款流程完整、防重复退款正常
+
+---
+
+### Task 4.6: Subscription 构造函数验证
+
+**完成时间**: 2025-11-10
+
+**实现内容**:
+
+- 验证 startAt 不为 null
+- 自动计算 nextBillingAt (如果未提供)：
+  - Trial: startAt + 7 天
+  - Monthly: startAt + 30 天
+  - Annual: startAt + 365 天
+- 初始状态根据 plan 设置：
+  - Trial → Trial 状态
+  - Monthly/Annual → Active 状态
+
+**修改文件**:
+
+- `Subscription.cpp`:
+  - 添加验证
+  - 实现自动计算逻辑
+  - 根据 plan 设置初始状态
+
+**测试结果**: ✅ 验证、自动计算、状态初始化正常
+
+---
+
+### Task 4.7-4.9: Subscription 状态机方法
+
+**完成时间**: 阶段 0 已实现，阶段 4 验证通过
+
+**实现内容**:
+这些状态机方法在阶段 0 已实现：
+
+- `chargeSuccess()` - Trial/Active/PastDue → Active
+- `chargeFail()` - Active → PastDue
+- `graceExpire()` - PastDue → Suspended
+- `cancel()` - 任意状态 → Cancelled
+
+**测试结果**: ✅ 状态机在阶段 0 已验证
+
+---
+
 ## 📈 里程碑
 
 - [x] **里程碑 1**: 阶段 0 完成 - 项目可编译运行 ✅
 - [x] **里程碑 1.5**: 阶段 1 完成 - 用户模块基础实现 ✅
 - [x] **里程碑 2**: 阶段 2 完成 - 课程管理核心功能可用 ✅
 - [x] **里程碑 3**: 阶段 3 完成 - 作业系统完整可用 ✅
-- [ ] **里程碑 4**: 阶段 4 完成 - 支付系统完整可用
+- [x] **里程碑 4**: 阶段 4 完成 - 支付系统完整可用 ✅
 - [ ] **里程碑 5**: 阶段 5 完成 - 所有业务约束得到验证
 - [ ] **里程碑 6**: 阶段 6 完成 - MVP 系统集成完成
 - [ ] **里程碑 7**: 阶段 8 完成 - 可交付的产品

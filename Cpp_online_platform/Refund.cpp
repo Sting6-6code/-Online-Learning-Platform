@@ -26,6 +26,11 @@ using namespace std;
 //------------------------
 Refund::Refund(const string aId, const double aAmount, tm* aRequestedAt, tm* aProcessedAt):
 		payment(NULL){
+  // Validate amount is positive
+  if (aAmount <= 0) {
+    throw std::invalid_argument("Refund amount must be greater than 0");
+  }
+  
   this->id= aId;
   this->amount= aAmount;
   this->requestedAt= aRequestedAt;

@@ -85,6 +85,14 @@ class Payment{
 		tm* getPaidAt(void);
 		Refund* getPaymentRefund(void);
 		Subscription* getSubscription(void);
+		
+		// Convenience and business methods
+		bool isSuccessful(void);
+		bool markSucceeded(void);
+		bool markFailed(void);
+		bool initiateRefund(double amount);
+		bool completeRefund(void);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------

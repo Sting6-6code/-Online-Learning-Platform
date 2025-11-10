@@ -28,12 +28,46 @@ using namespace std;
 //CONSTRUCTOR IMPLEMENTATION
 //------------------------
 Subscription::Subscription(const string aId, PlanType aPlan, tm* aStartAt, tm* aNextBillingAt){
+  // Validate startAt is not null
+  if (aStartAt == nullptr) {
+    throw std::invalid_argument("Subscription startAt cannot be null");
+  }
+  
   this->id= aId;
   this->plan= aPlan;
   this->startAt= aStartAt;
-  this->nextBillingAt= aNextBillingAt;
+  
+  // Auto-calculate nextBillingAt based on plan if not provided
+  if (aNextBillingAt == nullptr) {
+    tm* calculatedNext = new tm(*aStartAt);
+    time_t startTime = mktime(calculatedNext);
+    
+    switch(aPlan) {
+      case PlanType::Trial:
+        startTime += 7 * 24 * 60 * 60; // 7 days
+        break;
+      case PlanType::Monthly:
+        startTime += 30 * 24 * 60 * 60; // 30 days
+        break;
+      case PlanType::Annual:
+        startTime += 365 * 24 * 60 * 60; // 365 days
+        break;
+    }
+    
+    localtime_r(&startTime, calculatedNext);
+    this->nextBillingAt = calculatedNext;
+  } else {
+    this->nextBillingAt = aNextBillingAt;
+  }
+  
   this->subscriptionPayments= new vector<Payment*>();
-  setStatus(Subscription_ENUM_Status::Trial);  
+  
+  // Set initial status based on plan
+  if (aPlan == PlanType::Trial) {
+    setStatus(Subscription_ENUM_Status::Trial);
+  } else {
+    setStatus(Subscription_ENUM_Status::Active);
+  }
 }
 
 Subscription::Subscription(Subscription& other){

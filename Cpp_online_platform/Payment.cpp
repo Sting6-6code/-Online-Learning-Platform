@@ -19,6 +19,7 @@
 //------------------------
 using namespace std;
 #include <ostream>
+#include <ctime>
 
 
 
@@ -28,6 +29,16 @@ using namespace std;
 Payment::Payment(const string aId, const double aAmount, PaymentStatus aStatus, tm* aPaidAt, Subscription* aSubscription):
 		paymentRefund(NULL),
 		subscription(NULL){
+  // Validate amount is positive
+  if (aAmount <= 0) {
+    throw std::invalid_argument("Payment amount must be greater than 0");
+  }
+  
+  // Validate subscription is not null
+  if (aSubscription == nullptr) {
+    throw std::invalid_argument("Payment subscription cannot be null");
+  }
+  
   this->id= aId;
   this->amount= aAmount;
   this->status= aStatus;
@@ -217,6 +228,88 @@ Payment::~Payment(){
   delete paidAt;
   delete paymentRefund;
   delete subscription;  
+}
+
+//------------------------
+// Convenience and Business Methods
+//------------------------
+
+bool Payment::isSuccessful(void){
+  return status == PaymentStatus::Succeeded;
+}
+
+bool Payment::markSucceeded(void){
+  if (status != PaymentStatus::Pending) {
+    return false;
+  }
+  
+  // Set paidAt to current time
+  paidAt = new tm();
+  time_t now = time(nullptr);
+  localtime_r(&now, paidAt);
+  
+  status = PaymentStatus::Succeeded;
+  return true;
+}
+
+bool Payment::markFailed(void){
+  if (status != PaymentStatus::Pending) {
+    return false;
+  }
+  
+  status = PaymentStatus::Failed;
+  return true;
+}
+
+bool Payment::initiateRefund(double amount){
+  // Guard: must be in Succeeded state
+  if (status != PaymentStatus::Succeeded) {
+    return false;
+  }
+  
+  // Guard: amount must not exceed payment amount
+  if (amount > this->amount) {
+    return false;
+  }
+  
+  // Guard: cannot refund twice
+  if (paymentRefund != nullptr) {
+    return false;
+  }
+  
+  // Create Refund object
+  string refundId = "REF_" + id;
+  tm* requestedAt = new tm();
+  time_t now = time(nullptr);
+  localtime_r(&now, requestedAt);
+  
+  Refund* refund = new Refund(refundId, amount, requestedAt, nullptr);
+  refund->setPayment(this);
+  paymentRefund = refund;
+  
+  status = PaymentStatus::Refunding;
+  return true;
+}
+
+bool Payment::completeRefund(void){
+  // Guard: must be in Refunding state
+  if (status != PaymentStatus::Refunding) {
+    return false;
+  }
+  
+  // Guard: must have a refund object
+  if (paymentRefund == nullptr) {
+    return false;
+  }
+  
+  // Set processedAt
+  tm* processedAt = new tm();
+  time_t now = time(nullptr);
+  localtime_r(&now, processedAt);
+  paymentRefund->setProcessedAt(processedAt);
+  
+  status = PaymentStatus::Refunded;
+  return true;
 }
 
 void Payment::deleteAssociatedObjects(void){
