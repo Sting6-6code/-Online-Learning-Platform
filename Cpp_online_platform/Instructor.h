@@ -76,6 +76,11 @@ class Instructor : public User{
 		bool addTaughtCourseAt(Course* aNewTaughtCourse, int index);
 		bool addOrMoveTaughtCourseAt(Course* aNewTaughtCourse, int index);
 		Course* addTaughtCourse(const string aId, const string aTitle, const int aCapacity);
+		
+		// Convenience methods
+		int getActiveCourseCount(void);
+		vector<Course*>* getCoursesInProgress(void);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------

@@ -357,5 +357,19 @@ void Student::deleteAssociatedObjects(void){
     aSubmission->deleteAssociatedObjects();
   }  
 }
+
+//------------------------
+// Convenience Methods
+//------------------------
+
+int Student::getActiveEnrollmentCount(void){
+  int count = 0;
+  for(auto enrollment : *studentEnrollments){
+    if(enrollment->getStatus() == EnrollmentStatus::Active){
+      count++;
+    }
+  }
+  return count;
+}
 ;
 

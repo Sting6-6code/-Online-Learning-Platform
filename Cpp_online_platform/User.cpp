@@ -24,6 +24,21 @@ using namespace std;
 //CONSTRUCTOR IMPLEMENTATION
 //------------------------
 User::User(const string aId, const string aName, const string aEmail){
+  // Validate id is not empty
+  if (aId.empty()) {
+    throw std::invalid_argument("User id cannot be empty");
+  }
+  
+  // Validate name is not empty
+  if (aName.empty()) {
+    throw std::invalid_argument("User name cannot be empty");
+  }
+  
+  // Validate email format (must contain @)
+  if (aEmail.find('@') == string::npos) {
+    throw std::invalid_argument("User email must contain @");
+  }
+  
   this->id= aId;
   this->name= aName;
   this->email= aEmail;  

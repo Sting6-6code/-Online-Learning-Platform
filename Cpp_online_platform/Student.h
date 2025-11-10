@@ -93,6 +93,10 @@ class Student : public User{
 		bool addStudentSubmissionAt(Submission* aNewStudentSubmission, int index);
 		bool addOrMoveStudentSubmissionAt(Submission* aNewStudentSubmission, int index);
 		Submission* addStudentSubmission(const string aId, tm* aSubmittedAt, const int aVersion, bool aCheckPassed, Grade* aSubmissionGrade, Assignment* aAssignment);
+		
+		// Convenience methods
+		int getActiveEnrollmentCount(void);
+		
 		virtual size_t hashCode(void);
 		
 		//------------------------

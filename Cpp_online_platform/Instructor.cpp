@@ -217,5 +217,30 @@ void Instructor::deleteAssociatedObjects(void){
     aCourse->deleteAssociatedObjects();
   }  
 }
+
+//------------------------
+// Convenience Methods
+//------------------------
+
+int Instructor::getActiveCourseCount(void){
+  int count = 0;
+  for(auto course : *taughtCourses){
+    Status status = course->getStatus();
+    if(status != Status::Cancelled && status != Status::Completed){
+      count++;
+    }
+  }
+  return count;
+}
+
+vector<Course*>* Instructor::getCoursesInProgress(void){
+  vector<Course*>* result = new vector<Course*>();
+  for(auto course : *taughtCourses){
+    if(course->getStatus() == Status::InProgress){
+      result->push_back(course);
+    }
+  }
+  return result;
+}
 ;
 
