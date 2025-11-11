@@ -41,6 +41,38 @@ public class Refund
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Task 4.9: 修改构造函数，添加验证
+   */
+  public Refund(String aId, double aAmount, Date aRequestedAt, Date aProcessedAt, com.olp.model.payment.Payment aPayment)
+  {
+    // Task 4.9: 验证 amount > 0
+    if (aAmount <= 0) {
+      throw new IllegalArgumentException("Refund amount must be greater than 0");
+    }
+    
+    // Task 4.9: 验证 payment 不为 null
+    if (aPayment == null) {
+      throw new IllegalArgumentException("Refund payment cannot be null");
+    }
+    
+    // Task 4.9: 验证 payment.getStatus() == PaymentStatus.Succeeded（OCL 约束：RefundOnlyForSucceededPayment）
+    if (aPayment.getStatus() != Payment.PaymentStatus.Succeeded) {
+      throw new IllegalArgumentException("Refund can only be created for Succeeded payment, but payment status is: " + aPayment.getStatus());
+    }
+    
+    id = aId;
+    amount = aAmount;
+    requestedAt = aRequestedAt;
+    processedAt = aProcessedAt;
+    boolean didSetPayment = setPayment(aPayment);
+    if (!didSetPayment) {
+      throw new RuntimeException("Unable to create refund due to payment. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+  }
+  
+  // 保留原构造函数以兼容现有代码（不推荐使用，但为了兼容性保留）
+  @Deprecated
   public Refund(String aId, double aAmount, Date aRequestedAt, Date aProcessedAt)
   {
     id = aId;

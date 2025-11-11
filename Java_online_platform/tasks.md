@@ -429,11 +429,11 @@
 
 **目标**: 实现开放选课功能
 
-- [ ] 在 `Course.java` 中找到 `openEnrollment()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Published`
-- [ ] 添加守卫条件：`capacity > 0`
-- [ ] 状态转换：`setStatus(Status.EnrollmentOpen)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `Course.java` 中找到 `openEnrollment()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Published`
+- [x] 添加守卫条件：`capacity > 0`
+- [x] 状态转换：`setStatus(Status.EnrollmentOpen)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -452,15 +452,15 @@
 
 **目标**: 实现学生选课核心逻辑
 
-- [ ] 在 `Course.java` 中实现 `public Enrollment enroll(Student student)` 方法
-- [ ] 检查课程状态（必须是 `EnrollmentOpen` 或 `Waitlisted`）
-- [ ] 检查学生是否已报名（遍历 `courseEnrollments`，避免重复）
-- [ ] 统计当前 `Active` 报名数（遍历 `courseEnrollments`，统计 `status == EnrollmentStatus.Active`）
-- [ ] 如果未满（activeCount < capacity），创建 `Active` 状态的 Enrollment
-- [ ] 如果已满，创建 `Waitlisted` 状态的 Enrollment，并将课程状态改为 `Waitlisted`（如果当前是 `EnrollmentOpen`）
-- [ ] 使用 `Utils.generateId()` 生成 enrollment ID
-- [ ] 使用 `Utils.getCurrentTime()` 设置 `enrolledAt`
-- [ ] 返回创建的 Enrollment 对象
+- [x] 在 `Course.java` 中实现 `public Enrollment enroll(Student student)` 方法
+- [x] 检查课程状态（必须是 `EnrollmentOpen` 或 `Waitlisted`）
+- [x] 检查学生是否已报名（遍历 `courseEnrollments`，避免重复）
+- [x] 统计当前 `Active` 报名数（遍历 `courseEnrollments`，统计 `status == EnrollmentStatus.Active`）
+- [x] 如果未满（activeCount < capacity），创建 `Active` 状态的 Enrollment
+- [x] 如果已满，创建 `Waitlisted` 状态的 Enrollment，并将课程状态改为 `Waitlisted`（如果当前是 `EnrollmentOpen`）
+- [x] 使用 `Utils.generateId()` 生成 enrollment ID
+- [x] 使用 `Utils.getCurrentTime()` 设置 `enrolledAt`
+- [x] 返回创建的 Enrollment 对象
 
 **测试标准**:
 
@@ -480,13 +480,13 @@
 
 **目标**: 实现课程开课功能
 
-- [ ] 在 `Course.java` 中找到 `startCourse()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `EnrollmentOpen` 或 `Waitlisted`
-- [ ] 添加守卫方法：`private boolean hasActiveEnrollments()`
+- [x] 在 `Course.java` 中找到 `startCourse()` 方法
+- [x] 添加守卫条件：当前状态必须是 `EnrollmentOpen` 或 `Waitlisted`
+- [x] 添加守卫方法：`private boolean hasActiveEnrollments()`
   - 检查至少有一个 `Active` 状态的 Enrollment
-- [ ] 在 `startCourse()` 中调用守卫方法
-- [ ] 状态转换：`setStatus(Status.InProgress)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `startCourse()` 中调用守卫方法
+- [x] 状态转换：`setStatus(Status.InProgress)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -506,11 +506,11 @@
 
 **目标**: 实现课程结束和取消功能
 
-- [ ] 实现 `complete()` 方法：
+- [x] 实现 `complete()` 方法：
   - 守卫条件：当前状态必须是 `InProgress`
   - 状态转换：`setStatus(Status.Completed)`
   - 返回操作结果
-- [ ] 实现 `cancel(String reason)` 方法：
+- [x] 实现 `cancel(String reason)` 方法：
   - 可以从任意状态取消（除了 `Completed`）
   - 状态转换：`setStatus(Status.Cancelled)`
   - 记录取消原因（可以添加新属性 `cancelReason: String`，需要修改 Umple 模型或直接添加字段）
@@ -535,14 +535,14 @@
 
 **目标**: 实现作业实体
 
-- [ ] 打开 `Assignment.java`
-- [ ] 验证 `title` 不为 null 或空字符串
-- [ ] 验证 `maxScore > 0`
-- [ ] 验证 `deadline` 不为 null
-- [ ] 验证失败时抛出 `IllegalArgumentException`
-- [ ] 添加便捷方法：`public boolean isOverdue()`
+- [x] 打开 `Assignment.java`
+- [x] 验证 `title` 不为 null 或空字符串
+- [x] 验证 `maxScore > 0`
+- [x] 验证 `deadline` 不为 null
+- [x] 验证失败时抛出 `IllegalArgumentException`
+- [x] 添加便捷方法：`public boolean isOverdue()`
   - 比较当前时间与 `deadline`（使用 `Utils.compareDates()`）
-- [ ] 添加便捷方法：`public int getSubmissionCount()`
+- [x] 添加便捷方法：`public int getSubmissionCount()`
   - 返回 `assignmentSubmissions.size()`
 
 **测试标准**:
@@ -563,12 +563,12 @@
 
 **目标**: 实现成绩实体
 
-- [ ] 打开 `Grade.java`
-- [ ] 验证 `score >= 0`
-- [ ] 验证 `score <= submission.getAssignment().getMaxScore()`（需要访问关联）
-- [ ] 验证 `submission` 不为 null
-- [ ] 验证失败时抛出 `IllegalArgumentException`
-- [ ] 添加便捷方法：`public double getPercentage()`
+- [x] 打开 `Grade.java`
+- [x] 验证 `score >= 0`
+- [x] 验证 `score <= submission.getAssignment().getMaxScore()`（需要访问关联）
+- [x] 验证 `submission` 不为 null
+- [x] 验证失败时抛出 `IllegalArgumentException`
+- [x] 添加便捷方法：`public double getPercentage()`
   - 计算 `(score / assignment.maxScore) * 100.0`
   - 处理除零情况（返回 0.0）
 
@@ -589,13 +589,13 @@
 
 **目标**: 为 Submission 类添加基本验证
 
-- [ ] 打开 `Submission.java`
-- [ ] 验证 `assignment` 和 `student` 不为 null
-- [ ] 验证失败时抛出 `IllegalArgumentException`
-- [ ] 确认初始状态为 `Created`（Umple 已生成）
-- [ ] 确认初始 `version` 为构造函数参数值
-- [ ] 确认初始 `checkPassed` 为构造函数参数值
-- [ ] `submittedAt` 初始可为 null
+- [x] 打开 `Submission.java`
+- [x] 验证 `assignment` 和 `student` 不为 null
+- [x] 验证失败时抛出 `IllegalArgumentException`
+- [x] 确认初始状态为 `Created`（Umple 已生成）
+- [x] 确认初始 `version` 为构造函数参数值
+- [x] 确认初始 `checkPassed` 为构造函数参数值
+- [x] `submittedAt` 初始可为 null
 
 **测试标准**:
 
@@ -614,14 +614,14 @@
 
 **目标**: 实现作业提交功能
 
-- [ ] 在 `Submission.java` 中找到 `submit()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Created`
-- [ ] 添加守卫条件：`Utils.getCurrentTime()` <= `assignment.getDeadline()`（使用 `Utils.compareDates()`）
-- [ ] 设置 `submittedAt := Utils.getCurrentTime()`
-- [ ] 计算版本号：统计该学生对该作业的已有提交数 + 1
+- [x] 在 `Submission.java` 中找到 `submit()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Created`
+- [x] 添加守卫条件：`Utils.getCurrentTime()` <= `assignment.getDeadline()`（使用 `Utils.compareDates()`）
+- [x] 设置 `submittedAt := Utils.getCurrentTime()`
+- [x] 计算版本号：统计该学生对该作业的已有提交数 + 1
   - 遍历 `assignment.getAssignmentSubmissions()`，筛选 `student == this.student`，统计数量
-- [ ] 状态转换：`setStatus(Status.Submitted)`
-- [ ] 返回操作结果（boolean）
+- [x] 状态转换：`setStatus(Status.Submitted)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -641,11 +641,11 @@
 
 **目标**: 实现自动检查触发功能
 
-- [ ] 在 `Submission.java` 中找到 `startAutoChecks()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Submitted`
-- [ ] 状态转换：`setStatus(Status.UnderCheck)`
-- [ ] 返回操作结果（boolean）
-- [ ] 添加注释：实际的检查逻辑（查重、编译）由外部系统触发
+- [x] 在 `Submission.java` 中找到 `startAutoChecks()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Submitted`
+- [x] 状态转换：`setStatus(Status.UnderCheck)`
+- [x] 返回操作结果（boolean）
+- [x] 添加注释：实际的检查逻辑（查重、编译）由外部系统触发
 
 **测试标准**:
 
@@ -663,12 +663,12 @@
 
 **目标**: 实现检查结果处理
 
-- [ ] 实现 `checksPass()` 方法（如果 Umple 未生成，需要添加）：
+- [x] 实现 `checksPass()` 方法（如果 Umple 未生成，需要添加）：
   - 守卫条件：当前状态必须是 `UnderCheck`
   - 设置 `checkPassed := true`
   - 状态转换：`setStatus(Status.Submitted)`（回到已提交，标记为可评分）
   - 返回操作结果
-- [ ] 实现 `checksFail()` 方法：
+- [x] 实现 `checksFail()` 方法：
   - 守卫条件：当前状态必须是 `UnderCheck`
   - 设置 `checkPassed := false`
   - 状态转换：`setStatus(Status.Returned)`
@@ -692,11 +692,11 @@
 
 **目标**: 实现开始评分功能
 
-- [ ] 在 `Submission.java` 中找到 `startGrading()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Submitted`
-- [ ] 添加守卫条件：`checkPassed == true`
-- [ ] 状态转换：`setStatus(Status.Grading)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `Submission.java` 中找到 `startGrading()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Submitted`
+- [x] 添加守卫条件：`checkPassed == true`
+- [x] 状态转换：`setStatus(Status.Grading)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -715,13 +715,13 @@
 
 **目标**: 实现评分功能
 
-- [ ] 在 `Submission.java` 中找到 `grade(double score, String feedback)` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Grading`
-- [ ] 添加守卫条件：`0 <= score <= assignment.getMaxScore()`
-- [ ] 如果 `submissionGrade` 为 null，创建新的 Grade 对象
-- [ ] 如果 `submissionGrade` 已存在，更新其 `score` 和 `feedback`
-- [ ] 状态转换：`setStatus(Status.Graded)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `Submission.java` 中找到 `grade(double score, String feedback)` 方法
+- [x] 添加守卫条件：当前状态必须是 `Grading`
+- [x] 添加守卫条件：`0 <= score <= assignment.getMaxScore()`
+- [x] 如果 `submissionGrade` 为 null，创建新的 Grade 对象
+- [x] 如果 `submissionGrade` 已存在，更新其 `score` 和 `feedback`
+- [x] 状态转换：`setStatus(Status.Graded)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -741,12 +741,12 @@
 
 **目标**: 实现要求重交功能
 
-- [ ] 在 `Submission.java` 中找到 `requestResubmission()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Graded` 或 `Returned`
-- [ ] 添加守卫条件：`Utils.getCurrentTime() <= assignment.getDeadline()`（可选，根据业务需求）
-- [ ] 状态转换：`setStatus(Status.ResubmissionRequested)`
-- [ ] 返回操作结果（boolean）
-- [ ] 添加注释：学生可以创建新的 Submission（version 递增）
+- [x] 在 `Submission.java` 中找到 `requestResubmission()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Graded` 或 `Returned`
+- [x] 添加守卫条件：`Utils.getCurrentTime() <= assignment.getDeadline()`（可选，根据业务需求）
+- [x] 状态转换：`setStatus(Status.ResubmissionRequested)`
+- [x] 返回操作结果（boolean）
+- [x] 添加注释：学生可以创建新的 Submission（version 递增）
 
 **测试标准**:
 
@@ -765,15 +765,15 @@
 
 **目标**: 创建完整的提交工作流集成测试
 
-- [ ] 创建 JUnit 测试类 `SubmissionWorkflowTest.java`
-- [ ] 测试完整流程：
+- [x] 创建 JUnit 测试类 `SubmissionWorkflowTest.java`
+- [x] 测试完整流程：
   1. 创建 Submission（状态：Created）
   2. 提交（状态：Submitted）
   3. 开始自动检查（状态：UnderCheck）
   4. 检查通过（状态：Submitted，checkPassed = true）
   5. 开始评分（状态：Grading）
   6. 评分（状态：Graded）
-- [ ] 测试失败流程：
+- [x] 测试失败流程：
   1. 创建 Submission
   2. 提交
   3. 开始自动检查
@@ -798,12 +798,12 @@
 
 **目标**: 为 Subscription 类添加基本验证
 
-- [ ] 打开 `Subscription.java`
-- [ ] 验证 `plan` 不为 null
-- [ ] 验证 `startAt` 不为 null
-- [ ] `nextBillingAt` 可以为 null（初始创建时）
-- [ ] 验证失败时抛出 `IllegalArgumentException`
-- [ ] 确认初始状态为 `Trial`（Umple 已生成）
+- [x] 打开 `Subscription.java`
+- [x] 验证 `plan` 不为 null
+- [x] 验证 `startAt` 不为 null
+- [x] `nextBillingAt` 可以为 null（初始创建时）
+- [x] 验证失败时抛出 `IllegalArgumentException`
+- [x] 确认初始状态为 `Trial`（Umple 已生成）
 
 **测试标准**:
 
@@ -822,16 +822,16 @@
 
 **目标**: 实现计费成功功能
 
-- [ ] 在 `Subscription.java` 中找到 `chargeSuccess()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Trial`、`Active` 或 `PastDue`
-- [ ] 添加守卫条件：最近一笔 Payment 状态为 `Succeeded`
+- [x] 在 `Subscription.java` 中找到 `chargeSuccess()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Trial`、`Active` 或 `PastDue`
+- [x] 添加守卫条件：最近一笔 Payment 状态为 `Succeeded`
   - 遍历 `subscriptionPayments`，找到最新的 Payment，检查其状态
-- [ ] 状态转换：`setStatus(Status.Active)`
-- [ ] 更新 `nextBillingAt`：
+- [x] 状态转换：`setStatus(Status.Active)`
+- [x] 更新 `nextBillingAt`：
   - 如果 `plan == PlanType.Monthly`，使用 `Utils.addMonths(nextBillingAt, 1)`
   - 如果 `plan == PlanType.Annual`，使用 `Utils.addMonths(nextBillingAt, 12)`
   - 如果 `plan == PlanType.Trial`，不更新（或按业务需求）
-- [ ] 返回操作结果（boolean）
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -850,11 +850,11 @@
 
 **目标**: 实现计费失败功能
 
-- [ ] 在 `Subscription.java` 中找到 `chargeFail()` 方法
-- [ ] 添加守卫条件：当前状态必须是 `Active`
-- [ ] 添加守卫条件：最近一笔 Payment 状态为 `Failed`
-- [ ] 状态转换：`setStatus(Status.PastDue)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `Subscription.java` 中找到 `chargeFail()` 方法
+- [x] 添加守卫条件：当前状态必须是 `Active`
+- [x] 添加守卫条件：最近一笔 Payment 状态为 `Failed`
+- [x] 状态转换：`setStatus(Status.PastDue)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -872,10 +872,10 @@
 
 **目标**: 实现取消订阅功能
 
-- [ ] 在 `Subscription.java` 中找到 `cancel()` 方法
-- [ ] 可以从任意状态取消（无守卫条件）
-- [ ] 状态转换：`setStatus(Status.Cancelled)`
-- [ ] 返回操作结果（boolean）
+- [x] 在 `Subscription.java` 中找到 `cancel()` 方法
+- [x] 可以从任意状态取消（无守卫条件）
+- [x] 状态转换：`setStatus(Status.Cancelled)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -893,12 +893,12 @@
 
 **目标**: 实现宽限期到期功能
 
-- [ ] 在 `Subscription.java` 中找到 `graceExpire()` 方法（如果 Umple 未生成，需要添加）
-- [ ] 添加守卫条件：当前状态必须是 `PastDue`
-- [ ] 添加守卫条件：当前日期 > 宽限到期（可以硬编码宽限期，如 7 天）
+- [x] 在 `Subscription.java` 中找到 `graceExpire()` 方法（如果 Umple 未生成，需要添加）
+- [x] 添加守卫条件：当前状态必须是 `PastDue`
+- [x] 添加守卫条件：当前日期 > 宽限到期（可以硬编码宽限期，如 7 天）
   - 使用 `Utils.addDays(nextBillingAt, 7)` 计算宽限到期日
-- [ ] 状态转换：`setStatus(Status.Suspended)`
-- [ ] 返回操作结果（boolean）
+- [x] 状态转换：`setStatus(Status.Suspended)`
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -916,11 +916,11 @@
 
 **目标**: 为 Payment 类添加基本验证
 
-- [ ] 打开 `Payment.java`
-- [ ] 验证 `amount > 0`
-- [ ] 验证 `subscription` 不为 null
-- [ ] 验证失败时抛出 `IllegalArgumentException`
-- [ ] 确认初始状态为构造函数参数值（通常是 `Pending`）
+- [x] 打开 `Payment.java`
+- [x] 验证 `amount > 0`
+- [x] 验证 `subscription` 不为 null
+- [x] 验证失败时抛出 `IllegalArgumentException`
+- [x] 确认初始状态为构造函数参数值（通常是 `Pending`）
 
 **测试标准**:
 
@@ -939,14 +939,14 @@
 
 **目标**: 实现支付状态管理
 
-- [ ] 在 `Payment.java` 中添加方法：`public boolean markSucceeded()`
+- [x] 在 `Payment.java` 中添加方法：`public boolean markSucceeded()`
   - 守卫条件：当前状态必须是 `Pending`
   - 状态转换：`setStatus(PaymentStatus.Succeeded)`
   - 设置 `paidAt := Utils.getCurrentTime()`
-- [ ] 添加方法：`public boolean markFailed()`
+- [x] 添加方法：`public boolean markFailed()`
   - 守卫条件：当前状态必须是 `Pending`
   - 状态转换：`setStatus(PaymentStatus.Failed)`
-- [ ] 返回操作结果（boolean）
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -965,16 +965,16 @@
 
 **目标**: 实现发起退款功能
 
-- [ ] 在 `Payment.java` 中添加方法：`public boolean initiateRefund(double amount)`
-- [ ] 添加守卫条件：当前状态必须是 `Succeeded`
-- [ ] 添加守卫条件：`0 < amount <= this.amount`
-- [ ] 状态转换：`setStatus(PaymentStatus.Refunding)`
-- [ ] 创建 Refund 对象：
+- [x] 在 `Payment.java` 中添加方法：`public boolean initiateRefund(double amount)`
+- [x] 添加守卫条件：当前状态必须是 `Succeeded`
+- [x] 添加守卫条件：`0 < amount <= this.amount`
+- [x] 状态转换：`setStatus(PaymentStatus.Refunding)`
+- [x] 创建 Refund 对象：
   - 使用 `Utils.generateId("REF")` 生成 ID
   - 设置 `requestedAt := Utils.getCurrentTime()`
   - 设置 `processedAt := null`
   - 关联到当前 Payment
-- [ ] 返回操作结果（boolean）
+- [x] 返回操作结果（boolean）
 
 **测试标准**:
 
@@ -994,11 +994,11 @@
 
 **目标**: 为 Refund 类添加基本验证
 
-- [ ] 打开 `Refund.java`
-- [ ] 验证 `amount > 0`
-- [ ] 验证 `payment` 不为 null
-- [ ] 验证 `payment.getStatus() == PaymentStatus.Succeeded`（OCL 约束：RefundOnlyForSucceededPayment）
-- [ ] 验证失败时抛出 `IllegalArgumentException`
+- [x] 打开 `Refund.java`
+- [x] 验证 `amount > 0`
+- [x] 验证 `payment` 不为 null
+- [x] 验证 `payment.getStatus() == PaymentStatus.Succeeded`（OCL 约束：RefundOnlyForSucceededPayment）
+- [x] 验证失败时抛出 `IllegalArgumentException`
 
 **测试标准**:
 
@@ -1017,8 +1017,8 @@
 
 **目标**: 创建完整的订阅计费工作流集成测试
 
-- [ ] 创建 JUnit 测试类 `SubscriptionBillingWorkflowTest.java`
-- [ ] 测试完整流程：
+- [x] 创建 JUnit 测试类 `SubscriptionBillingWorkflowTest.java`
+- [x] 测试完整流程：
   1. 创建 Subscription（状态：Trial）
   2. 创建 Payment（状态：Pending）
   3. Payment 成功（状态：Succeeded）
@@ -1027,7 +1027,7 @@
   6. Payment 失败（状态：Failed）
   7. Subscription 计费失败（状态：PastDue）
   8. 宽限期到期（状态：Suspended）
-- [ ] 测试退款流程：
+- [x] 测试退款流程：
   1. 创建成功的 Payment
   2. 发起退款（状态：Refunding，创建 Refund）
   3. 完成退款（Refund.processedAt 设置）

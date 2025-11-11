@@ -9,6 +9,7 @@ import javax.persistence.*;
 import com.olp.model.user.Instructor;
 import com.olp.model.user.Student;
 import com.olp.model.assignment.Assignment;
+import com.olp.util.Utils;
 
 /**
  * ===== ????????? =====
@@ -47,6 +48,10 @@ public class Course
   @Enumerated(EnumType.STRING)
   @Column(name = "status", length = 20, nullable = false)
   private Status status;
+  
+  // Task 2.10: 添加取消原因字段
+  @Column(name = "cancel_reason", length = 500)
+  private String cancelReason;
 
   //Course Associations
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -200,34 +205,35 @@ public class Course
     return wasEventProcessed;
   }
 
+  /**
+   * Task 2.10: 修改 cancel() 方法，接受 reason 参数
+   * 可以从任意状态取消（除了 Completed）
+   */
+  public boolean cancel(String reason)
+  {
+    // 不能从 Completed 状态取消
+    if (status == Status.Completed) {
+      return false;
+    }
+    
+    // 记录取消原因
+    this.cancelReason = reason;
+    
+    // 状态转换
+    setStatus(Status.Cancelled);
+    return true;
+  }
+  
+  // 保留无参方法以兼容现有代码（调用新方法）
   public boolean cancel()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Published:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      case EnrollmentOpen:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      case Waitlisted:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      case InProgress:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
-    }
-
-    return wasEventProcessed;
+    return cancel("No reason provided");
+  }
+  
+  // Task 2.10: 添加 getter 方法
+  public String getCancelReason()
+  {
+    return cancelReason;
   }
 
   public boolean startCourse()
@@ -822,6 +828,61 @@ public class Course
       }
     }
     return false;
+  }
+
+  //------------------------
+  // Business Methods (Task 2.8)
+  //------------------------
+  
+  /**
+   * 学生选课核心逻辑
+   * Task 2.8: 实现 enroll() 方法
+   * @param student 要选课的学生
+   * @return 创建的 Enrollment 对象，如果选课失败返回 null
+   */
+  public Enrollment enroll(Student student) {
+    // 检查课程状态（必须是 EnrollmentOpen 或 Waitlisted）
+    if (status != Status.EnrollmentOpen && status != Status.Waitlisted) {
+      return null;
+    }
+    
+    // 检查学生是否已报名（避免重复）
+    for (Enrollment enrollment : courseEnrollments) {
+      if (enrollment.getStudent().equals(student)) {
+        // 学生已经报名，返回 null 表示失败
+        return null;
+      }
+    }
+    
+    // 统计当前 Active 报名数
+    int activeCount = 0;
+    for (Enrollment enrollment : courseEnrollments) {
+      if (enrollment.getStatus() == Enrollment.EnrollmentStatus.Active) {
+        activeCount++;
+      }
+    }
+    
+    // 创建 Enrollment
+    Enrollment.EnrollmentStatus enrollmentStatus;
+    if (activeCount < capacity) {
+      // 未满员，创建 Active 状态
+      enrollmentStatus = Enrollment.EnrollmentStatus.Active;
+    } else {
+      // 已满员，创建 Waitlisted 状态
+      enrollmentStatus = Enrollment.EnrollmentStatus.Waitlisted;
+      // 如果当前是 EnrollmentOpen，切换到 Waitlisted
+      if (status == Status.EnrollmentOpen) {
+        setStatus(Status.Waitlisted);
+      }
+    }
+    
+    // 使用 Utils 生成 ID 和时间
+    String enrollmentId = Utils.generateId("ENR");
+    Date enrolledAt = Utils.getCurrentTime();
+    
+    // 创建并添加 Enrollment
+    Enrollment enrollment = new Enrollment(enrollmentId, enrollmentStatus, enrolledAt, student, this);
+    return enrollment;
   }
 
 

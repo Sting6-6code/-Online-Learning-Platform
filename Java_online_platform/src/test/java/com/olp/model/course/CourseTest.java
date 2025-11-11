@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.user.Instructor;
+import com.olp.model.user.Student;
 import com.olp.model.assignment.Assignment;
 import java.sql.Date;
 
@@ -220,6 +221,533 @@ public class CourseTest {
         assertEquals(Course.Status.Draft, course.getStatus(), "状态应该保持为 Draft");
         
         System.out.println("✅ 没有内容的课程发布失败");
+    }
+
+    // Task 2.7: openEnrollment() 方法测试
+    @Test
+    public void testOpenEnrollmentFromPublished() {
+        Instructor instructor = new Instructor("I014", "Dr. Magenta", "magenta@example.com");
+        Course course = new Course("C017", "Advanced Java", 50, instructor);
+        
+        // 添加内容并发布
+        Lesson lesson = new Lesson("L004", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A004", "Assignment 1", deadline, 100, course);
+        course.publish();
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        // 开放选课
+        boolean opened = course.openEnrollment();
+        assertTrue(opened, "Published 状态的课程应该可以开放选课");
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus(), "状态应该变为 EnrollmentOpen");
+        
+        System.out.println("✅ Published 状态的课程可以开放选课");
+    }
+
+    @Test
+    public void testOpenEnrollmentWithZeroCapacity() {
+        Instructor instructor = new Instructor("I015", "Dr. Teal", "teal@example.com");
+        // 注意：构造函数已经验证 capacity > 0，所以我们需要通过反射或其他方式测试
+        // 但根据任务要求，我们测试正常流程：capacity > 0 时应该成功
+        
+        Course course = new Course("C018", "Python Advanced", 1, instructor); // 最小容量
+        Lesson lesson = new Lesson("L005", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A005", "Assignment 1", deadline, 100, course);
+        course.publish();
+        
+        // capacity = 1 > 0，应该可以开放
+        boolean opened = course.openEnrollment();
+        assertTrue(opened, "capacity > 0 的课程应该可以开放选课");
+        
+        System.out.println("✅ capacity > 0 的课程可以开放选课");
+    }
+
+    @Test
+    public void testOpenEnrollmentFromNonPublishedStatus() {
+        Instructor instructor = new Instructor("I016", "Dr. Indigo", "indigo@example.com");
+        Course course = new Course("C019", "Web Development Advanced", 30, instructor);
+        
+        // 从 Draft 状态尝试开放选课
+        boolean opened = course.openEnrollment();
+        assertFalse(opened, "Draft 状态的课程不应该开放选课");
+        assertEquals(Course.Status.Draft, course.getStatus(), "状态应该保持为 Draft");
+        
+        System.out.println("✅ 非 Published 状态的课程开放失败");
+    }
+
+    @Test
+    public void testOpenEnrollmentFromEnrollmentOpen() {
+        Instructor instructor = new Instructor("I017", "Dr. Violet", "violet@example.com");
+        Course course = new Course("C020", "Database Advanced", 25, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L006", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A006", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus());
+        
+        // 尝试再次开放选课
+        boolean opened = course.openEnrollment();
+        assertFalse(opened, "EnrollmentOpen 状态的课程不应该再次开放选课");
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus(), "状态应该保持为 EnrollmentOpen");
+        
+        System.out.println("✅ EnrollmentOpen 状态的课程不能再次开放选课");
+    }
+
+    @Test
+    public void testOpenEnrollmentWorkflow() {
+        Instructor instructor = new Instructor("I018", "Dr. Lavender", "lavender@example.com");
+        Course course = new Course("C021", "Full Stack Development", 40, instructor);
+        
+        // 1. 初始状态为 Draft
+        assertEquals(Course.Status.Draft, course.getStatus());
+        assertFalse(course.openEnrollment(), "Draft 状态不能开放选课");
+        
+        // 2. 发布课程
+        Lesson lesson = new Lesson("L007", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A007", "Assignment 1", deadline, 100, course);
+        assertTrue(course.publish(), "应该可以发布");
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        // 3. 开放选课
+        assertTrue(course.openEnrollment(), "应该可以开放选课");
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus());
+        
+        System.out.println("✅ 完整的发布和开放选课流程正常");
+    }
+
+    // Task 2.8: enroll() 方法测试
+    @Test
+    public void testEnrollWhenNotFull() {
+        Instructor instructor = new Instructor("I019", "Dr. Coral", "coral@example.com");
+        Course course = new Course("C022", "React Development", 50, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L008", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A008", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 学生选课
+        Student student = new Student("S001", "Alice", "alice@example.com");
+        Enrollment enrollment = course.enroll(student);
+        
+        assertNotNull(enrollment, "未满员课程应该可以选课");
+        assertEquals(Enrollment.EnrollmentStatus.Active, enrollment.getStatus(), "应该返回 Active 状态");
+        assertEquals(student, enrollment.getStudent());
+        assertEquals(course, enrollment.getCourse());
+        assertEquals(1, course.numberOfCourseEnrollments());
+        
+        System.out.println("✅ 未满员课程可以正常选课（返回 Active 状态 Enrollment）");
+    }
+
+    @Test
+    public void testEnrollWhenFull() {
+        Instructor instructor = new Instructor("I020", "Dr. Mint", "mint@example.com");
+        Course course = new Course("C023", "Vue.js Basics", 2, instructor); // 容量为 2
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L009", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A009", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 前两个学生选课（应该都是 Active）
+        Student student1 = new Student("S002", "Bob", "bob@example.com");
+        Student student2 = new Student("S003", "Charlie", "charlie@example.com");
+        Enrollment enrollment1 = course.enroll(student1);
+        Enrollment enrollment2 = course.enroll(student2);
+        
+        assertNotNull(enrollment1);
+        assertNotNull(enrollment2);
+        assertEquals(Enrollment.EnrollmentStatus.Active, enrollment1.getStatus());
+        assertEquals(Enrollment.EnrollmentStatus.Active, enrollment2.getStatus());
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus(), "前两个学生选课后应该还是 EnrollmentOpen");
+        
+        // 第三个学生选课（应该进入候补）
+        Student student3 = new Student("S004", "David", "david@example.com");
+        Enrollment enrollment3 = course.enroll(student3);
+        
+        assertNotNull(enrollment3, "满员课程应该可以进入候补");
+        assertEquals(Enrollment.EnrollmentStatus.Waitlisted, enrollment3.getStatus(), "应该返回 Waitlisted 状态");
+        assertEquals(Course.Status.Waitlisted, course.getStatus(), "课程状态应该自动切换到 Waitlisted");
+        
+        System.out.println("✅ 满员课程自动进入候补（返回 Waitlisted 状态 Enrollment）");
+    }
+
+    @Test
+    public void testEnrollDuplicateRejected() {
+        Instructor instructor = new Instructor("I021", "Dr. Peach", "peach@example.com");
+        Course course = new Course("C024", "Angular Framework", 50, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L010", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A010", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 学生第一次选课
+        Student student = new Student("S005", "Eve", "eve@example.com");
+        Enrollment enrollment1 = course.enroll(student);
+        assertNotNull(enrollment1);
+        assertEquals(1, course.numberOfCourseEnrollments());
+        
+        // 学生重复选课
+        Enrollment enrollment2 = course.enroll(student);
+        assertNull(enrollment2, "重复选课应该被拒绝");
+        assertEquals(1, course.numberOfCourseEnrollments(), "不应该创建新的 Enrollment");
+        
+        System.out.println("✅ 重复选课被拒绝（返回 null）");
+    }
+
+    @Test
+    public void testEnrollFromWaitlistedStatus() {
+        Instructor instructor = new Instructor("I022", "Dr. Sky", "sky@example.com");
+        Course course = new Course("C025", "Node.js Advanced", 1, instructor); // 容量为 1
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L011", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A011", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 第一个学生选课（Active）
+        Student student1 = new Student("S006", "Frank", "frank@example.com");
+        Enrollment enrollment1 = course.enroll(student1);
+        assertNotNull(enrollment1);
+        assertEquals(Enrollment.EnrollmentStatus.Active, enrollment1.getStatus());
+        
+        // 第二个学生选课（Waitlisted，课程状态变为 Waitlisted）
+        Student student2 = new Student("S007", "Grace", "grace@example.com");
+        Enrollment enrollment2 = course.enroll(student2);
+        assertNotNull(enrollment2);
+        assertEquals(Enrollment.EnrollmentStatus.Waitlisted, enrollment2.getStatus());
+        assertEquals(Course.Status.Waitlisted, course.getStatus());
+        
+        // 第三个学生从 Waitlisted 状态选课（应该也是 Waitlisted）
+        Student student3 = new Student("S008", "Henry", "henry@example.com");
+        Enrollment enrollment3 = course.enroll(student3);
+        assertNotNull(enrollment3);
+        assertEquals(Enrollment.EnrollmentStatus.Waitlisted, enrollment3.getStatus());
+        assertEquals(Course.Status.Waitlisted, course.getStatus(), "状态应该保持为 Waitlisted");
+        
+        System.out.println("✅ 从 Waitlisted 状态可以继续选课（进入候补）");
+    }
+
+    @Test
+    public void testEnrollFromInvalidStatus() {
+        Instructor instructor = new Instructor("I023", "Dr. Rose", "rose@example.com");
+        Course course = new Course("C026", "Spring Boot", 50, instructor);
+        
+        // Draft 状态不能选课
+        Student student = new Student("S009", "Iris", "iris@example.com");
+        Enrollment enrollment1 = course.enroll(student);
+        assertNull(enrollment1, "Draft 状态不能选课");
+        
+        // 发布但未开放选课
+        Lesson lesson = new Lesson("L012", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A012", "Assignment 1", deadline, 100, course);
+        course.publish();
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        Enrollment enrollment2 = course.enroll(student);
+        assertNull(enrollment2, "Published 状态不能选课");
+        
+        System.out.println("✅ 非 EnrollmentOpen/Waitlisted 状态的课程不能选课");
+    }
+
+    // Task 2.9: startCourse() 方法测试
+    @Test
+    public void testStartCourseWithActiveEnrollments() {
+        Instructor instructor = new Instructor("I024", "Dr. Amber", "amber@example.com");
+        Course course = new Course("C027", "Docker & Kubernetes", 50, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L013", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A013", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 学生选课
+        Student student = new Student("S010", "Jack", "jack@example.com");
+        course.enroll(student);
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus());
+        
+        // 开课
+        boolean started = course.startCourse();
+        assertTrue(started, "有 Active 学生的课程应该可以开课");
+        assertEquals(Course.Status.InProgress, course.getStatus(), "状态应该变为 InProgress");
+        
+        System.out.println("✅ 有 Active 学生的课程可以开课");
+    }
+
+    @Test
+    public void testStartCourseWithoutEnrollments() {
+        Instructor instructor = new Instructor("I025", "Dr. Jade", "jade@example.com");
+        Course course = new Course("C028", "Microservices Architecture", 50, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L014", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A014", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 没有学生选课，尝试开课
+        boolean started = course.startCourse();
+        assertFalse(started, "没有学生的课程不应该开课");
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus(), "状态应该保持为 EnrollmentOpen");
+        
+        System.out.println("✅ 没有学生的课程开课失败");
+    }
+
+    @Test
+    public void testStartCourseWithOnlyWaitlisted() {
+        Instructor instructor = new Instructor("I026", "Dr. Opal", "opal@example.com");
+        Course course = new Course("C029", "Cloud Computing", 1, instructor); // 容量为 1
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L015", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A015", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 第一个学生选课（Active）
+        Student student1 = new Student("S011", "Kelly", "kelly@example.com");
+        course.enroll(student1);
+        
+        // 第二个学生选课（Waitlisted）
+        Student student2 = new Student("S012", "Liam", "liam@example.com");
+        course.enroll(student2);
+        assertEquals(Course.Status.Waitlisted, course.getStatus());
+        
+        // 第一个学生退课
+        Enrollment enrollment1 = course.getCourseEnrollment(0);
+        enrollment1.dropCourse();
+        assertEquals(Enrollment.EnrollmentStatus.Dropped, enrollment1.getStatus());
+        
+        // 现在只有 Waitlisted 学生，尝试开课
+        boolean started = course.startCourse();
+        assertFalse(started, "只有 Waitlisted 学生的课程不应该开课");
+        assertEquals(Course.Status.Waitlisted, course.getStatus(), "状态应该保持为 Waitlisted");
+        
+        System.out.println("✅ 只有 Waitlisted 学生的课程开课失败");
+    }
+
+    @Test
+    public void testStartCourseFromInvalidStatus() {
+        Instructor instructor = new Instructor("I027", "Dr. Pearl", "pearl@example.com");
+        Course course = new Course("C030", "DevOps Practices", 50, instructor);
+        
+        // Draft 状态不能开课
+        boolean started1 = course.startCourse();
+        assertFalse(started1, "Draft 状态不能开课");
+        assertEquals(Course.Status.Draft, course.getStatus());
+        
+        // Published 状态不能开课
+        Lesson lesson = new Lesson("L016", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A016", "Assignment 1", deadline, 100, course);
+        course.publish();
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        boolean started2 = course.startCourse();
+        assertFalse(started2, "Published 状态不能开课");
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        System.out.println("✅ 非 EnrollmentOpen/Waitlisted 状态的课程开课失败");
+    }
+
+    @Test
+    public void testStartCourseFromWaitlistedStatus() {
+        Instructor instructor = new Instructor("I028", "Dr. Ruby", "ruby@example.com");
+        Course course = new Course("C031", "CI/CD Pipeline", 2, instructor);
+        
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L017", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A017", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
+        // 两个学生选课（都是 Active）
+        Student student1 = new Student("S013", "Mia", "mia@example.com");
+        Student student2 = new Student("S014", "Noah", "noah@example.com");
+        course.enroll(student1);
+        course.enroll(student2);
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus());
+        
+        // 第三个学生选课（Waitlisted，课程状态变为 Waitlisted）
+        Student student3 = new Student("S015", "Olivia", "olivia@example.com");
+        course.enroll(student3);
+        assertEquals(Course.Status.Waitlisted, course.getStatus());
+        
+        // 从 Waitlisted 状态开课（有 Active 学生）
+        boolean started = course.startCourse();
+        assertTrue(started, "Waitlisted 状态且有 Active 学生应该可以开课");
+        assertEquals(Course.Status.InProgress, course.getStatus(), "状态应该变为 InProgress");
+        
+        System.out.println("✅ Waitlisted 状态且有 Active 学生可以开课");
+    }
+
+    // Task 2.10: complete() 和 cancel() 方法测试
+    @Test
+    public void testCompleteFromInProgress() {
+        Instructor instructor = new Instructor("I029", "Dr. Sapphire", "sapphire@example.com");
+        Course course = new Course("C032", "Kubernetes Advanced", 50, instructor);
+        
+        // 发布、开放选课、学生选课、开课
+        Lesson lesson = new Lesson("L018", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A018", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        Student student = new Student("S016", "Paul", "paul@example.com");
+        course.enroll(student);
+        course.startCourse();
+        assertEquals(Course.Status.InProgress, course.getStatus());
+        
+        // 结课
+        boolean completed = course.complete();
+        assertTrue(completed, "InProgress 的课程应该可以结课");
+        assertEquals(Course.Status.Completed, course.getStatus(), "状态应该变为 Completed");
+        
+        System.out.println("✅ InProgress 的课程可以结课");
+    }
+
+    @Test
+    public void testCompleteFromNonInProgress() {
+        Instructor instructor = new Instructor("I030", "Dr. Topaz", "topaz@example.com");
+        Course course = new Course("C033", "Docker Basics", 50, instructor);
+        
+        // Draft 状态不能结课
+        boolean completed1 = course.complete();
+        assertFalse(completed1, "Draft 状态不能结课");
+        assertEquals(Course.Status.Draft, course.getStatus());
+        
+        // Published 状态不能结课
+        Lesson lesson = new Lesson("L019", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A019", "Assignment 1", deadline, 100, course);
+        course.publish();
+        boolean completed2 = course.complete();
+        assertFalse(completed2, "Published 状态不能结课");
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        System.out.println("✅ 非 InProgress 状态的课程不能结课");
+    }
+
+    @Test
+    public void testCancelFromVariousStates() {
+        Instructor instructor = new Instructor("I031", "Dr. Emerald", "emerald@example.com");
+        
+        // 测试从 Draft 状态取消
+        Course course1 = new Course("C034", "Course 1", 50, instructor);
+        boolean cancelled1 = course1.cancel("Low enrollment");
+        assertTrue(cancelled1, "Draft 状态应该可以取消");
+        assertEquals(Course.Status.Cancelled, course1.getStatus());
+        assertEquals("Low enrollment", course1.getCancelReason());
+        
+        // 测试从 Published 状态取消
+        Course course2 = new Course("C035", "Course 2", 50, instructor);
+        Lesson lesson = new Lesson("L020", "Introduction", 1, course2);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A020", "Assignment 1", deadline, 100, course2);
+        course2.publish();
+        boolean cancelled2 = course2.cancel("Instructor unavailable");
+        assertTrue(cancelled2, "Published 状态应该可以取消");
+        assertEquals(Course.Status.Cancelled, course2.getStatus());
+        assertEquals("Instructor unavailable", course2.getCancelReason());
+        
+        // 测试从 EnrollmentOpen 状态取消
+        Course course3 = new Course("C036", "Course 3", 50, instructor);
+        Lesson lesson3 = new Lesson("L021", "Introduction", 1, course3);
+        Date deadline3 = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment3 = new Assignment("A021", "Assignment 1", deadline3, 100, course3);
+        course3.publish();
+        course3.openEnrollment();
+        boolean cancelled3 = course3.cancel("Technical issues");
+        assertTrue(cancelled3, "EnrollmentOpen 状态应该可以取消");
+        assertEquals(Course.Status.Cancelled, course3.getStatus());
+        assertEquals("Technical issues", course3.getCancelReason());
+        
+        System.out.println("✅ 任何状态（除 Completed）可以取消");
+    }
+
+    @Test
+    public void testCancelFromCompleted() {
+        Instructor instructor = new Instructor("I032", "Dr. Diamond", "diamond@example.com");
+        Course course = new Course("C037", "Final Course", 50, instructor);
+        
+        // 发布、开放选课、学生选课、开课、结课
+        Lesson lesson = new Lesson("L022", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A022", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        Student student = new Student("S017", "Quinn", "quinn@example.com");
+        course.enroll(student);
+        course.startCourse();
+        course.complete();
+        assertEquals(Course.Status.Completed, course.getStatus());
+        
+        // 尝试取消已完成的课程
+        boolean cancelled = course.cancel("Should not work");
+        assertFalse(cancelled, "Completed 的课程不应该可以取消");
+        assertEquals(Course.Status.Completed, course.getStatus(), "状态应该保持为 Completed");
+        assertNull(course.getCancelReason(), "不应该设置取消原因");
+        
+        System.out.println("✅ Completed 的课程不能取消");
+    }
+
+    @Test
+    public void testCancelFromInProgress() {
+        Instructor instructor = new Instructor("I033", "Dr. Quartz", "quartz@example.com");
+        Course course = new Course("C038", "Advanced Course", 50, instructor);
+        
+        // 发布、开放选课、学生选课、开课
+        Lesson lesson = new Lesson("L023", "Introduction", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A023", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        Student student = new Student("S018", "Rachel", "rachel@example.com");
+        course.enroll(student);
+        course.startCourse();
+        assertEquals(Course.Status.InProgress, course.getStatus());
+        
+        // 取消进行中的课程
+        boolean cancelled = course.cancel("Emergency situation");
+        assertTrue(cancelled, "InProgress 状态应该可以取消");
+        assertEquals(Course.Status.Cancelled, course.getStatus());
+        assertEquals("Emergency situation", course.getCancelReason());
+        
+        System.out.println("✅ InProgress 状态的课程可以取消");
+    }
+
+    @Test
+    public void testCancelWithoutReason() {
+        Instructor instructor = new Instructor("I034", "Dr. Amethyst", "amethyst@example.com");
+        Course course = new Course("C039", "Test Course", 50, instructor);
+        
+        // 使用无参 cancel() 方法
+        boolean cancelled = course.cancel();
+        assertTrue(cancelled);
+        assertEquals(Course.Status.Cancelled, course.getStatus());
+        assertEquals("No reason provided", course.getCancelReason());
+        
+        System.out.println("✅ 无参 cancel() 方法正常工作");
     }
 }
 

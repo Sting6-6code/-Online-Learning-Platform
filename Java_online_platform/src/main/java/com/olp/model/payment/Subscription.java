@@ -7,6 +7,7 @@ package com.olp.model.payment;
 import java.sql.Date;
 import java.util.*;
 import javax.persistence.*;
+import com.olp.util.Utils;
 
 /**
  * ===== ????????? =====
@@ -59,8 +60,23 @@ public class Subscription
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Task 4.1: 添加构造函数验证
+   */
   public Subscription(String aId, PlanType aPlan, Date aStartAt, Date aNextBillingAt)
   {
+    // Task 4.1: 验证 plan 不为 null
+    if (aPlan == null) {
+      throw new IllegalArgumentException("Subscription plan cannot be null");
+    }
+    
+    // Task 4.1: 验证 startAt 不为 null
+    if (aStartAt == null) {
+      throw new IllegalArgumentException("Subscription startAt cannot be null");
+    }
+    
+    // Task 4.1: nextBillingAt 可以为 null（初始创建时）
+    
     id = aId;
     plan = aPlan;
     startAt = aStartAt;
@@ -136,92 +152,118 @@ public class Subscription
     return status;
   }
 
+  /**
+   * Task 4.2: 实现 chargeSuccess() 方法
+   * 计费成功：从 Trial/Active/PastDue 状态转换到 Active 状态
+   */
   public boolean chargeSuccess()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Trial:
-        setStatus(Status.Active);
-        wasEventProcessed = true;
-        break;
-      case Active:
-        setStatus(Status.Active);
-        wasEventProcessed = true;
-        break;
-      case PastDue:
-        setStatus(Status.Active);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Trial、Active 或 PastDue
+    if (status != Status.Trial && status != Status.Active && status != Status.PastDue) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：最近一笔 Payment 状态为 Succeeded
+    Payment latestPayment = getLatestPayment();
+    if (latestPayment == null || latestPayment.getStatus() != Payment.PaymentStatus.Succeeded) {
+      return false;
+    }
+    
+    // 状态转换
+    setStatus(Status.Active);
+    
+    // 更新 nextBillingAt
+    if (nextBillingAt != null) {
+      if (plan == PlanType.Monthly) {
+        nextBillingAt = Utils.addMonths(nextBillingAt, 1);
+      } else if (plan == PlanType.Annual) {
+        nextBillingAt = Utils.addMonths(nextBillingAt, 12);
+      }
+      // Trial 计划不更新 nextBillingAt
+    }
+    
+    return true;
+  }
+  
+  /**
+   * Task 4.2: 获取最近一笔 Payment
+   */
+  private Payment getLatestPayment() {
+    if (subscriptionPayments == null || subscriptionPayments.isEmpty()) {
+      return null;
+    }
+    // 找到最近的一笔 Payment（按 paidAt 排序，取最新的）
+    Payment latest = null;
+    Date latestDate = null;
+    for (Payment payment : subscriptionPayments) {
+      if (payment.getPaidAt() != null) {
+        if (latestDate == null || Utils.compareDates(payment.getPaidAt(), latestDate) > 0) {
+          latest = payment;
+          latestDate = payment.getPaidAt();
+        }
+      }
+    }
+    return latest;
   }
 
+  /**
+   * Task 4.3: 实现 chargeFail() 方法
+   * 计费失败：从 Active 状态转换到 PastDue 状态
+   */
   public boolean chargeFail()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Active:
-        setStatus(Status.PastDue);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Active
+    if (status != Status.Active) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：最近一笔 Payment 状态为 Failed
+    Payment latestPayment = getLatestPayment();
+    if (latestPayment == null || latestPayment.getStatus() != Payment.PaymentStatus.Failed) {
+      return false;
+    }
+    
+    // 状态转换
+    setStatus(Status.PastDue);
+    return true;
   }
 
+  /**
+   * Task 4.4: 实现 cancel() 方法
+   * 取消订阅：从任意状态转换到 Cancelled 状态
+   */
   public boolean cancel()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Active:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      case PastDue:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      case Suspended:
-        setStatus(Status.Cancelled);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
-    }
-
-    return wasEventProcessed;
+    // 可以从任意状态取消（无守卫条件）
+    // 状态转换
+    setStatus(Status.Cancelled);
+    return true;
   }
 
+  /**
+   * Task 4.5: 实现 graceExpire() 方法
+   * 宽限期到期：从 PastDue 状态转换到 Suspended 状态
+   */
   public boolean graceExpire()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case PastDue:
-        setStatus(Status.Suspended);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 PastDue
+    if (status != Status.PastDue) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：当前日期 > 宽限到期（宽限期为 7 天）
+    if (nextBillingAt == null) {
+      return false;
+    }
+    Date graceExpiryDate = Utils.addDays(nextBillingAt, 7);
+    Date currentTime = Utils.getCurrentTime();
+    if (Utils.compareDates(currentTime, graceExpiryDate) <= 0) {
+      return false; // 宽限期未到期
+    }
+    
+    // 状态转换
+    setStatus(Status.Suspended);
+    return true;
   }
 
   private void setStatus(Status aStatus)

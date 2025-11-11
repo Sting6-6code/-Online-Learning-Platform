@@ -83,11 +83,12 @@ public class EnumValidationTest {
 
     @Test
     public void testPaymentStatusEnum() {
-        // 验证 Payment.PaymentStatus 有 4 个状态
+        // 验证 Payment.PaymentStatus 有 5 个状态（Task 4.7 添加了 Pending）
         Payment.PaymentStatus[] statuses = Payment.PaymentStatus.values();
-        assertEquals(4, statuses.length, "Payment.PaymentStatus 应该有 4 个状态");
+        assertEquals(5, statuses.length, "Payment.PaymentStatus 应该有 5 个状态（包括 Pending）");
         
         // 验证所有状态值
+        assertEquals(Payment.PaymentStatus.Pending, Payment.PaymentStatus.valueOf("Pending"));
         assertEquals(Payment.PaymentStatus.Succeeded, Payment.PaymentStatus.valueOf("Succeeded"));
         assertEquals(Payment.PaymentStatus.Failed, Payment.PaymentStatus.valueOf("Failed"));
         assertEquals(Payment.PaymentStatus.Refunding, Payment.PaymentStatus.valueOf("Refunding"));

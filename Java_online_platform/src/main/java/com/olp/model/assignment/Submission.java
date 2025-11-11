@@ -7,6 +7,7 @@ package com.olp.model.assignment;
 import java.sql.Date;
 import javax.persistence.*;
 import com.olp.model.user.Student;
+import com.olp.util.Utils;
 
 // line 125 "model.ump"
 // line 275 "model.ump"
@@ -58,10 +59,18 @@ public class Submission
 
   public Submission(String aId, Date aSubmittedAt, int aVersion, boolean aCheckPassed, com.olp.model.assignment.Grade aSubmissionGrade, com.olp.model.user.Student aStudent, com.olp.model.assignment.Assignment aAssignment)
   {
+    // Task 3.3: 添加构造函数验证
+    if (aStudent == null) {
+      throw new IllegalArgumentException("Submission student cannot be null");
+    }
+    if (aAssignment == null) {
+      throw new IllegalArgumentException("Submission assignment cannot be null");
+    }
+    
     id = aId;
-    submittedAt = aSubmittedAt;
-    version = aVersion;
-    checkPassed = aCheckPassed;
+    submittedAt = aSubmittedAt; // submittedAt 初始可为 null
+    version = aVersion; // 初始 version 为构造函数参数值
+    checkPassed = aCheckPassed; // 初始 checkPassed 为构造函数参数值
     boolean didAddSubmissionGrade = setSubmissionGrade(aSubmissionGrade);
     if (!didAddSubmissionGrade)
     {
@@ -77,7 +86,7 @@ public class Submission
     {
       throw new RuntimeException("Unable to create assignmentSubmission due to assignment. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    setStatus(Status.Created);
+    setStatus(Status.Created); // 初始状态为 Created
   }
 
   //------------------------
@@ -152,158 +161,188 @@ public class Submission
     return status;
   }
 
+  /**
+   * Task 3.4: 实现 submit() 方法
+   * 提交作业：从 Created 状态转换到 Submitted 状态
+   */
   public boolean submit()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Created:
-        if (isBeforeDeadline())
-        {
-          setStatus(Status.Submitted);
-          wasEventProcessed = true;
-          break;
-        }
-        break;
-      case ResubmissionRequested:
-        if (isBeforeDeadline())
-        {
-          setStatus(Status.Submitted);
-          wasEventProcessed = true;
-          break;
-        }
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Created
+    if (status != Status.Created && status != Status.ResubmissionRequested) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：当前时间 <= assignment.getDeadline()
+    Date currentTime = Utils.getCurrentTime();
+    if (assignment == null || assignment.getDeadline() == null) {
+      return false;
+    }
+    if (Utils.compareDates(currentTime, assignment.getDeadline()) > 0) {
+      return false; // 超过截止时间
+    }
+    
+    // 设置 submittedAt
+    setSubmittedAt(currentTime);
+    
+    // 计算版本号：统计该学生对该作业的已有提交数 + 1
+    int existingCount = 0;
+    if (assignment != null && student != null) {
+      for (int i = 0; i < assignment.numberOfAssignmentSubmissions(); i++) {
+        Submission existingSubmission = assignment.getAssignmentSubmission(i);
+        if (existingSubmission.getStudent() != null && 
+            existingSubmission.getStudent().equals(student) &&
+            !existingSubmission.equals(this)) {
+          existingCount++;
+        }
+      }
+    }
+    setVersion(existingCount + 1);
+    
+    // 状态转换
+    setStatus(Status.Submitted);
+    return true;
   }
 
+  /**
+   * Task 3.5: 实现 startAutoChecks() 方法
+   * 触发自动检查：从 Submitted 状态转换到 UnderCheck 状态
+   * 注意：实际的检查逻辑（查重、编译等）由外部系统触发，此方法仅负责状态转换
+   */
   public boolean startAutoChecks()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Submitted:
-        setStatus(Status.UnderCheck);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Submitted
+    if (status != Status.Submitted) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 状态转换
+    setStatus(Status.UnderCheck);
+    return true;
   }
 
+  /**
+   * Task 3.7: 实现 startGrading() 方法
+   * 开始评分：从 Submitted 状态转换到 Grading 状态
+   */
   public boolean startGrading()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Submitted:
-        if (getCheckPassed())
-        {
-          setStatus(Status.Grading);
-          wasEventProcessed = true;
-          break;
-        }
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Submitted
+    if (status != Status.Submitted) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：checkPassed == true
+    if (!getCheckPassed()) {
+      return false;
+    }
+    
+    // 状态转换
+    setStatus(Status.Grading);
+    return true;
   }
 
+  /**
+   * Task 3.6: 实现 checksPass() 方法
+   * 检查通过：从 UnderCheck 状态转换回 Submitted 状态（标记为可评分）
+   */
   public boolean checksPass()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case UnderCheck:
-        setStatus(Status.Submitted);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 UnderCheck
+    if (status != Status.UnderCheck) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 设置 checkPassed := true
+    setCheckPassed(true);
+    
+    // 状态转换：回到 Submitted（标记为可评分）
+    setStatus(Status.Submitted);
+    return true;
   }
 
+  /**
+   * Task 3.6: 实现 checksFail() 方法
+   * 检查失败：从 UnderCheck 状态转换到 Returned 状态
+   */
   public boolean checksFail()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case UnderCheck:
-        setStatus(Status.Returned);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 UnderCheck
+    if (status != Status.UnderCheck) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 设置 checkPassed := false
+    setCheckPassed(false);
+    
+    // 状态转换：转到 Returned
+    setStatus(Status.Returned);
+    return true;
   }
 
+  /**
+   * Task 3.8: 实现 grade() 方法（带参数）
+   * 评分：从 Grading 状态转换到 Graded 状态，创建或更新 Grade 对象
+   */
+  public boolean grade(double score, String feedback)
+  {
+    // 守卫条件：当前状态必须是 Grading
+    if (status != Status.Grading) {
+      return false;
+    }
+    
+    // 守卫条件：0 <= score <= assignment.getMaxScore()
+    if (assignment == null) {
+      return false;
+    }
+    if (score < 0 || score > assignment.getMaxScore()) {
+      return false;
+    }
+    
+    // 如果 submissionGrade 为 null，创建新的 Grade 对象
+    if (submissionGrade == null) {
+      String gradeId = com.olp.util.Utils.generateId("GRD");
+      Grade newGrade = new Grade(gradeId, score, feedback, this);
+      setSubmissionGrade(newGrade);
+    } else {
+      // 如果 submissionGrade 已存在，更新其 score 和 feedback
+      submissionGrade.setScore(score);
+      submissionGrade.setFeedback(feedback);
+    }
+    
+    // 状态转换
+    setStatus(Status.Graded);
+    return true;
+  }
+  
+  // 保留无参方法以兼容现有代码（调用新方法，使用默认值）
   public boolean grade()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Grading:
-        setStatus(Status.Graded);
-        wasEventProcessed = true;
-        break;
-      default:
-        // Other states do respond to this event
-    }
-
-    return wasEventProcessed;
+    return grade(0.0, "");
   }
 
+  /**
+   * Task 3.9: 实现 requestResubmission() 方法
+   * 要求重交：从 Graded 或 Returned 状态转换到 ResubmissionRequested 状态
+   * 注意：学生可以创建新的 Submission（version 递增）
+   */
   public boolean requestResubmission()
   {
-    boolean wasEventProcessed = false;
-    
-    Status aStatus = status;
-    switch (aStatus)
-    {
-      case Graded:
-        if (canResubmit())
-        {
-          setStatus(Status.ResubmissionRequested);
-          wasEventProcessed = true;
-          break;
-        }
-        break;
-      case Returned:
-        if (canResubmit())
-        {
-          setStatus(Status.ResubmissionRequested);
-          wasEventProcessed = true;
-          break;
-        }
-        break;
-      default:
-        // Other states do respond to this event
+    // 守卫条件：当前状态必须是 Graded 或 Returned
+    if (status != Status.Graded && status != Status.Returned) {
+      return false;
     }
-
-    return wasEventProcessed;
+    
+    // 守卫条件：Utils.getCurrentTime() <= assignment.getDeadline()（可选）
+    if (assignment != null && assignment.getDeadline() != null) {
+      Date currentTime = Utils.getCurrentTime();
+      if (Utils.compareDates(currentTime, assignment.getDeadline()) > 0) {
+        return false; // 超过截止时间
+      }
+    }
+    
+    // 状态转换
+    setStatus(Status.ResubmissionRequested);
+    return true;
   }
 
   private void setStatus(Status aStatus)
@@ -415,8 +454,16 @@ public class Submission
   }
 
   // line 161 "model.ump"
+  /**
+   * Task 3.4: 修改 isBeforeDeadline() 方法
+   * 检查当前时间是否在截止时间之前
+   */
   public Boolean isBeforeDeadline(){
-    return submittedAt != null;
+    if (assignment == null || assignment.getDeadline() == null) {
+      return false;
+    }
+    Date currentTime = Utils.getCurrentTime();
+    return Utils.compareDates(currentTime, assignment.getDeadline()) <= 0;
   }
 
   // line 165 "model.ump"

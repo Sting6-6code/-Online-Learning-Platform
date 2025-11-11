@@ -9,6 +9,7 @@ import java.util.*;
 import javax.persistence.*;
 import com.olp.model.course.Course;
 import com.olp.model.user.Student;
+import com.olp.util.Utils;
 
 /**
  * ===== ????????? =====
@@ -53,6 +54,20 @@ public class Assignment
 
   public Assignment(String aId, String aTitle, Date aDeadline, int aMaxScore, com.olp.model.course.Course aCourse)
   {
+    // Task 3.1: 添加构造函数验证
+    if (aTitle == null || aTitle.trim().isEmpty()) {
+      throw new IllegalArgumentException("Assignment title cannot be null or empty");
+    }
+    if (aMaxScore <= 0) {
+      throw new IllegalArgumentException("Assignment maxScore must be greater than 0");
+    }
+    if (aDeadline == null) {
+      throw new IllegalArgumentException("Assignment deadline cannot be null");
+    }
+    if (aCourse == null) {
+      throw new IllegalArgumentException("Assignment course cannot be null");
+    }
+    
     id = aId;
     title = aTitle;
     deadline = aDeadline;
@@ -256,6 +271,34 @@ public class Assignment
     course.addCourseAssignment(this);
     wasSet = true;
     return wasSet;
+  }
+
+  //------------------------
+  // Convenience Methods (Task 3.1)
+  //------------------------
+  
+  /**
+   * 判断作业是否已过期
+   * Task 3.1: 添加便捷方法
+   * @return true 如果当前时间 > deadline，否则返回 false
+   */
+  public boolean isOverdue()
+  {
+    if (deadline == null) {
+      return false;
+    }
+    Date currentTime = Utils.getCurrentTime();
+    return Utils.compareDates(currentTime, deadline) > 0;
+  }
+  
+  /**
+   * 获取提交数量
+   * Task 3.1: 添加便捷方法
+   * @return assignmentSubmissions 的大小
+   */
+  public int getSubmissionCount()
+  {
+    return assignmentSubmissions.size();
   }
 
   public void delete()

@@ -38,6 +38,30 @@ public class Grade
   // CONSTRUCTOR
   //------------------------
 
+  public Grade(String aId, double aScore, String aFeedback, com.olp.model.assignment.Submission aSubmission)
+  {
+    // Task 3.2: 添加构造函数验证
+    if (aSubmission == null) {
+      throw new IllegalArgumentException("Grade submission cannot be null");
+    }
+    if (aScore < 0) {
+      throw new IllegalArgumentException("Grade score cannot be negative");
+    }
+    if (aSubmission.getAssignment() == null) {
+      throw new IllegalArgumentException("Grade submission must have an assignment");
+    }
+    int maxScore = aSubmission.getAssignment().getMaxScore();
+    if (aScore > maxScore) {
+      throw new IllegalArgumentException("Grade score (" + aScore + ") cannot exceed assignment maxScore (" + maxScore + ")");
+    }
+    
+    id = aId;
+    score = aScore;
+    feedback = aFeedback;
+    setSubmission(aSubmission);
+  }
+  
+  // 保留原构造函数以兼容现有代码（不推荐使用）
   public Grade(String aId, double aScore, String aFeedback)
   {
     id = aId;
@@ -124,6 +148,27 @@ public class Grade
     }
     wasSet = true;
     return wasSet;
+  }
+
+  //------------------------
+  // Convenience Methods (Task 3.2)
+  //------------------------
+  
+  /**
+   * 计算成绩百分比
+   * Task 3.2: 添加便捷方法
+   * @return (score / assignment.maxScore) * 100.0，如果 maxScore 为 0 则返回 0.0
+   */
+  public double getPercentage()
+  {
+    if (submission == null || submission.getAssignment() == null) {
+      return 0.0;
+    }
+    int maxScore = submission.getAssignment().getMaxScore();
+    if (maxScore == 0) {
+      return 0.0;
+    }
+    return (score / maxScore) * 100.0;
   }
 
   public void delete()
