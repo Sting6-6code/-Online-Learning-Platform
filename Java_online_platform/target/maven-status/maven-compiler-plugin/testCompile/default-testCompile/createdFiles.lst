@@ -1,0 +1,12 @@
+com/olp/model/course/EnrollmentTest.class
+com/olp/model/course/CourseTest.class
+com/olp/model/EnumValidationTest.class
+com/olp/model/course/CourseCategoryTest.class
+com/olp/model/user/AdministratorTest.class
+com/olp/util/UtilsTest.class
+com/olp/JpaConfigurationTest.class
+com/olp/model/course/LessonTest.class
+com/olp/model/user/InstructorTest.class
+com/olp/model/user/UserTest.class
+com/olp/model/course/VideoContentTest.class
+com/olp/model/user/StudentTest.class

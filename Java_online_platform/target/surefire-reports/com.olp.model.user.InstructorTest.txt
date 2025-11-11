@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.olp.model.user.InstructorTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.624 s - in com.olp.model.user.InstructorTest
