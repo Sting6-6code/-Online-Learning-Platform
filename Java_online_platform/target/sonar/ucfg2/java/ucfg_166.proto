@@ -1,0 +1,213 @@
+
+Mcom.olp.model.assignment.Assignment#setCourse(Lcom/olp/model/course/Course;)Zí
+Ö/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/assignment/Assignment.java˛ ˛("10*Ω
+2
+ì ì(ï
+í
+
+ì ì(1%
+#com.olp.model.assignment.Assignment"
+course"__id*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course"
+
+î î(
+""*Ê
+3
+ê ê((Ã…
+
+ê ê(E
+%10boolean"Zcom.olp.model.course.Course#removeCourseAssignment(Lcom/olp/model/assignment/Assignment;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*C
+
+__unknown_file ('%
+#com.olp.model.assignment.Assignment2=removeCourseAssignment(Lcom/olp/model/assignment/Assignment;)*
+2
+1*ï
+4
+é# é(1˚¯
+
+é# é(A
+%9boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Course2equals(Ljava/lang/Object;)*
+3
+1*”
+5
+å1 å(7â
+Ü
+
+å1 å(7!
+%7com.olp.model.course.Course"__id*O
+
+__unknown_file (3*1%
+#com.olp.model.assignment.Assignment"
+courseÖ
+Ç
+
+å å(8-
+existingCoursecom.olp.model.course.Course"__id*?
+
+__unknown_file (#
+!
+%7com.olp.model.course.Courseé
+ã
+
+ç ç(1%
+#com.olp.model.assignment.Assignment"
+course"__id*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Courseî
+ë
+
+é é(
+%8boolean"	__compare*
+
+é é(
+!=*=
+
+é é(/
+-
+existingCoursecom.olp.model.course.Course*
+
+é é(
+""*
+4
+1*%
+6
+â â("
+
+â â(
+""*È
+7
+á á( â
+Ü
+
+á á( !
+%3com.olp.model.course.Course"__id*O
+
+__unknown_file (3*1%
+#com.olp.model.assignment.Assignment"
+course≤Ø
+
+á á(<	
+%4int"8com.olp.model.course.Course#numberOfCourseAssignments()I*?
+
+__unknown_file (#
+!
+%3com.olp.model.course.Course2numberOfCourseAssignments()ò
+ï
+
+á@ á(~	
+%5int"?com.olp.model.course.Course#minimumNumberOfCourseAssignments()I*;
+
+__unknown_file ("
+com.olp.model.course.Courset
+r
+
+á á(~
+%6boolean"	__compare*
+
+á= á(?
+<=*
+
+á á(<
+	
+%4int*
+
+á@ á(~
+	
+%5int*
+5
+6*Æ
+8
+á á(â
+Ü
+
+á á(!
+%1com.olp.model.course.Course"__id*O
+
+__unknown_file (3*1%
+#com.olp.model.assignment.Assignment"
+courseà
+Ö
+
+á á(
+%2boolean"	__compare*
+
+á á(
+!=*1
+
+á á(#
+!
+%1com.olp.model.course.Course*
+
+á á(
+""*
+5
+7*%
+9
+Ñ Ñ("
+
+Ñ Ñ(
+""*®
+10
+Ä Ä(ç
+ä
+
+Ç Ç(
+%0boolean"	__compare*
+
+Ç Ç(
+==*6
+
+Ç Ç((
+&
+aCoursecom.olp.model.course.Course*
+
+Ç Ç(
+""*
+8
+9*
+1
+ó ó(
+ä
+á
+
+ó ó(
+"
+%11com.olp.model.course.Course"__id*O
+
+__unknown_file (3*1%
+#com.olp.model.assignment.Assignment"
+courseª∏
+
+ó ó($
+%12boolean"Wcom.olp.model.course.Course#addCourseAssignment(Lcom/olp/model/assignment/Assignment;)Z*@
+
+__unknown_file ($
+"
+%11com.olp.model.course.Course*C
+
+__unknown_file ('%
+#com.olp.model.assignment.Assignment2:addCourseAssignment(Lcom/olp/model/assignment/Assignment;)"
+
+ô ô(
+"":4
+
+˛ ˛(>&
+aCoursecom.olp.model.course.CourseB'%
+#com.olp.model.assignment.AssignmentHX

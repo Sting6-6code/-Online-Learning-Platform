@@ -1,0 +1,124 @@
+
+Icom.olp.model.course.Enrollment#setStudent(Lcom/olp/model/user/Student;)Zé
+Å/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Enrollment.javaê ê("6*◊
+2
+ú ú(¿Ω
+
+ú ú(3
+%4boolean"Vcom.olp.model.user.Student#removeStudentEnrollment(Lcom/olp/model/course/Enrollment;)Z*K
+
+__unknown_file (/
+-
+existingStudentcom.olp.model.user.Student*?
+
+__unknown_file (#!
+com.olp.model.course.Enrollment2:removeStudentEnrollment(Lcom/olp/model/course/Enrollment;)*
+1*ï
+3
+ö$ ö(3˚¯
+
+ö$ ö(D
+%3boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*K
+
+__unknown_file (/
+-
+existingStudentcom.olp.model.user.Student*D
+
+__unknown_file ((
+&
+aStudentcom.olp.model.user.Student2equals(Ljava/lang/Object;)*
+2
+1*À
+4
+ò ò(%Ö
+Ç
+
+ò ò(% 
+%1com.olp.model.user.Student"__id*L
+
+__unknown_file (0*.!
+com.olp.model.course.Enrollment"	
+studentÑ
+Å
+
+ò ò(&-
+existingStudentcom.olp.model.user.Student"__id*>
+
+__unknown_file ("
+ 
+%1com.olp.model.user.Studentã
+à
+
+ô ô(.!
+com.olp.model.course.Enrollment"	
+student"__id*D
+
+__unknown_file ((
+&
+aStudentcom.olp.model.user.Studentî
+ë
+
+ö ö(
+%2boolean"	__compare*
+
+ö ö(
+!=*=
+
+ö ö(/
+-
+existingStudentcom.olp.model.user.Student*
+
+ö ö(
+""*
+3
+1*%
+5
+ï ï("
+
+ï ï(
+""*ß
+6
+í í(ç
+ä
+
+ì ì(
+%0boolean"	__compare*
+
+ì ì(
+==*6
+
+ì ì((
+&
+aStudentcom.olp.model.user.Student*
+
+ì ì(
+""*
+4
+5*›
+1
+û û(Ö
+Ç
+
+û û( 
+%5com.olp.model.user.Student"__id*L
+
+__unknown_file (0*.!
+com.olp.model.course.Enrollment"	
+student≠™
+
+û û(&
+%6boolean"Scom.olp.model.user.Student#addStudentEnrollment(Lcom/olp/model/course/Enrollment;)Z*>
+
+__unknown_file ("
+ 
+%5com.olp.model.user.Student*?
+
+__unknown_file (#!
+com.olp.model.course.Enrollment27addStudentEnrollment(Lcom/olp/model/course/Enrollment;)"
+
+† †(
+"":4
+
+ê ê(,&
+aStudentcom.olp.model.user.StudentB#!
+com.olp.model.course.EnrollmentHX

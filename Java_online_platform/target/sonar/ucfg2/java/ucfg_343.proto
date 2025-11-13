@@ -1,0 +1,106 @@
+
+Kcom.olp.model.course.VideoContent#setLesson(Lcom/olp/model/course/Lesson;)Zé
+É/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/VideoContent.javar r("6*Œ
+2~ ~(π∂
+~ ~(,
+%4boolean"Scom.olp.model.course.Lesson#removeLessonVideo(Lcom/olp/model/course/VideoContent;)Z*K
+
+__unknown_file (/
+-
+existingLessoncom.olp.model.course.Lesson*A
+
+__unknown_file (%#
+!com.olp.model.course.VideoContent26removeLessonVideo(Lcom/olp/model/course/VideoContent;)*
+1*ë
+3|# |(1˘ˆ
+|# |(A
+%3boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*K
+
+__unknown_file (/
+-
+existingLessoncom.olp.model.course.Lesson*D
+
+__unknown_file ((
+&
+aLessoncom.olp.model.course.Lesson2equals(Ljava/lang/Object;)*
+2
+1*ø
+4z z("Ö
+Ç
+z z("!
+%1com.olp.model.course.Lesson"__id*M
+
+__unknown_file (1*/#
+!com.olp.model.course.VideoContent"
+lessonÉ
+Ä
+z z(#-
+existingLessoncom.olp.model.course.Lesson"__id*?
+
+__unknown_file (#
+!
+%1com.olp.model.course.Lessonä
+á
+{ {(/#
+!com.olp.model.course.VideoContent"
+lesson"__id*D
+
+__unknown_file ((
+&
+aLessoncom.olp.model.course.Lessonå
+â
+| |(
+%2boolean"	__compare*
+| |(
+!=*;
+| |(/
+-
+existingLessoncom.olp.model.course.Lesson*
+| |(
+""*
+3
+1*!
+5w w("
+w w(
+""*ù
+6t t(Ö
+Ç
+u u(
+%0boolean"	__compare*
+u u(
+==*4
+u u((
+&
+aLessoncom.olp.model.course.Lesson*
+u u(
+""*
+4
+5*€
+1
+Ä Ä(
+á
+Ñ
+
+Ä Ä(
+!
+%5com.olp.model.course.Lesson"__id*M
+
+__unknown_file (1*/#
+!com.olp.model.course.VideoContent"
+lesson©¶
+
+Ä Ä(
+%6boolean"Pcom.olp.model.course.Lesson#addLessonVideo(Lcom/olp/model/course/VideoContent;)Z*?
+
+__unknown_file (#
+!
+%5com.olp.model.course.Lesson*A
+
+__unknown_file (%#
+!com.olp.model.course.VideoContent23addLessonVideo(Lcom/olp/model/course/VideoContent;)"
+
+Ç Ç(
+"":2
+r r()&
+aLessoncom.olp.model.course.LessonB%#
+!com.olp.model.course.VideoContentHX

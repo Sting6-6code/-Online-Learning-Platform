@@ -1,0 +1,126 @@
+
+Icom.olp.model.course.Enrollment#setCourse(Lcom/olp/model/course/Course;)Zé
+Å/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Enrollment.java£ £("6*÷
+2
+Ø Ø(øº
+
+Ø Ø(1
+%4boolean"Vcom.olp.model.course.Course#removeCourseEnrollment(Lcom/olp/model/course/Enrollment;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*?
+
+__unknown_file (#!
+com.olp.model.course.Enrollment29removeCourseEnrollment(Lcom/olp/model/course/Enrollment;)*
+1*ï
+3
+≠# ≠(1˚¯
+
+≠# ≠(A
+%3boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Course2equals(Ljava/lang/Object;)*
+2
+1*À
+4
+´ ´("Ö
+Ç
+
+´ ´("!
+%1com.olp.model.course.Course"__id*K
+
+__unknown_file (/*-!
+com.olp.model.course.Enrollment"
+courseÖ
+Ç
+
+´ ´(#-
+existingCoursecom.olp.model.course.Course"__id*?
+
+__unknown_file (#
+!
+%1com.olp.model.course.Courseä
+á
+
+¨ ¨(-!
+com.olp.model.course.Enrollment"
+course"__id*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Courseî
+ë
+
+≠ ≠(
+%2boolean"	__compare*
+
+≠ ≠(
+!=*=
+
+≠ ≠(/
+-
+existingCoursecom.olp.model.course.Course*
+
+≠ ≠(
+""*
+3
+1*%
+5
+® ®("
+
+® ®(
+""*ß
+6
+• •(ç
+ä
+
+¶ ¶(
+%0boolean"	__compare*
+
+¶ ¶(
+==*6
+
+¶ ¶((
+&
+aCoursecom.olp.model.course.Course*
+
+¶ ¶(
+""*
+4
+5*›
+1
+± ±(
+Ö
+Ç
+
+± ±(
+!
+%5com.olp.model.course.Course"__id*K
+
+__unknown_file (/*-!
+com.olp.model.course.Enrollment"
+course≠™
+
+± ±($
+%6boolean"Scom.olp.model.course.Course#addCourseEnrollment(Lcom/olp/model/course/Enrollment;)Z*?
+
+__unknown_file (#
+!
+%5com.olp.model.course.Course*?
+
+__unknown_file (#!
+com.olp.model.course.Enrollment26addCourseEnrollment(Lcom/olp/model/course/Enrollment;)"
+
+≥ ≥(
+"":4
+
+£ £()&
+aCoursecom.olp.model.course.CourseB#!
+com.olp.model.course.EnrollmentHX

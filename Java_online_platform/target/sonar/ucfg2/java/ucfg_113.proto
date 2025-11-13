@@ -1,0 +1,54 @@
+
+Bcom.olp.model.course.Course#hasMinimumContent()Ljava/lang/Boolean;‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaº º(""3*´
+2
+»% »(>®«
+
+»% »(@	
+%2int"8com.olp.model.course.Course#numberOfCourseAssignments()I*;
+
+__unknown_file (
+com.olp.model.course.Course2numberOfCourseAssignments()m
+k
+
+»% »(E
+%3boolean"	__compare*
+
+»A »(C
+>=*
+
+»% »(@
+	
+%2int*
+
+»D »(E2*
+1*£
+3
+» »(š—
+
+» »(	
+%0int".com.olp.model.course.Course#numberOfLessons()I*;
+
+__unknown_file (
+com.olp.model.course.Course2numberOfLessons()m
+k
+
+» »(!
+%1boolean"	__compare*
+
+» »(
+>=*
+
+» »(
+	
+%0int*
+
+»  »(!2*
+2
+1*%
+1
+» »(F"
+
+» »(F
+""B
+com.olp.model.course.CourseH

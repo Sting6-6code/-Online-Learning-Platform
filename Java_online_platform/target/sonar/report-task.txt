@@ -1,0 +1,7 @@
+organization=sting6-6code
+projectKey=Sting6-6code_-Online-Learning-Platform
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.76487
+dashboardUrl=https://sonarcloud.io/dashboard?id=Sting6-6code_-Online-Learning-Platform
+ceTaskId=AZp-XPvVN78nC7rREhN1
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZp-XPvVN78nC7rREhN1

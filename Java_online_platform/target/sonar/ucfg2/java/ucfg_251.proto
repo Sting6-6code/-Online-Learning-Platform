@@ -1,0 +1,161 @@
+
+Ycom.olp.model.assignment.Submission#setSubmissionGrade(Lcom/olp/model/assignment/Grade;)Z’
+…/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/assignment/Submission.javaô ô(#"8*»
+2
+Š Š(¤¡
+
+Š Š(.
+%8boolean"Tcom.olp.model.assignment.Grade#setSubmission(Lcom/olp/model/assignment/Submission;)Z*T
+
+__unknown_file (8
+6
+anOldSubmissionGradecom.olp.model.assignment.Grade*"
+
+__unknown_file (
+""24setSubmission(Lcom/olp/model/assignment/Submission;)*
+1*Ú
+3
+„: „(I•
+’
+
+„: „(I$
+%4com.olp.model.assignment.Grade"__id*X
+
+__unknown_file (<*:%
+#com.olp.model.assignment.Submission"
+submissionGrade‘
+Ž
+
+„ „(J6
+anOldSubmissionGradecom.olp.model.assignment.Grade"__id*B
+
+__unknown_file (&
+$
+%4com.olp.model.assignment.Grade¦
+£
+
+… …():%
+#com.olp.model.assignment.Submission"
+submissionGrade"__id*S
+
+__unknown_file (7
+5
+aNewSubmissionGradecom.olp.model.assignment.Grade•
+’
+
+† †($
+%5com.olp.model.assignment.Grade"__id*X
+
+__unknown_file (<*:%
+#com.olp.model.assignment.Submission"
+submissionGrade³°
+
+† †('
+%6boolean"Tcom.olp.model.assignment.Grade#setSubmission(Lcom/olp/model/assignment/Submission;)Z*B
+
+__unknown_file (&
+$
+%5com.olp.model.assignment.Grade*C
+
+__unknown_file ('%
+#com.olp.model.assignment.Submission24setSubmission(Lcom/olp/model/assignment/Submission;)
+š
+
+ˆ ˆ($
+%7boolean"	__compare*
+
+ˆ ˆ(
+!=*F
+
+ˆ ˆ(8
+6
+anOldSubmissionGradecom.olp.model.assignment.Grade*
+
+ˆ  ˆ($
+""*
+2
+1*%
+4
+ ("
+
+ (
+""* 
+5
+þ' þ(-†ƒ
+
+þ' þ(A
+%3boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*C
+
+__unknown_file ('%
+#com.olp.model.assignment.Submission*W
+
+__unknown_file (;
+9
+existingSubmission#com.olp.model.assignment.Submission2equals(Ljava/lang/Object;)*
+3
+4*Î
+6
+ý$ ý(7õò
+
+ý$ ý(G)
+%1#com.olp.model.assignment.Submission"Scom.olp.model.assignment.Grade#getSubmission()Lcom/olp/model/assignment/Submission;*S
+
+__unknown_file (7
+5
+aNewSubmissionGradecom.olp.model.assignment.Grade2getSubmission()™
+–
+
+ý ý(H9
+existingSubmission#com.olp.model.assignment.Submission"__id*G
+
+__unknown_file (+
+)
+%1#com.olp.model.assignment.Submission 
+
+
+þ þ("
+%2boolean"	__compare*
+
+þ þ(
+!=*I
+
+þ þ(;
+9
+existingSubmission#com.olp.model.assignment.Submission*
+
+þ þ("
+""*
+3
+5*%
+7
+ú ú("
+
+ú ú(
+""*¶
+8
+ö ö(œ
+™
+
+÷ ÷(#
+%0boolean"	__compare*
+
+÷ ÷(
+==*E
+
+÷ ÷(7
+5
+aNewSubmissionGradecom.olp.model.assignment.Grade*
+
+÷ ÷(#
+""*
+6
+7*%
+1
+Œ Œ("
+
+ (
+"":C
+
+ô$ ô(V5
+aNewSubmissionGradecom.olp.model.assignment.GradeB'%
+#com.olp.model.assignment.SubmissionHX

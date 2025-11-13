@@ -1,0 +1,336 @@
+
+1.0&Sting6-6code_-Online-Learning-PlatformJavaFrontend"1763056599174*java2.B‚
+5
+0src/main/java/com/olp/service/CourseService.java2
+	
+type3
+	
+MAIN4
+
+
+module-key5
+
+online-learning-platform6
+
+package8
+-
+(online-learning-platform:com.olp.service9
+#
+com.olp.service.CourseService11
+
+	interface12
+
+access13
+
+public14
+
+simple-name15
+
+CourseService16
+‡
+€com.olp.service.CourseService#createCourse(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)Lcom/olp/model/course/Course;18
+
+method19
+
+createCourse20
+!
+com.olp.model.course.Course22
+
+unknown23
+
+returns24
+
+
+uses25
+Z
+Tcom.olp.service.CourseService#findCourseById(Ljava/lang/String;)Ljava/util/Optional;27
+
+findCourseById28
+_
+Ycom.olp.service.CourseService#findCoursesByInstructor(Ljava/lang/String;)Ljava/util/List;30
+
+findCoursesByInstructor31
+m
+gcom.olp.service.CourseService#findCoursesByStatus(Lcom/olp/model/course/Course$Status;)Ljava/util/List;33
+
+findCoursesByStatus34
+(
+"com.olp.model.course.Course$Status36
+
+	has param37
+
+is type38
+
+
+references39
+C
+=com.olp.service.CourseService#getAllCourses()Ljava/util/List;41
+
+getAllCourses42
+b
+\com.olp.service.CourseService#publishCourse(Ljava/lang/String;)Lcom/olp/model/course/Course;44
+
+publishCourse45
+c
+]com.olp.service.CourseService#openEnrollment(Ljava/lang/String;)Lcom/olp/model/course/Course;47
+
+openEnrollment48
+x
+rcom.olp.service.CourseService#enrollStudent(Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/course/Enrollment;50
+
+enrollStudent51
+%
+com.olp.model.course.Enrollment53
+`
+Zcom.olp.service.CourseService#startCourse(Ljava/lang/String;)Lcom/olp/model/course/Course;55
+
+startCourse56
+c
+]com.olp.service.CourseService#completeCourse(Ljava/lang/String;)Lcom/olp/model/course/Course;58
+
+completeCourse59
+s
+mcom.olp.service.CourseService#cancelCourse(Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/course/Course;61
+
+cancelCourse62J#
+!
+1
+12
+
+3
+4
+
+5
+6Z
+
+7
+7982
+
+
+5
+6jè
+B
+32<
+323319 *
+1, ,(	210:7B
+
+
+13
+14
+
+
+15
+34
+B
+57<
+575819 *
+1V V(210:7B
+
+
+13
+14
+
+
+15
+59
+B
+54<
+545519 *
+1O O(210:7B
+
+
+13
+14
+
+
+15
+56
+B
+17<
+171819 *
+1 (210:7B
+
+
+13
+14
+
+
+15
+20
+
+52
+525323
+>
+108
+101112 *
+1 (:7B
+
+
+13
+14
+
+
+15
+16
+B
+26<
+262719 *
+1 (210:7B
+
+
+13
+14
+
+
+15
+28
+B
+43<
+434419 *
+19 9(210:7B
+
+
+13
+14
+
+
+15
+45
+B
+60<
+606119 *
+1^ ^(210:7B
+
+
+13
+14
+
+
+15
+62
+B
+40<
+404119 *
+12 2(	210:7B
+
+
+13
+14
+
+
+15
+42
+B
+29<
+293019 *
+1% %(	210:7B
+
+
+13
+14
+
+
+15
+31
+
+35
+353623
+B
+49<
+495019 *
+1H H(210:7B
+
+
+13
+14
+
+
+15
+51
+B
+46<
+464719 *
+1@ @(210:7B
+
+
+13
+14
+
+
+15
+48
+
+21
+212223rí
+
+172124*
+1 (
+
+172125*
+1 (
+
+262125*
+1 (
+
+292125*
+1%
+ %(
+
+323537*
+1,& ,(,
+
+322125*
+1,
+ ,(
+
+323538*
+1,4 ,(:
+
+322125*
+1,& ,(,
+
+323525*
+1,- ,(3
+
+323539*
+1,- ,(3
+
+402125*
+12
+ 2(
+
+432124*
+19 9(
+
+432125*
+19 9(
+
+462124*
+1@ @(
+
+462125*
+1@ @(
+
+495224*
+1H H(
+
+495225*
+1H H(
+
+542124*
+1O O(
+
+542125*
+1O O(
+
+572124*
+1V V(
+
+572125*
+1V V(
+
+602124*
+1^ ^(
+
+602125*
+1^ ^(

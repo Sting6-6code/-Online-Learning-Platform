@@ -1,0 +1,213 @@
+
+Ecom.olp.model.course.Lesson#setCourse(Lcom/olp/model/course/Course;)Zâ
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Lesson.javaﬁ ﬁ("10*µ
+2
+Û Û(ç
+ä
+
+Û Û()
+com.olp.model.course.Lesson"
+course"__id*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course"
+
+Ù Ù(
+""*∫
+3
+ ((†ù
+
+ (;
+%10boolean"Hcom.olp.model.course.Course#removeLesson(Lcom/olp/model/course/Lesson;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*;
+
+__unknown_file (
+com.olp.model.course.Lesson2+removeLesson(Lcom/olp/model/course/Lesson;)*
+2
+1*ï
+4
+Ó# Ó(1˚¯
+
+Ó# Ó(A
+%9boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*K
+
+__unknown_file (/
+-
+existingCoursecom.olp.model.course.Course*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Course2equals(Ljava/lang/Object;)*
+3
+1*¬
+5
+Ï Ï("Ä
+~
+
+Ï Ï("!
+%7com.olp.model.course.Course"__id*G
+
+__unknown_file (+*)
+com.olp.model.course.Lesson"
+courseÖ
+Ç
+
+Ï Ï(#-
+existingCoursecom.olp.model.course.Course"__id*?
+
+__unknown_file (#
+!
+%7com.olp.model.course.CourseÜ
+É
+
+Ì Ì()
+com.olp.model.course.Lesson"
+course"__id*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Courseî
+ë
+
+Ó Ó(
+%8boolean"	__compare*
+
+Ó Ó(
+!=*=
+
+Ó Ó(/
+-
+existingCoursecom.olp.model.course.Course*
+
+Ó Ó(
+""*
+4
+1*%
+6
+È È("
+
+È È(
+""*¬
+7
+Á Á( Ä
+~
+
+Á Á( !
+%3com.olp.model.course.Course"__id*G
+
+__unknown_file (+*)
+com.olp.model.course.Lesson"
+courseûõ
+
+Á Á(2	
+%4int".com.olp.model.course.Course#numberOfLessons()I*?
+
+__unknown_file (#
+!
+%3com.olp.model.course.Course2numberOfLessons()é
+ã
+
+Á6 Á(U	
+%5int"5com.olp.model.course.Course#minimumNumberOfLessons()I*;
+
+__unknown_file ("
+com.olp.model.course.Courset
+r
+
+Á Á(U
+%6boolean"	__compare*
+
+Á3 Á(5
+<=*
+
+Á Á(2
+	
+%4int*
+
+Á6 Á(U
+	
+%5int*
+5
+6*•
+8
+Á Á(Ä
+~
+
+Á Á(!
+%1com.olp.model.course.Course"__id*G
+
+__unknown_file (+*)
+com.olp.model.course.Lesson"
+courseà
+Ö
+
+Á Á(
+%2boolean"	__compare*
+
+Á Á(
+!=*1
+
+Á Á(#
+!
+%1com.olp.model.course.Course*
+
+Á Á(
+""*
+5
+7*%
+9
+‰ ‰("
+
+‰ ‰(
+""*®
+10
+‡ ‡(ç
+ä
+
+‚ ‚(
+%0boolean"	__compare*
+
+‚ ‚(
+==*6
+
+‚ ‚((
+&
+aCoursecom.olp.model.course.Course*
+
+‚ ‚(
+""*
+8
+9*ª
+1
+˜ ˜(
+Å
+
+
+˜ ˜(
+"
+%11com.olp.model.course.Course"__id*G
+
+__unknown_file (+*)
+com.olp.model.course.Lesson"
+courseèå
+
+˜ ˜(
+%12boolean"Ecom.olp.model.course.Course#addLesson(Lcom/olp/model/course/Lesson;)Z*@
+
+__unknown_file ($
+"
+%11com.olp.model.course.Course*;
+
+__unknown_file (
+com.olp.model.course.Lesson2(addLesson(Lcom/olp/model/course/Lesson;)"
+
+˘ ˘(
+"":4
+
+ﬁ ﬁ()&
+aCoursecom.olp.model.course.CourseB
+com.olp.model.course.LessonHX

@@ -1,0 +1,64 @@
+
+|com.olp.controller.AssignmentController#getSubmissionsByStudent(Ljava/lang/String;)Lorg/springframework/http/ResponseEntity;”
+‰/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/controller/AssignmentController.javaH, H(C"startingBlock*²
+startingBlockHC H(c²
+¯
+HD H(Q
+%3"
+__annotate*T
+
+__unknown_file (86
+4org.springframework.web.bind.annotation.PathVariable*;
+
+__unknown_file (
+
+	studentIdjava.lang.String]
+[
+HY H(b
+	studentIdjava.lang.String"__annotation*"
+
+__unknown_file (
+
+%3*
+1*¶
+1I' I(8œ
+™
+I' I(8'
+%0!com.olp.service.AssignmentService"__id*^
+
+__unknown_file (B*@)
+'com.olp.controller.AssignmentController"
+assignmentServiceµ²
+I' I(\
+%1java.util.List"^com.olp.service.AssignmentService#findSubmissionsByStudent(Ljava/lang/String;)Ljava/util/List;*E
+
+__unknown_file ()
+'
+%0!com.olp.service.AssignmentService*;
+
+__unknown_file (
+
+	studentIdjava.lang.String2,findSubmissionsByStudent(Ljava/lang/String;)e
+c
+I I(]
+submissionsjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List«
+¨
+J J(--
+%2'org.springframework.http.ResponseEntity"gorg.springframework.http.ResponseEntity#ok(Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;*G
+
+__unknown_file (+")
+'org.springframework.http.ResponseEntity*;
+
+__unknown_file (
+
+submissionsjava.util.List";
+J J(./
+-
+%2'org.springframework.http.ResponseEntity:)
+HD H(b
+	studentIdjava.lang.StringB+)
+'com.olp.controller.AssignmentControllerH

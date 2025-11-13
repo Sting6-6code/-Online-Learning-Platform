@@ -1,0 +1,70 @@
+
+tcom.olp.controller.AssignmentController#startAutoChecks(Ljava/lang/String;)Lorg/springframework/http/ResponseEntity;î
+â/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/controller/AssignmentController.javab& b(5"startingBlock*§
+startingBlockb5 b(N´
+®
+b6 b(C
+%7"
+__annotate*T
+
+__unknown_file (86
+4org.springframework.web.bind.annotation.PathVariable*4
+
+__unknown_file (
+
+idjava.lang.StringV
+T
+bK b(M
+idjava.lang.String"__annotation*"
+
+__unknown_file (
+
+%7*
+9*J
+7e e(1";
+e e(1/
+-
+%2'org.springframework.http.ResponseEntity*Ê
+8d d(Jè
+å
+d d(J1
+
+submission#com.olp.model.assignment.Submission"__id*G
+
+__unknown_file (+
+)
+%1#com.olp.model.assignment.Submissionø
+º
+e e(0-
+%2'org.springframework.http.ResponseEntity"gorg.springframework.http.ResponseEntity#ok(Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;*G
+
+__unknown_file (+")
+'org.springframework.http.ResponseEntity*O
+
+__unknown_file (3
+1
+
+submission#com.olp.model.assignment.Submission*
+7*˙
+9d$ d(5ú
+ô
+d$ d(5'
+%0!com.olp.service.AssignmentService"__id*^
+
+__unknown_file (B*@)
+'com.olp.controller.AssignmentController"
+assignmentService∆√
+d$ d(I)
+%1#com.olp.model.assignment.Submission"jcom.olp.service.AssignmentService#startAutoChecks(Ljava/lang/String;)Lcom/olp/model/assignment/Submission;*E
+
+__unknown_file ()
+'
+%0!com.olp.service.AssignmentService*4
+
+__unknown_file (
+
+idjava.lang.String2#startAutoChecks(Ljava/lang/String;)*
+8:"
+b6 b(M
+idjava.lang.StringB+)
+'com.olp.controller.AssignmentControllerH

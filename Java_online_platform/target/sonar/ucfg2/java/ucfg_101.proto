@@ -1,0 +1,59 @@
+
+Šcom.olp.model.course.Course#addCourseAssignment(Ljava/lang/String;Ljava/lang/String;Ljava/sql/Date;I)Lcom/olp/model/assignment/Assignment;‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaâ â('"1*Ç
+1
+ä5 ä(8^\
+
+ä* ä(4)
+%0#com.olp.model.assignment.Assignment"#com.olp.model.assignment.Assignmentê
+ç
+
+ä& ä(]
+%1"~com.olp.model.assignment.Assignment#<init>(Ljava/lang/String;Ljava/lang/String;Ljava/sql/Date;ILcom/olp/model/course/Course;)V*G
+
+__unknown_file (+
+)
+%0#com.olp.model.assignment.Assignment*5
+
+__unknown_file (
+
+aIdjava.lang.String*8
+
+__unknown_file (
+
+aTitlejava.lang.String*8
+
+__unknown_file (
+
+	aDeadlinejava.sql.Date*"
+
+__unknown_file (
+""*;
+
+__unknown_file (
+com.olp.model.course.Course›
+˜
+
+ä ä(^;
+aNewCourseAssignment#com.olp.model.assignment.Assignment"__id*G
+
+__unknown_file (+
+)
+%0#com.olp.model.assignment.Assignment"K
+
+å å( =
+;
+aNewCourseAssignment#com.olp.model.assignment.Assignment:%
+
+â( â(3
+aIdjava.lang.String:(
+
+â4 â(B
+aTitlejava.lang.String:(
+
+âC â(R
+	aDeadlinejava.sql.Date: 
+
+__unknown_file (
+""B
+com.olp.model.course.CourseH

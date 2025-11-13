@@ -1,0 +1,37 @@
+
+5com.olp.model.course.Course#isNumberOfLessonsValid()Z‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.java³ ³('"1*É
+1
+µ µ(%š—
+
+µ µ('	
+%0int".com.olp.model.course.Course#numberOfLessons()I*;
+
+__unknown_file (
+com.olp.model.course.Course2numberOfLessons()Ž
+‹
+
+µ+ µ(C	
+%1int"5com.olp.model.course.Course#minimumNumberOfLessons()I*;
+
+__unknown_file ("
+com.olp.model.course.Courset
+r
+
+µ µ(C
+%2boolean"	__compare*
+
+µ( µ(*
+>=*
+
+µ µ('
+	
+%0int*
+
+µ+ µ(C
+	
+%1int"
+
+¶ ¶(
+""B
+com.olp.model.course.CourseHX

@@ -1,0 +1,124 @@
+
+Tcom.olp.model.payment.Payment#setSubscription(Lcom/olp/model/payment/Subscription;)Z‹
+/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/payment/Payment.javaÃ Ã( "6*ê
+2
+Ï Ï(ÓÐ
+
+Ï Ï(:
+%4boolean"^com.olp.model.payment.Subscription#removeSubscriptionPayment(Lcom/olp/model/payment/Payment;)Z*X
+
+__unknown_file (<
+:
+existingSubscription"com.olp.model.payment.Subscription*=
+
+__unknown_file (!
+com.olp.model.payment.Payment2:removeSubscriptionPayment(Lcom/olp/model/payment/Payment;)*
+1*¯
+3
+Í) Í(=•’
+
+Í) Í(S
+%3boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*X
+
+__unknown_file (<
+:
+existingSubscription"com.olp.model.payment.Subscription*Q
+
+__unknown_file (5
+3
+aSubscription"com.olp.model.payment.Subscription2equals(Ljava/lang/Object;)*
+2
+1*ˆ
+4
+Ë> Ë(J
+
+
+Ë> Ë(J(
+%1"com.olp.model.payment.Subscription"__id*O
+
+__unknown_file (3*1
+com.olp.model.payment.Payment"
+subscription™
+–
+
+Ë Ë(K:
+existingSubscription"com.olp.model.payment.Subscription"__id*F
+
+__unknown_file (*
+(
+%1"com.olp.model.payment.Subscription›
+˜
+
+Ì Ì( 1
+com.olp.model.payment.Payment"
+subscription"__id*Q
+
+__unknown_file (5
+3
+aSubscription"com.olp.model.payment.Subscription¡
+ž
+
+Í Í($
+%2boolean"	__compare*
+
+Í Í(
+!=*J
+
+Í Í(<
+:
+existingSubscription"com.olp.model.payment.Subscription*
+
+Í  Í($
+""*
+3
+1*%
+5
+È È("
+
+È È(
+""*´
+6
+Å Å(š
+—
+
+Æ Æ(
+%0boolean"	__compare*
+
+Æ Æ(
+==*C
+
+Æ Æ(5
+3
+aSubscription"com.olp.model.payment.Subscription*
+
+Æ Æ(
+""*
+4
+5*ö
+1
+Ñ Ñ(
+
+
+Ñ Ñ((
+%5"com.olp.model.payment.Subscription"__id*O
+
+__unknown_file (3*1
+com.olp.model.payment.Payment"
+subscription»¸
+
+Ñ Ñ(-
+%6boolean"[com.olp.model.payment.Subscription#addSubscriptionPayment(Lcom/olp/model/payment/Payment;)Z*F
+
+__unknown_file (*
+(
+%5"com.olp.model.payment.Subscription*=
+
+__unknown_file (!
+com.olp.model.payment.Payment27addSubscriptionPayment(Lcom/olp/model/payment/Payment;)"
+
+Ó Ó(
+"":A
+
+Ã! Ã(Q3
+aSubscription"com.olp.model.payment.SubscriptionB!
+com.olp.model.payment.PaymentHX

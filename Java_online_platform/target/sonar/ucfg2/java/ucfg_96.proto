@@ -1,0 +1,55 @@
+
+Vcom.olp.model.course.Course#removeCourseEnrollment(Lcom/olp/model/course/Enrollment;)Z‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.java« «('"3*…
+2
+± ±(~
+|
+
+± ±(
+%2java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.course.Course"
+courseEnrollmentsîë
+
+± ±(1
+%3boolean"*java.util.List#remove(Ljava/lang/Object;)Z*2
+
+__unknown_file (
+
+%2java.util.List*R
+
+__unknown_file (6
+4
+aCourseEnrollmentcom.olp.model.course.Enrollment2remove(Ljava/lang/Object;)*
+1*à
+3
+­ ­(ÝÚ
+
+¯ ¯(2!
+%0com.olp.model.course.Course"Hcom.olp.model.course.Enrollment#getCourse()Lcom/olp/model/course/Course;*R
+
+__unknown_file (6
+4
+aCourseEnrollmentcom.olp.model.course.Enrollment2getCourse()æã
+
+¯	 ¯(3
+%1boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*;
+
+__unknown_file (
+com.olp.model.course.Course*?
+
+__unknown_file (#
+!
+%0com.olp.model.course.Course2equals(Ljava/lang/Object;)*
+2
+1*%
+1
+´ ´("
+
+´ ´(
+"":B
+
+«( «(D4
+aCourseEnrollmentcom.olp.model.course.EnrollmentB
+com.olp.model.course.CourseHX

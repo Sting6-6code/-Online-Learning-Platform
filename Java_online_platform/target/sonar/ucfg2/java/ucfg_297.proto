@@ -1,0 +1,34 @@
+
+@com.olp.model.course.CourseCategory#getCourses()Ljava/util/List;ê
+Ö/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/CourseCategory.java\ \( "1*ˆ
+1^ ^()z
+x
+^; ^(B
+%0java.util.List"__id*P
+
+__unknown_file (4*2%
+#com.olp.model.course.CourseCategory"	
+coursesÿ
+’
+^ ^(C
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listd
+b
+^ ^(D
+
+newCoursesjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List"*
+_ _(
+
+
+newCoursesjava.util.ListB'%
+#com.olp.model.course.CourseCategoryH

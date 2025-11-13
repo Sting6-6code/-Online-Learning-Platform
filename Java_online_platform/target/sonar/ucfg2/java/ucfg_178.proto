@@ -1,0 +1,194 @@
+
+Wcom.olp.service.UserServiceImpl#findUserByEmail(Ljava/lang/String;)Ljava/util/Optional;å
+Å/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/service/UserServiceImpl.java` `()"startingBlock*Ω
+2i i(•¢
+i i(/#
+%8com.olp.model.user.Instructor"*java.util.Optional#get()Ljava/lang/Object;*>
+
+__unknown_file ("
+ 
+
+instructorjava.util.Optional2get()›
+⁄
+i i(0
+%9java.util.Optional"=java.util.Optional#of(Ljava/lang/Object;)Ljava/util/Optional;*2
+
+__unknown_file ("
+java.util.Optional*A
+
+__unknown_file (%
+#
+%8com.olp.model.user.Instructor"&
+i i(1
+
+%9java.util.Optional*ﬁ
+3g* g(>ù
+ö
+g* g(>-
+%5'com.olp.repository.InstructorRepository"__id*Y
+
+__unknown_file (=*;!
+com.olp.service.UserServiceImpl"
+instructorRepository´®
+g* g(Q
+%6java.util.Optional"[com.olp.repository.InstructorRepository#findByEmail(Ljava/lang/String;)Ljava/util/Optional;*K
+
+__unknown_file (/
+-
+%5'com.olp.repository.InstructorRepository*7
+
+__unknown_file (
+
+emailjava.lang.String2findByEmail(Ljava/lang/String;)l
+j
+g g(R 
+
+instructorjava.util.Optional"__id*6
+
+__unknown_file (
+
+%6java.util.Optionaläá
+h h("
+%7boolean"java.util.Optional#isPresent()Z*>
+
+__unknown_file ("
+ 
+
+instructorjava.util.Optional2isPresent()*
+2
+1*Â
+startingBlock`) `(7ç
+ä
+^ ^(
+%14"
+__annotate*2
+
+__unknown_file (
+java.lang.Override*7
+
+__unknown_file (
+
+emailjava.lang.String≥
+∞
+_ _(#
+%15"
+__annotate*X
+
+__unknown_file (<:
+8org.springframework.transaction.annotation.Transactional*7
+
+__unknown_file (
+
+emailjava.lang.String
+}
+`1 `(6
+emailjava.lang.String"__annotation*#
+
+__unknown_file (
+
+%14*#
+
+__unknown_file (
+
+%15*
+5*¥
+4d d(üú
+d d(, 
+%3com.olp.model.user.Student"*java.util.Optional#get()Ljava/lang/Object;*;
+
+__unknown_file (
+
+studentjava.util.Optional2get()⁄
+◊
+d d(-
+%4java.util.Optional"=java.util.Optional#of(Ljava/lang/Object;)Ljava/util/Optional;*2
+
+__unknown_file ("
+java.util.Optional*>
+
+__unknown_file ("
+ 
+%3com.olp.model.user.Student"&
+d d(.
+
+%4java.util.Optional*Ã
+5b$ b(5ó
+î
+b$ b(5*
+%0$com.olp.repository.StudentRepository"__id*V
+
+__unknown_file (:*8!
+com.olp.service.UserServiceImpl"
+studentRepository•¢
+b$ b(H
+%1java.util.Optional"Xcom.olp.repository.StudentRepository#findByEmail(Ljava/lang/String;)Ljava/util/Optional;*H
+
+__unknown_file (,
+*
+%0$com.olp.repository.StudentRepository*7
+
+__unknown_file (
+
+emailjava.lang.String2findByEmail(Ljava/lang/String;)i
+g
+b b(I
+studentjava.util.Optional"__id*6
+
+__unknown_file (
+
+%1java.util.OptionaláÑ
+c c(
+%2boolean"java.util.Optional#isPresent()Z*;
+
+__unknown_file (
+
+studentjava.util.Optional2isPresent()*
+3
+4*Æ
+1l( l(?§
+°
+l( l(?1
+%10*com.olp.repository.AdministratorRepository"__id*\
+
+__unknown_file (@*>!
+com.olp.service.UserServiceImpl"
+administratorRepository≥∞
+l( l(R
+%11java.util.Optional"^com.olp.repository.AdministratorRepository#findByEmail(Ljava/lang/String;)Ljava/util/Optional;*O
+
+__unknown_file (3
+1
+%10*com.olp.repository.AdministratorRepository*7
+
+__unknown_file (
+
+emailjava.lang.String2findByEmail(Ljava/lang/String;)h
+f
+l l(S
+adminjava.util.Optional"__id*7
+
+__unknown_file (
+
+%11java.util.Optionaló
+î
+m m(7"
+%12java.util.function.Function"__declareFunction*Q
+
+__unknown_file (53
+1__sonar_lambda_15$com.olp.service.UserServiceImplîë
+m m(8
+%13java.util.Optional"Ijava.util.Optional#map(Ljava/util/function/Function;)Ljava/util/Optional;*9
+
+__unknown_file (
+
+adminjava.util.Optional*@
+
+__unknown_file ($
+"
+%12java.util.function.Function2"map(Ljava/util/function/Function;)"'
+m m(9
+
+%13java.util.Optional:%
+`* `(6
+emailjava.lang.StringB#!
+com.olp.service.UserServiceImplH

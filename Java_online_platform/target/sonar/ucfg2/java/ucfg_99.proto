@@ -1,0 +1,37 @@
+
+?com.olp.model.course.Course#isNumberOfCourseAssignmentsValid()Z‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.java× ×(1"1*ç
+1
+Ù Ù(/®«
+
+Ù Ù(1	
+%0int"8com.olp.model.course.Course#numberOfCourseAssignments()I*;
+
+__unknown_file (
+com.olp.model.course.Course2numberOfCourseAssignments()˜
+•
+
+Ù5 Ù(W	
+%1int"?com.olp.model.course.Course#minimumNumberOfCourseAssignments()I*;
+
+__unknown_file ("
+com.olp.model.course.Courset
+r
+
+Ù Ù(W
+%2boolean"	__compare*
+
+Ù2 Ù(4
+>=*
+
+Ù Ù(1
+	
+%0int*
+
+Ù5 Ù(W
+	
+%1int"
+
+Ú Ú(
+""B
+com.olp.model.course.CourseHX

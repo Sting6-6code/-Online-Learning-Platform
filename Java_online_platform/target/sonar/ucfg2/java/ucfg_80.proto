@@ -1,0 +1,42 @@
+
+Ocom.olp.model.course.Course#getCategory(I)Lcom/olp/model/course/CourseCategory;â
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaê ê(#"1*˛
+1
+í í()w
+u
+
+í í()
+%0java.util.List"__id*K
+
+__unknown_file (/*-
+com.olp.model.course.Course"
+
+categoriesû
+õ
+
+í í(4)
+%1#com.olp.model.course.CourseCategory"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""ê
+ç
+
+í í(50
+	aCategory#com.olp.model.course.CourseCategory"__id*G
+
+__unknown_file (+
+)
+%1#com.olp.model.course.CourseCategory"@
+
+ì ì(2
+0
+	aCategory#com.olp.model.course.CourseCategory: 
+
+__unknown_file (
+""B
+com.olp.model.course.CourseH

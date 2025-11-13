@@ -1,0 +1,32 @@
+
+=com.olp.model.course.Lesson#getLessonVideos()Ljava/util/List;‡
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Lesson.javay y(+"1*ý
+1{) {(4w
+u
+{F {(R
+%0java.util.List"__id*M
+
+__unknown_file (1*/
+com.olp.model.course.Lesson"
+lessonVideosØ
+Õ
+{) {(S
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listi
+g
+{ {(T!
+newLessonVideosjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List"/
+| |(#
+!
+newLessonVideosjava.util.ListB
+com.olp.model.course.LessonH

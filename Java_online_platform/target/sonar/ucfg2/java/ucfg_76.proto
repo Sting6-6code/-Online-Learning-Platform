@@ -1,0 +1,37 @@
+
+Bcom.olp.model.course.Course#getCourseAssignments()Ljava/util/List;‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaø ø(."1*–
+1
+ú, ú(7~
+|
+
+úI ú(Z
+%0java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.course.Course"
+courseAssignmentsÚ
+×
+
+ú, ú([
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listp
+n
+
+ú ú(\&
+newCourseAssignmentsjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List"6
+
+û û( (
+&
+newCourseAssignmentsjava.util.ListB
+com.olp.model.course.CourseH

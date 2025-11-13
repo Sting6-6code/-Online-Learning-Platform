@@ -1,0 +1,231 @@
+
+1.0&Sting6-6code_-Online-Learning-PlatformJavaFrontend"1763056595603*java2.B˙
+
+3
+.src/main/java/com/olp/service/UserService.java2
+	
+type3
+	
+MAIN4
+
+
+module-key5
+
+online-learning-platform6
+
+package8
+-
+(online-learning-platform:com.olp.service9
+!
+com.olp.service.UserService11
+
+	interface12
+
+access13
+
+public14
+
+simple-name15
+
+UserService16
+É
+}com.olp.service.UserService#createStudent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/user/Student;18
+
+method19
+
+createStudent20
+ 
+com.olp.model.user.Student22
+
+unknown23
+
+returns24
+
+
+uses25
+ä
+Écom.olp.service.UserService#createInstructor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/user/Instructor;27
+
+createInstructor28
+#
+com.olp.model.user.Instructor30
+ê
+âcom.olp.service.UserService#createAdministrator(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/user/Administrator;32
+
+createAdministrator33
+&
+ com.olp.model.user.Administrator35
+V
+Pcom.olp.service.UserService#findUserById(Ljava/lang/String;)Ljava/util/Optional;37
+
+findUserById38
+
+com.olp.model.user.User40
+Y
+Scom.olp.service.UserService#findUserByEmail(Ljava/lang/String;)Ljava/util/Optional;42
+
+findUserByEmail43
+B
+<com.olp.service.UserService#getAllStudents()Ljava/util/List;45
+
+getAllStudents46
+E
+?com.olp.service.UserService#getAllInstructors()Ljava/util/List;48
+
+getAllInstructors49J#
+!
+1
+12
+
+3
+4
+
+5
+6Z
+
+7
+7982
+
+
+5
+6jÏ
+B
+44<
+444519 *
+1> >(	210:7B
+
+
+13
+14
+
+
+15
+46
+B
+41<
+414219 *
+18 8(210:7B
+
+
+13
+14
+
+
+15
+43
+B
+31<
+313219 *
+1* *(210:7B
+
+
+13
+14
+
+
+15
+33
+
+39
+394023
+B
+47<
+474819 *
+1D D(	210:7B
+
+
+13
+14
+
+
+15
+49
+B
+17<
+171819 *
+1 (210:7B
+
+
+13
+14
+
+
+15
+20
+B
+26<
+262719 *
+1! !(210:7B
+
+
+13
+14
+
+
+15
+28
+B
+36<
+363719 *
+11 1(210:7B
+
+
+13
+14
+
+
+15
+38
+>
+108
+101112 *
+1 (:7B
+
+
+13
+14
+
+
+15
+16
+
+21
+212223
+
+29
+293023
+
+34
+343523ré
+
+172124*
+1 (
+
+172125*
+1 (
+
+262924*
+1! !(
+
+262925*
+1! !(
+
+313424*
+1* *(
+
+313425*
+1* *(
+
+363925*
+11 1(
+
+413925*
+18 8(
+
+442125*
+1>
+ >(
+
+472925*
+1D
+ D(

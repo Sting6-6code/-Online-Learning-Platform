@@ -1,0 +1,151 @@
+
+ocom.olp.controller.UserController#createAdministrator(Ljava/util/Map;)Lorg/springframework/http/ResponseEntity;Ž
+ƒ/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/controller/UserController.java^) ^(<"startingBlock*ª
+startingBlock^< ^(f­
+ª
+^= ^(I
+%10"
+__annotate*S
+
+__unknown_file (75
+3org.springframework.web.bind.annotation.RequestBody*6
+
+__unknown_file (
+
+requestjava.util.MapY
+W
+^^ ^(e
+requestjava.util.Map"__annotation*#
+
+__unknown_file (
+
+%10*
+10*J
+4e e(Q";
+e e(Q/
+-
+%7'org.springframework.http.ResponseEntity*Œ
+5eB e(O÷ô
+e e(P-
+%7'org.springframework.http.ResponseEntity"uorg.springframework.http.ResponseEntity$BodyBuilder#body(Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;*W
+
+__unknown_file (;
+9
+%63org.springframework.http.ResponseEntity$BodyBuilder*O
+
+__unknown_file (3
+1
+administrator com.olp.model.user.Administrator2body(Ljava/lang/Object;)*
+4*î
+6d d([Œ
+‰
+d d([1
+administrator com.olp.model.user.Administrator"__id*D
+
+__unknown_file ((
+&
+%4 com.olp.model.user.Administratora
+_
+e) e(;)
+%5#org.springframework.http.HttpStatus"__id*"
+
+__unknown_file (
+""ç
+ä
+e e(<9
+%63org.springframework.http.ResponseEntity$BodyBuilder"Šorg.springframework.http.ResponseEntity#status(Lorg/springframework/http/HttpStatus;)Lorg/springframework/http/ResponseEntity$BodyBuilder;*G
+
+__unknown_file (+")
+'org.springframework.http.ResponseEntity*G
+
+__unknown_file (+
+)
+%5#org.springframework.http.HttpStatus*
+5*ý
+7b b(0c
+a
+b b(0
+emailjava.lang.String"__id*4
+
+__unknown_file (
+
+%2java.lang.StringŠ
+‡
+d* d(5!
+%3com.olp.service.UserService"__id*R
+
+__unknown_file (6*4#
+!com.olp.controller.UserController"
+userServiceöó
+d* d(Z&
+%4 com.olp.model.user.Administrator"‰com.olp.service.UserService#createAdministrator(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/olp/model/user/Administrator;*?
+
+__unknown_file (#
+!
+%3com.olp.service.UserService*4
+
+__unknown_file (
+
+idjava.lang.String*6
+
+__unknown_file (
+
+namejava.lang.String*7
+
+__unknown_file (
+
+emailjava.lang.String2KcreateAdministrator(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)*
+6*‡
+8a a(.b
+`
+a a(.
+namejava.lang.String"__id*4
+
+__unknown_file (
+
+%1java.lang.StringŽ
+‹
+b b(/
+%2java.lang.String"__mapGet*6
+
+__unknown_file (
+
+requestjava.util.Map*%
+
+__unknown_file (	
+email*
+7*„
+9` `(*`
+^
+` `(*
+idjava.lang.String"__id*4
+
+__unknown_file (
+
+%0java.lang.String
+Š
+a a(-
+%1java.lang.String"__mapGet*6
+
+__unknown_file (
+
+requestjava.util.Map*$
+
+__unknown_file (
+name*
+8*¡
+10` `(‹
+ˆ
+` `()
+%0java.lang.String"__mapGet*6
+
+__unknown_file (
+
+requestjava.util.Map*"
+
+__unknown_file (
+id*
+9:$
+^= ^(e
+requestjava.util.MapB%#
+!com.olp.controller.UserControllerH

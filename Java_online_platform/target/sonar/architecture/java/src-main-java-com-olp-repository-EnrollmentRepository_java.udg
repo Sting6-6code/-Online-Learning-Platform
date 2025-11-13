@@ -1,0 +1,211 @@
+
+1.0&Sting6-6code_-Online-Learning-PlatformJavaFrontend"1763056595500*java2.B¶
+?
+:src/main/java/com/olp/repository/EnrollmentRepository.java2
+	
+type3
+	
+MAIN4
+
+
+module-key5
+
+online-learning-platform6
+
+package8
+0
++online-learning-platform:com.olp.repository9
+-
+'com.olp.repository.EnrollmentRepository11
+
+	interface12
+
+access13
+
+public14
+
+simple-name15
+
+EnrollmentRepository16
+;
+5org.springframework.data.jpa.repository.JpaRepository18
+
+unknown19
+
+
+implements20
+/
+)org.springframework.stereotype.Repository22
+
+annotated by23
+
+
+uses24
+%
+com.olp.model.course.Enrollment26
+a
+[com.olp.repository.EnrollmentRepository#findByStudentId(Ljava/lang/String;)Ljava/util/List;28
+
+method29
+
+findByStudentId30
+3
+-org.springframework.data.jpa.repository.Query32
+5
+/org.springframework.data.repository.query.Param34
+`
+Zcom.olp.repository.EnrollmentRepository#findByCourseId(Ljava/lang/String;)Ljava/util/List;36
+
+findByCourseId37
+~
+xcom.olp.repository.EnrollmentRepository#findByStudentIdAndCourseId(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;39
+ 
+findByStudentIdAndCourseId40J#
+!
+1
+12
+
+3
+4
+
+5
+6Z
+
+7
+7982
+
+
+5
+6jð
+B
+27<
+272829 *
+1 (210:7B
+
+
+13
+14
+
+
+15
+30
+
+31
+313219
+
+33
+333419
+B
+38<
+383929 *
+1( ((210:7B
+
+
+13
+14
+
+
+15
+40
+>
+108
+101112 *
+1 (&:7B
+
+
+13
+14
+
+
+15
+16
+
+21
+212219
+B
+35<
+353629 *
+1 (210:7B
+
+
+13
+14
+
+
+15
+37
+
+17
+171819
+
+25
+252619rÒ
+
+101720*
+1/ (<
+
+102123*
+1 (
+
+102124*
+1 (
+
+101724*
+1/ (<
+
+102524*
+1= (G
+
+273123*
+1 (
+
+273124*
+1 (
+
+272524*
+1
+ (
+
+273323*
+1& ('
+
+273324*
+1' (,
+
+353123*
+1 (
+
+353124*
+1 (
+
+352524*
+1 
+  (
+
+353323*
+1 %  (&
+
+353324*
+1 &  (+
+
+383123*
+1( ((
+
+383124*
+1( ((
+
+382524*
+1)
+ )(
+
+383323*
+1)1 )(2
+
+383324*
+1)2 )(7
+
+383323*
+1)W )(X
+
+383324*
+1)X )(]

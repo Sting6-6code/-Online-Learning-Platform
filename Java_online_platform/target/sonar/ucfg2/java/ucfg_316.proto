@@ -1,0 +1,32 @@
+
+Bcom.olp.model.user.Student#getStudentSubmissions()Ljava/util/List;†
+|/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Student.java` `(/"1*Ž
+1b- b(8|
+z
+bJ b(\
+%0java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.user.Student"
+studentSubmissionsØ
+Õ
+b- b(]
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listo
+m
+b b(^'
+newStudentSubmissionsjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List"5
+c c(!)
+'
+newStudentSubmissionsjava.util.ListB
+com.olp.model.user.StudentH

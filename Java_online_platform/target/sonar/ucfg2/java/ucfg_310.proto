@@ -1,0 +1,36 @@
+
+Scom.olp.model.user.Student#getStudentEnrollment(I)Lcom/olp/model/course/Enrollment;†
+|/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Student.java< <(("1*ý
+1>$ >(6|
+z
+>$ >(6
+%0java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.user.Student"
+studentEnrollments˜
+•
+>$ >(A%
+%1com.olp.model.course.Enrollment"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""
+Œ
+> >(B5
+aStudentEnrollmentcom.olp.model.course.Enrollment"__id*C
+
+__unknown_file ('
+%
+%1com.olp.model.course.Enrollment"C
+? ?(7
+5
+aStudentEnrollmentcom.olp.model.course.Enrollment: 
+
+__unknown_file (
+""B
+com.olp.model.user.StudentH

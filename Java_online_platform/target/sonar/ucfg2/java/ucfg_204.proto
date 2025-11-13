@@ -1,0 +1,24 @@
+
+Bcom.olp.model.payment.Subscription#numberOfSubscriptionPayments()I‘
+„/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/payment/Subscription.java§ §()"1* 
+1
+© ©(%‰
+†
+
+© ©(%
+%0java.util.List"__id*\
+
+__unknown_file (@*>$
+"com.olp.model.payment.Subscription"
+subscriptionPaymentsmk
+
+© ©(,	
+%1int"java.util.List#size()I*2
+
+__unknown_file (
+
+%0java.util.List2size()"
+
+ª ª(
+""B&$
+"com.olp.model.payment.SubscriptionHX

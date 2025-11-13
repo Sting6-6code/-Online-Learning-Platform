@@ -1,0 +1,64 @@
+
+wcom.olp.controller.CourseController#getCoursesByInstructor(Ljava/lang/String;)Lorg/springframework/http/ResponseEntity;
+…/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/controller/CourseController.java4( 4(>"startingBlock*¸
+startingBlock4> 4(aµ
+²
+4? 4(L
+%3"
+__annotate*T
+
+__unknown_file (86
+4org.springframework.web.bind.annotation.PathVariable*>
+
+__unknown_file ("
+ 
+instructorIdjava.lang.String`
+^
+4T 4(` 
+instructorIdjava.lang.String"__annotation*"
+
+__unknown_file (
+
+%3*
+1*›
+15 5(,
+
+5 5(,#
+%0com.olp.service.CourseService"__id*V
+
+__unknown_file (:*8%
+#com.olp.controller.CourseController"
+courseService®«
+5 5(R
+%1java.util.List"Ycom.olp.service.CourseService#findCoursesByInstructor(Ljava/lang/String;)Ljava/util/List;*A
+
+__unknown_file (%
+#
+%0com.olp.service.CourseService*>
+
+__unknown_file ("
+ 
+instructorIdjava.lang.String2+findCoursesByInstructor(Ljava/lang/String;)a
+_
+5 5(S
+coursesjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List§
+¤
+6 6()-
+%2'org.springframework.http.ResponseEntity"gorg.springframework.http.ResponseEntity#ok(Ljava/lang/Object;)Lorg/springframework/http/ResponseEntity;*G
+
+__unknown_file (+")
+'org.springframework.http.ResponseEntity*7
+
+__unknown_file (
+
+coursesjava.util.List";
+6 6(*/
+-
+%2'org.springframework.http.ResponseEntity:,
+4? 4(` 
+instructorIdjava.lang.StringB'%
+#com.olp.controller.CourseControllerH

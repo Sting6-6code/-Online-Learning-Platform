@@ -1,0 +1,41 @@
+
+Wcom.olp.model.course.Course#getCourseAssignment(I)Lcom/olp/model/assignment/Assignment;‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaò ò('"1*•
+1
+ô# ô(4~
+|
+
+ô# ô(4
+%0java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.course.Course"
+courseAssignmentsž
+›
+
+ô# ô(?)
+%1#com.olp.model.assignment.Assignment"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""˜
+•
+
+ô ô(@8
+aCourseAssignment#com.olp.model.assignment.Assignment"__id*G
+
+__unknown_file (+
+)
+%1#com.olp.model.assignment.Assignment"H
+
+õ õ(:
+8
+aCourseAssignment#com.olp.model.assignment.Assignment: 
+
+__unknown_file (
+""B
+com.olp.model.course.CourseH

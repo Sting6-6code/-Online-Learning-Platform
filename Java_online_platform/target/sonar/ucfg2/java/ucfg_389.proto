@@ -1,0 +1,38 @@
+
+qcom.olp.model.user.Instructor#addTaughtCourse(Ljava/lang/String;Ljava/lang/String;I)Lcom/olp/model/course/Course;â
+/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Instructor.javaP P("1*¢
+1R R(LJ
+R R(!
+%0com.olp.model.course.Course"com.olp.model.course.Courseì
+ê
+R R(3
+%1"icom.olp.model.course.Course#<init>(Ljava/lang/String;Ljava/lang/String;ILcom/olp/model/user/Instructor;)V*?
+
+__unknown_file (#
+!
+%0com.olp.model.course.Course*5
+
+__unknown_file (
+
+aIdjava.lang.String*8
+
+__unknown_file (
+
+aTitlejava.lang.String*"
+
+__unknown_file (
+""*=
+
+__unknown_file (!
+com.olp.model.user.Instructor"/
+R R(4#
+!
+%0com.olp.model.course.Course:#
+P  P(+
+aIdjava.lang.String:&
+P, P(:
+aTitlejava.lang.String: 
+
+__unknown_file (
+""B!
+com.olp.model.user.InstructorH

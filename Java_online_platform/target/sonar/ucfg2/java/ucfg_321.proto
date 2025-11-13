@@ -1,0 +1,44 @@
+
+Âcom.olp.model.user.Student#addStudentEnrollment(Ljava/lang/String;Lcom/olp/model/course/Enrollment$EnrollmentStatus;Ljava/sql/Date;Lcom/olp/model/course/Course;)Lcom/olp/model/course/Enrollment;†
+|/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Student.java} }(("1*û
+1 (TR
+ (%
+%0com.olp.model.course.Enrollment"com.olp.model.course.Enrollmentà
+Ý
+ (C
+%1"µcom.olp.model.course.Enrollment#<init>(Ljava/lang/String;Lcom/olp/model/course/Enrollment$EnrollmentStatus;Ljava/sql/Date;Lcom/olp/model/user/Student;Lcom/olp/model/course/Course;)V*C
+
+__unknown_file ('
+%
+%0com.olp.model.course.Enrollment*5
+
+__unknown_file (
+
+aIdjava.lang.String*Y
+
+__unknown_file (=
+;
+aStatus0com.olp.model.course.Enrollment$EnrollmentStatus*:
+
+__unknown_file (
+
+aEnrolledAtjava.sql.Date*:
+
+__unknown_file (
+com.olp.model.user.Student*D
+
+__unknown_file ((
+&
+aCoursecom.olp.model.course.Course"3
+ (D'
+%
+%0com.olp.model.course.Enrollment:#
+}) }(4
+aIdjava.lang.String:G
+}5 }(Y;
+aStatus0com.olp.model.course.Enrollment$EnrollmentStatus:(
+}Z }(k
+aEnrolledAtjava.sql.Date:2
+}l }(z&
+aCoursecom.olp.model.course.CourseB
+com.olp.model.user.StudentH

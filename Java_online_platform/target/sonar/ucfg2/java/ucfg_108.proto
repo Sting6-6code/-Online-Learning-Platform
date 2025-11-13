@@ -1,0 +1,150 @@
+
+Rcom.olp.model.course.Course#removeCategory(Lcom/olp/model/course/CourseCategory;)Z‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaÌ Ì("7*à
+2
+ß ß(w
+u
+
+ß ß(
+%9java.util.List"__id*K
+
+__unknown_file (/*-
+com.olp.model.course.Course"
+
+categoriesÐ
+Í
+
+ß ß(*
+%10void"
+__arrayAdd*2
+
+__unknown_file (
+
+%9java.util.List*"
+
+__unknown_file (
+""*N
+
+__unknown_file (2
+0
+	aCategory#com.olp.model.course.CourseCategory*
+1*Ä
+3
+Ü Ü(ª§
+
+Ü Ü(/
+%8boolean"Pcom.olp.model.course.CourseCategory#removeCourse(Lcom/olp/model/course/Course;)Z*N
+
+__unknown_file (2
+0
+	aCategory#com.olp.model.course.CourseCategory*;
+
+__unknown_file (
+com.olp.model.course.Course2+removeCourse(Lcom/olp/model/course/Course;)*
+2
+1*²
+5
+Ô Ô(w
+u
+
+Ô Ô(
+%2java.util.List"__id*K
+
+__unknown_file (/*-
+com.olp.model.course.Course"
+
+categoriesèå
+
+Ô Ô(0	
+%3int"+java.util.List#indexOf(Ljava/lang/Object;)I*2
+
+__unknown_file (
+
+%2java.util.List*N
+
+__unknown_file (2
+0
+	aCategory#com.olp.model.course.CourseCategory2indexOf(Ljava/lang/Object;)w
+u
+
+Õ Õ(
+%4java.util.List"__id*K
+
+__unknown_file (/*-
+com.olp.model.course.Course"
+
+categories¡
+ž
+
+Õ Õ()
+%5#com.olp.model.course.CourseCategory"__arrayRemove*2
+
+__unknown_file (
+
+%4java.util.List*"
+
+__unknown_file (
+""¨¥
+
+Ö Ö(%	
+%6int"Qcom.olp.model.course.CourseCategory#indexOfCourse(Lcom/olp/model/course/Course;)I*N
+
+__unknown_file (2
+0
+	aCategory#com.olp.model.course.CourseCategory*;
+
+__unknown_file (
+com.olp.model.course.Course2,indexOfCourse(Lcom/olp/model/course/Course;)m
+k
+
+Ö Ö(+
+%7boolean"	__compare*
+
+Ö& Ö((
+==*
+
+Ö Ö(%
+	
+%6int*
+
+Ö) Ö(+2*
+3
+1*%
+6
+Ñ Ñ("
+
+Ñ Ñ(
+""*
+7
+Î Î(w
+u
+
+Ï	 Ï(
+%0java.util.List"__id*K
+
+__unknown_file (/*-
+com.olp.model.course.Course"
+
+categoriesîë
+
+Ï	 Ï('
+%1boolean",java.util.List#contains(Ljava/lang/Object;)Z*2
+
+__unknown_file (
+
+%0java.util.List*N
+
+__unknown_file (2
+0
+	aCategory#com.olp.model.course.CourseCategory2contains(Ljava/lang/Object;)*
+5
+6*%
+1
+â â("
+
+â â(
+"":>
+
+Ì  Ì(80
+	aCategory#com.olp.model.course.CourseCategoryB
+com.olp.model.course.CourseHX

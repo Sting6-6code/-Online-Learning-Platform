@@ -1,0 +1,32 @@
+
++com.olp.model.assignment.Grade#setScore(D)Z‹
+€/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/assignment/Grade.javaU U("1*â
+1W W(Ž
+‹
+X* X(4)
+%0#com.olp.model.assignment.Submission"__id*N
+
+__unknown_file (2*0 
+com.olp.model.assignment.Grade"
+
+submission­
+ª
+X X(5
+
+%1void"ecom.olp.model.assignment.Grade#validateScoreWithinSubmission(DLcom/olp/model/assignment/Submission;)V*>
+
+__unknown_file (" 
+com.olp.model.assignment.Grade*"
+
+__unknown_file (
+""*G
+
+__unknown_file (+
+)
+%0#com.olp.model.assignment.Submission"
+[ [(
+"": 
+
+__unknown_file (
+""B" 
+com.olp.model.assignment.GradeHX

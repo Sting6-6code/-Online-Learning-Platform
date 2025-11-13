@@ -1,0 +1,53 @@
+
+/com.olp.model.course.Lesson#getTotalDuration()Iâ
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Lesson.javaÑ Ñ("4*ü
+2
+á	 á(d
+b
+
+á	 á(*
+video!com.olp.model.course.VideoContent"__id*"
+
+__unknown_file (
+""ü
+ú
+
+á	 á(*
+video!com.olp.model.course.VideoContent"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""*
+3
+1*¬
+3
+à à(´®
+
+à à(%	
+%1int"3com.olp.model.course.VideoContent#getDurationSec()I*H
+
+__unknown_file (,
+*
+video!com.olp.model.course.VideoContent2getDurationSec()*
+2*è
+4
+á á(*y
+w
+
+á á(*
+%0java.util.List"__id*M
+
+__unknown_file (1*/
+com.olp.model.course.Lesson"
+lessonVideos*
+2*%
+1
+ä ä("
+
+ä ä(
+""B
+com.olp.model.course.LessonHX

@@ -1,0 +1,20 @@
+
+6com.olp.model.user.Instructor#numberOfTaughtCourses()I‰
+/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Instructor.java9 9(""1*Š
+1; ;(z
+x
+; ;(
+%0java.util.List"__id*P
+
+__unknown_file (4*2
+com.olp.model.user.Instructor"
+taughtCourseski
+; ;(%	
+%1int"java.util.List#size()I*2
+
+__unknown_file (
+
+%0java.util.List2size()"
+< <(
+""B!
+com.olp.model.user.InstructorHX

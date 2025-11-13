@@ -1,0 +1,94 @@
+
+Hcom.olp.model.course.Course#removeLesson(Lcom/olp/model/course/Lesson;)Z‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaÛ Û("5*%
+2
+ç ç("
+
+ç ç(
+""*»
+3
+å å(š—
+
+å å(	
+%2int".com.olp.model.course.Course#numberOfLessons()I*;
+
+__unknown_file (
+com.olp.model.course.Course2numberOfLessons()Ž
+‹
+
+å å(5	
+%3int"5com.olp.model.course.Course#minimumNumberOfLessons()I*;
+
+__unknown_file ("
+com.olp.model.course.Courset
+r
+
+å å(5
+%4boolean"	__compare*
+
+å å(
+<=*
+
+å å(
+	
+%2int*
+
+å å(5
+	
+%3int*
+2
+1*%
+4
+á á("
+
+á á(
+""*Î
+5
+Ý Ý(ËÈ
+
+ß ß('!
+%0com.olp.model.course.Course"Dcom.olp.model.course.Lesson#getCourse()Lcom/olp/model/course/Course;*D
+
+__unknown_file ((
+&
+aLessoncom.olp.model.course.Lesson2getCourse()æã
+
+ß ß((
+%1boolean",java.lang.Object#equals(Ljava/lang/Object;)Z*;
+
+__unknown_file (
+com.olp.model.course.Course*?
+
+__unknown_file (#
+!
+%0com.olp.model.course.Course2equals(Ljava/lang/Object;)*
+3
+4*þ
+1
+ê ê(t
+r
+
+ê ê(
+%5java.util.List"__id*H
+
+__unknown_file (,**
+com.olp.model.course.Course"	
+lessonsàÝ
+
+ê ê(
+%6boolean"*java.util.List#remove(Ljava/lang/Object;)Z*2
+
+__unknown_file (
+
+%5java.util.List*D
+
+__unknown_file ((
+&
+aLessoncom.olp.model.course.Lesson2remove(Ljava/lang/Object;)"
+
+ì ì(
+"":4
+
+Û Û(,&
+aLessoncom.olp.model.course.LessonB
+com.olp.model.course.CourseHX

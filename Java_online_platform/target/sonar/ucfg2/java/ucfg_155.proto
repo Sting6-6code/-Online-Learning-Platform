@@ -1,0 +1,37 @@
+
+Ncom.olp.model.assignment.Assignment#getAssignmentSubmissions()Ljava/util/List;’
+…/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/assignment/Assignment.java™ ™(2"1*¬
+1
+›0 ›(;‹
+ˆ
+
+›M ›(b
+%0java.util.List"__id*^
+
+__unknown_file (B*@%
+#com.olp.model.assignment.Assignment"
+assignmentSubmissionsÚ
+×
+
+›0 ›(c
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listt
+r
+
+› ›(d*
+newAssignmentSubmissionsjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List":
+
+œ œ($,
+*
+newAssignmentSubmissionsjava.util.ListB'%
+#com.olp.model.assignment.AssignmentH

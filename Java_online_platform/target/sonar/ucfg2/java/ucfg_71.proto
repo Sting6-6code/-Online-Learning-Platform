@@ -1,0 +1,37 @@
+
+Bcom.olp.model.course.Course#getCourseEnrollments()Ljava/util/List;‰
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Course.javaÚ Ú(."1*–
+1
+Ü, Ü(7~
+|
+
+ÜI Ü(Z
+%0java.util.List"__id*R
+
+__unknown_file (6*4
+com.olp.model.course.Course"
+courseEnrollmentsÚ
+×
+
+Ü, Ü([
+%1java.util.List"Hjava.util.Collections#unmodifiableList(Ljava/util/List;)Ljava/util/List;*5
+
+__unknown_file ("
+java.util.Collections*2
+
+__unknown_file (
+
+%0java.util.Listp
+n
+
+Ü Ü(\&
+newCourseEnrollmentsjava.util.List"__id*2
+
+__unknown_file (
+
+%1java.util.List"6
+
+Ý Ý( (
+&
+newCourseEnrollmentsjava.util.ListB
+com.olp.model.course.CourseH

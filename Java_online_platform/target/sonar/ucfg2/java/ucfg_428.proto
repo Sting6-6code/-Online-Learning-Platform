@@ -1,0 +1,44 @@
+
+tcom.olp.model.course.Lesson#addLessonVideo(Ljava/lang/String;Ljava/lang/String;I)Lcom/olp/model/course/VideoContent;â
+}/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/course/Lesson.javaõ õ($"1*¬
+1
+ù ù(ZX
+
+ù ù('
+%0!com.olp.model.course.VideoContent"!com.olp.model.course.VideoContentõ
+ò
+
+ù ù(:
+%1"mcom.olp.model.course.VideoContent#<init>(Ljava/lang/String;Ljava/lang/String;ILcom/olp/model/course/Lesson;)V*E
+
+__unknown_file ()
+'
+%0!com.olp.model.course.VideoContent*5
+
+__unknown_file (
+
+aIdjava.lang.String*6
+
+__unknown_file (
+
+aUrljava.lang.String*"
+
+__unknown_file (
+""*;
+
+__unknown_file (
+com.olp.model.course.Lesson"7
+
+ù ù(;)
+'
+%0!com.olp.model.course.VideoContent:%
+
+õ% õ(0
+aIdjava.lang.String:&
+
+õ1 õ(=
+aUrljava.lang.String: 
+
+__unknown_file (
+""B
+com.olp.model.course.LessonH

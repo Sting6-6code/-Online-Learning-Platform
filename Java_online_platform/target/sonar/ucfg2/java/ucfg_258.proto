@@ -1,0 +1,67 @@
+
+>com.olp.model.assignment.Submission#validateGradeUniqueness()Z’
+…/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/assignment/Submission.java€ €(("3*Ç
+2
+ƒ& ƒ(5•
+’
+
+ƒ& ƒ(5$
+%2com.olp.model.assignment.Grade"__id*X
+
+__unknown_file (<*:%
+#com.olp.model.assignment.Submission"
+submissionGradeäá
+
+ƒ& ƒ(E)
+%3#com.olp.model.assignment.Submission"Scom.olp.model.assignment.Grade#getSubmission()Lcom/olp/model/assignment/Submission;*B
+
+__unknown_file (&
+$
+%2com.olp.model.assignment.Grade2getSubmission()±
+®
+
+ƒ& ƒ(M
+%4boolean"	__compare*
+
+ƒF ƒ(H
+==*9
+
+ƒ& ƒ(E+
+)
+%3#com.olp.model.assignment.Submission*5
+
+ƒI ƒ(M'%
+#com.olp.model.assignment.Submission*
+1*½
+3
+ƒ ƒ(•
+’
+
+ƒ ƒ($
+%0com.olp.model.assignment.Grade"__id*X
+
+__unknown_file (<*:%
+#com.olp.model.assignment.Submission"
+submissionGrade‹
+ˆ
+
+ƒ ƒ("
+%1boolean"	__compare*
+
+ƒ ƒ(
+==*4
+
+ƒ ƒ(&
+$
+%0com.olp.model.assignment.Grade*
+
+ƒ ƒ("
+""*
+2
+1*%
+1
+ƒ ƒ(N"
+
+ƒ ƒ(N
+""B'%
+#com.olp.model.assignment.SubmissionHX

@@ -1,0 +1,36 @@
+
+Mcom.olp.model.user.Instructor#getTaughtCourse(I)Lcom/olp/model/course/Course;â
+/Users/wangsiting/github_Siting/-Online-Learning-Platform/Java_online_platform/src/main/java/com/olp/model/user/Instructor.java- -("1*‡
+1/ /((z
+x
+/ /((
+%0java.util.List"__id*P
+
+__unknown_file (4*2
+com.olp.model.user.Instructor"
+taughtCoursesî
+ë
+/ /(3!
+%1com.olp.model.course.Course"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""Å
+
+/ /(4,
+aTaughtCoursecom.olp.model.course.Course"__id*?
+
+__unknown_file (#
+!
+%1com.olp.model.course.Course":
+0 0(.
+,
+aTaughtCoursecom.olp.model.course.Course: 
+
+__unknown_file (
+""B!
+com.olp.model.user.InstructorH
