@@ -52,6 +52,14 @@ public class Assignment
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Assignment()
+  {
+    assignmentSubmissions = new ArrayList<Submission>();
+  }
+
   public Assignment(String aId, String aTitle, Date aDeadline, int aMaxScore, com.olp.model.course.Course aCourse)
   {
     // Task 3.1: 添加构造函数验证

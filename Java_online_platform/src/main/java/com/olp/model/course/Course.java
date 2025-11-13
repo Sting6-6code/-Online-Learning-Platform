@@ -79,6 +79,18 @@ public class Course
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Course()
+  {
+    lessons = new ArrayList<Lesson>();
+    courseEnrollments = new ArrayList<Enrollment>();
+    courseAssignments = new ArrayList<Assignment>();
+    categories = new ArrayList<CourseCategory>();
+    status = Status.Draft;
+  }
+
   public Course(String aId, String aTitle, int aCapacity, Instructor aInstructor)
   {
     // Task 2.5: 添加构造函数验证
@@ -244,7 +256,7 @@ public class Course
     switch (aStatus)
     {
       case EnrollmentOpen:
-        if (hasActiveEnrollments())
+        if (validateHasActiveStudents())
         {
           setStatus(Status.InProgress);
           wasEventProcessed = true;
@@ -252,7 +264,7 @@ public class Course
         }
         break;
       case Waitlisted:
-        if (hasActiveEnrollments())
+        if (validateHasActiveStudents())
         {
           setStatus(Status.InProgress);
           wasEventProcessed = true;
@@ -830,10 +842,61 @@ public class Course
     return false;
   }
 
+  /**
+   * Task 5.3: 实现 CourseStartRequiresStudent 约束验证
+   * OCL 约束：课程开课前必须至少有一个 Active 状态的学生
+   * @return true 如果存在至少一个 Active Enrollment，否则返回 false
+   */
+  public boolean validateHasActiveStudents() {
+    return hasActiveEnrollments();
+  }
+
+  /**
+   * Task 5.8: 实现 UniqueCourseCategories 约束验证
+   * OCL 约束：课程的分类列表中不能有重复的分类
+   * @return true 如果所有分类唯一，否则返回 false
+   */
+  public boolean validateUniqueCategories() {
+    java.util.Set<String> categoryIds = new java.util.HashSet<>();
+    for (CourseCategory category : categories) {
+      if (!categoryIds.add(category.getId())) {
+        return false; // 发现重复
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Task 5.11: 实现 PublishRequiresContent 约束验证
+   * OCL 约束：课程发布前必须有最少的内容（至少1个Lesson和1个Assignment）
+   * @return true 如果有最少内容，否则返回 false
+   */
+  public boolean validateHasMinimumContent() {
+    return hasMinimumContent();
+  }
+
   //------------------------
   // Business Methods (Task 2.8)
   //------------------------
   
+  /**
+   * Task 5.1: 实现 SeatsNotExceeded 约束验证
+   * OCL 约束：enrollments 中 status=Active 的计数 ≤ capacity
+   * @return true 如果 Active 报名数 <= capacity，否则返回 false
+   */
+  public boolean validateSeatsNotExceeded() {
+    // 统计 Active 状态的 Enrollment 数量
+    int activeCount = 0;
+    for (Enrollment enrollment : courseEnrollments) {
+      if (enrollment.getStatus() == Enrollment.EnrollmentStatus.Active) {
+        activeCount++;
+      }
+    }
+    
+    // 返回 activeCount <= capacity
+    return activeCount <= capacity;
+  }
+
   /**
    * 学生选课核心逻辑
    * Task 2.8: 实现 enroll() 方法

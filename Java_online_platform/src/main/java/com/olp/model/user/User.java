@@ -30,6 +30,14 @@ public abstract class User
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected User()
+  {
+    // JPA requires a no-arg constructor
+  }
+
   public User(String aId, String aName, String aEmail)
   {
     // Task 1.1: 添加构造函数验证

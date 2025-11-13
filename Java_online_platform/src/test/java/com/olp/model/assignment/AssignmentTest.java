@@ -1,7 +1,6 @@
 package com.olp.model.assignment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.course.Course;
@@ -12,7 +11,6 @@ import java.sql.Date;
  * Task 3.1: Assignment 类基础功能测试
  * 验证 Assignment 类的构造函数验证和便捷方法
  */
-@SpringBootTest
 public class AssignmentTest {
 
     @Test

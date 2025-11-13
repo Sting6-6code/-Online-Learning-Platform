@@ -1,7 +1,6 @@
 package com.olp.model.course;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.user.Instructor;
@@ -10,7 +9,6 @@ import com.olp.model.user.Instructor;
  * Task 2.3: Lesson 类基础功能测试
  * 验证 Lesson 类的构造函数验证和便捷方法
  */
-@SpringBootTest
 public class LessonTest {
 
     @Test

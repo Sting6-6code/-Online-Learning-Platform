@@ -1,24 +1,30 @@
 package com.olp.model.course;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.user.Instructor;
 import com.olp.model.user.Student;
+import com.olp.model.assignment.Assignment;
 import java.sql.Date;
 
 /**
  * Task 2.4: Enrollment 关联类基础功能测试
  * 验证 Enrollment 类的构造函数验证和状态转换方法
  */
-@SpringBootTest
 public class EnrollmentTest {
 
     @Test
     public void testCreateEnrollment() {
         Instructor instructor = new Instructor("I001", "Dr. Smith", "smith@example.com");
         Course course = new Course("C001", "Java Programming", 50, instructor);
+        // Task 5.2: 课程必须不是 Draft 状态才能创建 Enrollment
+        Lesson lesson = new Lesson("L001", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A001", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
         Student student = new Student("S001", "John Doe", "john@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         
@@ -77,10 +83,80 @@ public class EnrollmentTest {
         System.out.println("✅ null course 验证通过");
     }
 
+    // Task 5.2: EnrollmentOnlyAfterPublish 约束验证测试
+    @Test
+    public void testEnrollmentCannotBeCreatedForDraftCourse() {
+        Instructor instructor = new Instructor("I009", "Dr. Violet", "violet@example.com");
+        Course course = new Course("C010", "Draft Course", 50, instructor);
+        // Course 初始状态为 Draft
+        assertEquals(Course.Status.Draft, course.getStatus());
+        
+        Student student = new Student("S009", "Grace Purple", "grace@example.com");
+        Date enrolledAt = new Date(System.currentTimeMillis());
+        
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> new Enrollment("E011", Enrollment.EnrollmentStatus.Active, enrolledAt, student, course),
+            "Draft 状态的课程不应该创建 Enrollment"
+        );
+        assertTrue(exception.getMessage().contains("Draft"));
+        
+        System.out.println("✅ Draft 状态的课程无法创建 Enrollment");
+    }
+
+    @Test
+    public void testEnrollmentCanBeCreatedForPublishedCourse() {
+        Instructor instructor = new Instructor("I010", "Dr. Indigo", "indigo@example.com");
+        Course course = new Course("C011", "Published Course", 50, instructor);
+        // 发布课程
+        Lesson lesson = new Lesson("L002", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A002", "Assignment 1", deadline, 100, course);
+        course.publish();
+        assertEquals(Course.Status.Published, course.getStatus());
+        
+        Student student = new Student("S010", "Henry Orange", "henry@example.com");
+        Date enrolledAt = new Date(System.currentTimeMillis());
+        
+        // 应该可以创建 Enrollment（虽然课程状态是 Published，不是 EnrollmentOpen，但约束只要求不是 Draft）
+        Enrollment enrollment = new Enrollment("E012", Enrollment.EnrollmentStatus.Active, enrolledAt, student, course);
+        assertNotNull(enrollment, "Published 状态的课程可以创建 Enrollment");
+        
+        System.out.println("✅ Published 状态的课程可以创建 Enrollment");
+    }
+
+    @Test
+    public void testEnrollmentCanBeCreatedForEnrollmentOpenCourse() {
+        Instructor instructor = new Instructor("I011", "Dr. Cyan", "cyan@example.com");
+        Course course = new Course("C012", "Enrollment Open Course", 50, instructor);
+        // 发布并开放选课
+        Lesson lesson = new Lesson("L003", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A003", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        assertEquals(Course.Status.EnrollmentOpen, course.getStatus());
+        
+        Student student = new Student("S011", "Iris Pink", "iris@example.com");
+        Date enrolledAt = new Date(System.currentTimeMillis());
+        
+        Enrollment enrollment = new Enrollment("E013", Enrollment.EnrollmentStatus.Active, enrolledAt, student, course);
+        assertNotNull(enrollment, "EnrollmentOpen 状态的课程可以创建 Enrollment");
+        
+        System.out.println("✅ EnrollmentOpen 状态的课程可以创建 Enrollment");
+    }
+
     @Test
     public void testDropCourseFromActive() {
         Instructor instructor = new Instructor("I004", "Dr. White", "white@example.com");
         Course course = new Course("C004", "Database Design", 25, instructor);
+        // 发布课程以便创建 Enrollment
+        Lesson lesson = new Lesson("L004", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A004", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
         Student student = new Student("S004", "Alice Brown", "alice@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         
@@ -98,6 +174,13 @@ public class EnrollmentTest {
     public void testDropCourseFromWaitlisted() {
         Instructor instructor = new Instructor("I005", "Dr. Black", "black@example.com");
         Course course = new Course("C005", "Math 101", 100, instructor);
+        // 发布课程以便创建 Enrollment
+        Lesson lesson = new Lesson("L005", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A005", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
         Student student = new Student("S005", "Charlie Green", "charlie@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         
@@ -115,6 +198,13 @@ public class EnrollmentTest {
     public void testDropCourseFromDropped() {
         Instructor instructor = new Instructor("I006", "Dr. Green", "green@example.com");
         Course course = new Course("C006", "Physics 101", 80, instructor);
+        // 发布课程以便创建 Enrollment
+        Lesson lesson = new Lesson("L006", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A006", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
         Student student = new Student("S006", "David Blue", "david@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         
@@ -132,6 +222,13 @@ public class EnrollmentTest {
     public void testEnrollmentAssociation() {
         Instructor instructor = new Instructor("I007", "Dr. Blue", "blue@example.com");
         Course course = new Course("C007", "Chemistry 101", 90, instructor);
+        // 发布课程以便创建 Enrollment
+        Lesson lesson = new Lesson("L007", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A007", "Assignment 1", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+        
         Student student = new Student("S007", "Eve Red", "eve@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         
@@ -151,6 +248,17 @@ public class EnrollmentTest {
         Instructor instructor = new Instructor("I008", "Dr. Red", "red@example.com");
         Course course1 = new Course("C008", "Biology 101", 85, instructor);
         Course course2 = new Course("C009", "History 101", 70, instructor);
+        // 发布课程以便创建 Enrollment
+        Lesson lesson1 = new Lesson("L008", "Lesson 1", 1, course1);
+        Lesson lesson2 = new Lesson("L009", "Lesson 1", 1, course2);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment1 = new Assignment("A008", "Assignment 1", deadline, 100, course1);
+        Assignment assignment2 = new Assignment("A009", "Assignment 1", deadline, 100, course2);
+        course1.publish();
+        course1.openEnrollment();
+        course2.publish();
+        course2.openEnrollment();
+        
         Student student = new Student("S008", "Frank Yellow", "frank@example.com");
         Date enrolledAt = new Date(System.currentTimeMillis());
         

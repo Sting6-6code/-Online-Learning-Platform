@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.service</a> &gt; <span class="el_source">CourseServiceImpl.java</span></div><h1>CourseServiceImpl.java</h1><pre class="source lang-java linenums">package com.olp.service;
+
+import com.olp.model.course.Course;
+import com.olp.model.course.Enrollment;
+import com.olp.model.user.Instructor;
+import com.olp.model.user.Student;
+import com.olp.repository.CourseRepository;
+import com.olp.repository.InstructorRepository;
+import com.olp.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Task 6.4: CourseServiceImpl 实现类
+ * 实现课程服务的业务逻辑
+ */
+@Service
+@Transactional
+<span class="nc" id="L23">public class CourseServiceImpl implements CourseService {</span>
+    
+    @Autowired
+    private CourseRepository courseRepository;
+    
+    @Autowired
+    private InstructorRepository instructorRepository;
+    
+    @Autowired
+    private StudentRepository studentRepository;
+    
+    @Override
+    public Course createCourse(String id, String title, int capacity, String instructorId) {
+<span class="nc" id="L36">        Instructor instructor = instructorRepository.findById(instructorId)</span>
+<span class="nc" id="L37">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Instructor not found: &quot; + instructorId));</span>
+        
+<span class="nc" id="L39">        Course course = new Course(id, title, capacity, instructor);</span>
+<span class="nc" id="L40">        return courseRepository.save(course);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;Course&gt; findCourseById(String id) {
+<span class="nc" id="L46">        return courseRepository.findById(id);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Course&gt; findCoursesByInstructor(String instructorId) {
+<span class="nc" id="L52">        return courseRepository.findByInstructorId(instructorId);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Course&gt; findCoursesByStatus(Course.Status status) {
+<span class="nc" id="L58">        return courseRepository.findByStatus(status);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Course&gt; getAllCourses() {
+<span class="nc" id="L64">        return courseRepository.findAll();</span>
+    }
+    
+    @Override
+    public Course publishCourse(String courseId) {
+<span class="nc" id="L69">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L70">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L72">        boolean published = course.publish();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (!published) {</span>
+<span class="nc" id="L74">            throw new IllegalStateException(&quot;Failed to publish course. Check course status and content requirements.&quot;);</span>
+        }
+        
+<span class="nc" id="L77">        return courseRepository.save(course);</span>
+    }
+    
+    @Override
+    public Course openEnrollment(String courseId) {
+<span class="nc" id="L82">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L83">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L85">        boolean opened = course.openEnrollment();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (!opened) {</span>
+<span class="nc" id="L87">            throw new IllegalStateException(&quot;Failed to open enrollment. Course must be published first.&quot;);</span>
+        }
+        
+<span class="nc" id="L90">        return courseRepository.save(course);</span>
+    }
+    
+    @Override
+    public Enrollment enrollStudent(String courseId, String studentId) {
+<span class="nc" id="L95">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L96">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L98">        Student student = studentRepository.findById(studentId)</span>
+<span class="nc" id="L99">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Student not found: &quot; + studentId));</span>
+        
+<span class="nc" id="L101">        Enrollment enrollment = course.enroll(student);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (enrollment == null) {</span>
+<span class="nc" id="L103">            throw new IllegalStateException(&quot;Failed to enroll student. Check course status or duplicate enrollment.&quot;);</span>
+        }
+        
+<span class="nc" id="L106">        courseRepository.save(course);</span>
+<span class="nc" id="L107">        return enrollment;</span>
+    }
+    
+    @Override
+    public Course startCourse(String courseId) {
+<span class="nc" id="L112">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L113">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L115">        boolean started = course.startCourse();</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (!started) {</span>
+<span class="nc" id="L117">            throw new IllegalStateException(&quot;Failed to start course. Must have active students.&quot;);</span>
+        }
+        
+<span class="nc" id="L120">        return courseRepository.save(course);</span>
+    }
+    
+    @Override
+    public Course completeCourse(String courseId) {
+<span class="nc" id="L125">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L126">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L128">        boolean completed = course.complete();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (!completed) {</span>
+<span class="nc" id="L130">            throw new IllegalStateException(&quot;Failed to complete course. Course must be in progress.&quot;);</span>
+        }
+        
+<span class="nc" id="L133">        return courseRepository.save(course);</span>
+    }
+    
+    @Override
+    public Course cancelCourse(String courseId, String reason) {
+<span class="nc" id="L138">        Course course = courseRepository.findById(courseId)</span>
+<span class="nc" id="L139">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Course not found: &quot; + courseId));</span>
+        
+<span class="nc" id="L141">        boolean cancelled = course.cancel(reason);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (!cancelled) {</span>
+<span class="nc" id="L143">            throw new IllegalStateException(&quot;Failed to cancel course. Cannot cancel completed courses.&quot;);</span>
+        }
+        
+<span class="nc" id="L146">        return courseRepository.save(course);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

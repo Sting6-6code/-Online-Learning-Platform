@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Submission.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.assignment</a> &gt; <span class="el_source">Submission.java</span></div><h1>Submission.java</h1><pre class="source lang-java linenums">/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+
+
+package com.olp.model.assignment;
+
+import java.sql.Date;
+import javax.persistence.*;
+import com.olp.util.Utils;
+
+// line 125 &quot;model.ump&quot;
+// line 275 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;submissions&quot;)
+public class Submission
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Submission Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Column(name = &quot;submitted_at&quot;)
+  private Date submittedAt;
+  
+  @Column(name = &quot;version&quot;, nullable = false)
+  private int version;
+  
+  @Column(name = &quot;check_passed&quot;, nullable = false)
+  private boolean checkPassed;
+
+  //Submission State Machines
+<span class="fc" id="L37">  public enum Status { Created, Submitted, UnderCheck, Grading, Graded, Returned, ResubmissionRequested }</span>
+  
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;status&quot;, length = 30, nullable = false)
+  private Status status;
+
+  //Submission Associations
+  @OneToOne(mappedBy = &quot;submission&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private com.olp.model.assignment.Grade submissionGrade;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;student_id&quot;, nullable = false)
+  private com.olp.model.user.Student student;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;assignment_id&quot;, nullable = false)
+  private com.olp.model.assignment.Assignment assignment;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Submission()
+<span class="nc" id="L63">  {</span>
+<span class="nc" id="L64">    status = Status.Created;</span>
+<span class="nc" id="L65">  }</span>
+
+  public Submission(String aId, Date aSubmittedAt, int aVersion, boolean aCheckPassed, com.olp.model.assignment.Grade aSubmissionGrade, com.olp.model.user.Student aStudent, com.olp.model.assignment.Assignment aAssignment)
+<span class="fc" id="L68">  {</span>
+    // Task 3.3: 添加构造函数验证
+<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (aStudent == null) {</span>
+<span class="fc" id="L71">      throw new IllegalArgumentException(&quot;Submission student cannot be null&quot;);</span>
+    }
+<span class="fc bfc" id="L73" title="All 2 branches covered.">    if (aAssignment == null) {</span>
+<span class="fc" id="L74">      throw new IllegalArgumentException(&quot;Submission assignment cannot be null&quot;);</span>
+    }
+    
+<span class="fc" id="L77">    id = aId;</span>
+<span class="fc" id="L78">    submittedAt = aSubmittedAt; // submittedAt 初始可为 null</span>
+<span class="fc" id="L79">    version = aVersion; // 初始 version 为构造函数参数值</span>
+<span class="fc" id="L80">    checkPassed = aCheckPassed; // 初始 checkPassed 为构造函数参数值</span>
+<span class="fc" id="L81">    boolean didAddSubmissionGrade = setSubmissionGrade(aSubmissionGrade);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">    if (!didAddSubmissionGrade)</span>
+    {
+<span class="nc" id="L84">      throw new RuntimeException(&quot;Unable to create submission due to submissionGrade. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L86">    boolean didAddStudent = setStudent(aStudent);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">    if (!didAddStudent)</span>
+    {
+<span class="nc" id="L89">      throw new RuntimeException(&quot;Unable to create studentSubmission due to student. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L91">    boolean didAddAssignment = setAssignment(aAssignment);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">    if (!didAddAssignment)</span>
+    {
+<span class="nc" id="L94">      throw new RuntimeException(&quot;Unable to create assignmentSubmission due to assignment. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L96">    setStatus(Status.Created); // 初始状态为 Created</span>
+<span class="fc" id="L97">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L105">    boolean wasSet = false;</span>
+<span class="nc" id="L106">    id = aId;</span>
+<span class="nc" id="L107">    wasSet = true;</span>
+<span class="nc" id="L108">    return wasSet;</span>
+  }
+
+  public boolean setSubmittedAt(Date aSubmittedAt)
+  {
+<span class="fc" id="L113">    boolean wasSet = false;</span>
+<span class="fc" id="L114">    submittedAt = aSubmittedAt;</span>
+<span class="fc" id="L115">    wasSet = true;</span>
+<span class="fc" id="L116">    return wasSet;</span>
+  }
+
+  public boolean setVersion(int aVersion)
+  {
+<span class="fc" id="L121">    boolean wasSet = false;</span>
+<span class="fc" id="L122">    version = aVersion;</span>
+<span class="fc" id="L123">    wasSet = true;</span>
+<span class="fc" id="L124">    return wasSet;</span>
+  }
+
+  public boolean setCheckPassed(boolean aCheckPassed)
+  {
+<span class="fc" id="L129">    boolean wasSet = false;</span>
+<span class="fc" id="L130">    checkPassed = aCheckPassed;</span>
+<span class="fc" id="L131">    wasSet = true;</span>
+<span class="fc" id="L132">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L137">    return id;</span>
+  }
+
+  public Date getSubmittedAt()
+  {
+<span class="fc" id="L142">    return submittedAt;</span>
+  }
+
+  public int getVersion()
+  {
+<span class="fc" id="L147">    return version;</span>
+  }
+
+  public boolean getCheckPassed()
+  {
+<span class="fc" id="L152">    return checkPassed;</span>
+  }
+  /* Code from template attribute_IsBoolean */
+  public boolean isCheckPassed()
+  {
+<span class="nc" id="L157">    return checkPassed;</span>
+  }
+
+  public String getStatusFullName()
+  {
+<span class="nc" id="L162">    String answer = status.toString();</span>
+<span class="nc" id="L163">    return answer;</span>
+  }
+
+  public Status getStatus()
+  {
+<span class="fc" id="L168">    return status;</span>
+  }
+
+  /**
+   * Task 3.4: 实现 submit() 方法
+   * 提交作业：从 Created 状态转换到 Submitted 状态
+   */
+  public boolean submit()
+  {
+    // 守卫条件：当前状态必须是 Created
+<span class="pc bpc" id="L178" title="1 of 4 branches missed.">    if (status != Status.Created &amp;&amp; status != Status.ResubmissionRequested) {</span>
+<span class="fc" id="L179">      return false;</span>
+    }
+    
+    // 守卫条件：当前时间 &lt;= assignment.getDeadline()
+<span class="fc bfc" id="L183" title="All 2 branches covered.">    if (!validateNotOverdue()) {</span>
+<span class="fc" id="L184">      return false; // 超过截止时间</span>
+    }
+    
+    // 设置 submittedAt
+<span class="fc" id="L188">    setSubmittedAt(Utils.getCurrentTime());</span>
+    
+    // 计算版本号：统计该学生对该作业的已有提交数 + 1
+<span class="fc" id="L191">    int existingCount = 0;</span>
+<span class="pc bpc" id="L192" title="2 of 4 branches missed.">    if (assignment != null &amp;&amp; student != null) {</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">      for (int i = 0; i &lt; assignment.numberOfAssignmentSubmissions(); i++) {</span>
+<span class="fc" id="L194">        Submission existingSubmission = assignment.getAssignmentSubmission(i);</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (existingSubmission.getStudent() != null &amp;&amp; </span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            existingSubmission.getStudent().equals(student) &amp;&amp;</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            !existingSubmission.equals(this) &amp;&amp;</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            existingSubmission.getSubmittedAt() != null) {</span>
+<span class="fc" id="L199">          existingCount++;</span>
+        }
+      }
+    }
+<span class="fc" id="L203">    setVersion(existingCount + 1);</span>
+    
+    // 状态转换
+<span class="fc" id="L206">    setStatus(Status.Submitted);</span>
+<span class="fc" id="L207">    return true;</span>
+  }
+
+  /**
+   * Task 3.5: 实现 startAutoChecks() 方法
+   * 触发自动检查：从 Submitted 状态转换到 UnderCheck 状态
+   * 注意：实际的检查逻辑（查重、编译等）由外部系统触发，此方法仅负责状态转换
+   */
+  public boolean startAutoChecks()
+  {
+    // 守卫条件：当前状态必须是 Submitted
+<span class="fc bfc" id="L218" title="All 2 branches covered.">    if (status != Status.Submitted) {</span>
+<span class="fc" id="L219">      return false;</span>
+    }
+    
+    // 状态转换
+<span class="fc" id="L223">    setStatus(Status.UnderCheck);</span>
+<span class="fc" id="L224">    return true;</span>
+  }
+
+  /**
+   * Task 3.7: 实现 startGrading() 方法
+   * 开始评分：从 Submitted 状态转换到 Grading 状态
+   */
+  public boolean startGrading()
+  {
+    // 守卫条件：当前状态必须是 Submitted
+<span class="fc bfc" id="L234" title="All 2 branches covered.">    if (status != Status.Submitted) {</span>
+<span class="fc" id="L235">      return false;</span>
+    }
+    
+    // 守卫条件：checkPassed == true
+<span class="fc bfc" id="L239" title="All 2 branches covered.">    if (!getCheckPassed()) {</span>
+<span class="fc" id="L240">      return false;</span>
+    }
+    
+    // 状态转换
+<span class="fc" id="L244">    setStatus(Status.Grading);</span>
+<span class="fc" id="L245">    return true;</span>
+  }
+
+  /**
+   * Task 3.6: 实现 checksPass() 方法
+   * 检查通过：从 UnderCheck 状态转换回 Submitted 状态（标记为可评分）
+   */
+  public boolean checksPass()
+  {
+    // 守卫条件：当前状态必须是 UnderCheck
+<span class="fc bfc" id="L255" title="All 2 branches covered.">    if (status != Status.UnderCheck) {</span>
+<span class="fc" id="L256">      return false;</span>
+    }
+    
+    // 设置 checkPassed := true
+<span class="fc" id="L260">    setCheckPassed(true);</span>
+    
+    // 状态转换：回到 Submitted（标记为可评分）
+<span class="fc" id="L263">    setStatus(Status.Submitted);</span>
+<span class="fc" id="L264">    return true;</span>
+  }
+
+  /**
+   * Task 3.6: 实现 checksFail() 方法
+   * 检查失败：从 UnderCheck 状态转换到 Returned 状态
+   */
+  public boolean checksFail()
+  {
+    // 守卫条件：当前状态必须是 UnderCheck
+<span class="fc bfc" id="L274" title="All 2 branches covered.">    if (status != Status.UnderCheck) {</span>
+<span class="fc" id="L275">      return false;</span>
+    }
+    
+    // 设置 checkPassed := false
+<span class="fc" id="L279">    setCheckPassed(false);</span>
+    
+    // 状态转换：转到 Returned
+<span class="fc" id="L282">    setStatus(Status.Returned);</span>
+<span class="fc" id="L283">    return true;</span>
+  }
+
+  /**
+   * Task 3.8: 实现 grade() 方法（带参数）
+   * 评分：从 Grading 状态转换到 Graded 状态，创建或更新 Grade 对象
+   */
+  public boolean grade(double score, String feedback)
+  {
+    // 守卫条件：当前状态必须是 Grading
+<span class="fc bfc" id="L293" title="All 2 branches covered.">    if (status != Status.Grading) {</span>
+<span class="fc" id="L294">      return false;</span>
+    }
+    
+    // 守卫条件：0 &lt;= score &lt;= assignment.getMaxScore()
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">    if (assignment == null) {</span>
+<span class="nc" id="L299">      return false;</span>
+    }
+<span class="fc bfc" id="L301" title="All 4 branches covered.">    if (score &lt; 0 || score &gt; assignment.getMaxScore()) {</span>
+<span class="fc" id="L302">      return false;</span>
+    }
+    
+    // 如果 submissionGrade 为 null，创建新的 Grade 对象
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">    if (submissionGrade == null) {</span>
+<span class="nc" id="L307">      String gradeId = com.olp.util.Utils.generateId(&quot;GRD&quot;);</span>
+<span class="nc" id="L308">      Grade newGrade = new Grade(gradeId, score, feedback, this);</span>
+<span class="nc" id="L309">      setSubmissionGrade(newGrade);</span>
+<span class="nc" id="L310">    } else {</span>
+      // 如果 submissionGrade 已存在，更新其 score 和 feedback
+<span class="fc" id="L312">      submissionGrade.setScore(score);</span>
+<span class="fc" id="L313">      submissionGrade.setFeedback(feedback);</span>
+    }
+    
+    // 状态转换
+<span class="fc" id="L317">    setStatus(Status.Graded);</span>
+<span class="fc" id="L318">    return true;</span>
+  }
+  
+  // 保留无参方法以兼容现有代码（调用新方法，使用默认值）
+  public boolean grade()
+  {
+<span class="nc" id="L324">    return grade(0.0, &quot;&quot;);</span>
+  }
+
+  /**
+   * Task 3.9: 实现 requestResubmission() 方法
+   * 要求重交：从 Graded 或 Returned 状态转换到 ResubmissionRequested 状态
+   * 注意：学生可以创建新的 Submission（version 递增）
+   */
+  public boolean requestResubmission()
+  {
+    // 守卫条件：当前状态必须是 Graded 或 Returned
+<span class="fc bfc" id="L335" title="All 4 branches covered.">    if (status != Status.Graded &amp;&amp; status != Status.Returned) {</span>
+<span class="fc" id="L336">      return false;</span>
+    }
+    
+    // 守卫条件：Utils.getCurrentTime() &lt;= assignment.getDeadline()（可选）
+<span class="pc bpc" id="L340" title="2 of 4 branches missed.">    if (assignment != null &amp;&amp; assignment.getDeadline() != null) {</span>
+<span class="fc" id="L341">      Date currentTime = Utils.getCurrentTime();</span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">      if (Utils.compareDates(currentTime, assignment.getDeadline()) &gt; 0) {</span>
+<span class="fc" id="L343">        return false; // 超过截止时间</span>
+      }
+    }
+    
+    // 状态转换
+<span class="fc" id="L348">    setStatus(Status.ResubmissionRequested);</span>
+<span class="fc" id="L349">    return true;</span>
+  }
+
+  private void setStatus(Status aStatus)
+  {
+<span class="fc" id="L354">    status = aStatus;</span>
+<span class="fc" id="L355">  }</span>
+  /* Code from template association_GetOne */
+  public com.olp.model.assignment.Grade getSubmissionGrade()
+  {
+<span class="fc" id="L359">    return submissionGrade;</span>
+  }
+  /* Code from template association_GetOne */
+  public com.olp.model.user.Student getStudent()
+  {
+<span class="fc" id="L364">    return student;</span>
+  }
+  /* Code from template association_GetOne */
+  public com.olp.model.assignment.Assignment getAssignment()
+  {
+<span class="fc" id="L369">    return assignment;</span>
+  }
+  /* Code from template association_SetOneToOptionalOne */
+  public boolean setSubmissionGrade(com.olp.model.assignment.Grade aNewSubmissionGrade)
+  {
+<span class="fc" id="L374">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L375" title="1 of 2 branches missed.">    if (aNewSubmissionGrade == null)</span>
+    {
+      //Unable to setSubmissionGrade to null, as submission must always be associated to a submissionGrade
+<span class="nc" id="L378">      return wasSet;</span>
+    }
+    
+<span class="fc" id="L381">    Submission existingSubmission = aNewSubmissionGrade.getSubmission();</span>
+<span class="pc bpc" id="L382" title="1 of 4 branches missed.">    if (existingSubmission != null &amp;&amp; !equals(existingSubmission))</span>
+    {
+      //Unable to setSubmissionGrade, the current submissionGrade already has a submission, which would be orphaned if it were re-assigned
+<span class="nc" id="L385">      return wasSet;</span>
+    }
+    
+<span class="fc" id="L388">    com.olp.model.assignment.Grade anOldSubmissionGrade = submissionGrade;</span>
+<span class="fc" id="L389">    submissionGrade = aNewSubmissionGrade;</span>
+<span class="fc" id="L390">    submissionGrade.setSubmission(this);</span>
+
+<span class="fc bfc" id="L392" title="All 2 branches covered.">    if (anOldSubmissionGrade != null)</span>
+    {
+<span class="fc" id="L394">      anOldSubmissionGrade.setSubmission(null);</span>
+    }
+<span class="fc" id="L396">    wasSet = true;</span>
+<span class="fc" id="L397">    return wasSet;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setStudent(com.olp.model.user.Student aStudent)
+  {
+<span class="fc" id="L402">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">    if (aStudent == null)</span>
+    {
+<span class="nc" id="L405">      return wasSet;</span>
+    }
+
+<span class="fc" id="L408">    com.olp.model.user.Student existingStudent = student;</span>
+<span class="fc" id="L409">    student = aStudent;</span>
+<span class="pc bpc" id="L410" title="3 of 4 branches missed.">    if (existingStudent != null &amp;&amp; !existingStudent.equals(aStudent))</span>
+    {
+<span class="nc" id="L412">      existingStudent.removeStudentSubmission(this);</span>
+    }
+<span class="fc" id="L414">    student.addStudentSubmission(this);</span>
+<span class="fc" id="L415">    wasSet = true;</span>
+<span class="fc" id="L416">    return wasSet;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setAssignment(com.olp.model.assignment.Assignment aAssignment)
+  {
+<span class="fc" id="L421">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L422" title="1 of 2 branches missed.">    if (aAssignment == null)</span>
+    {
+<span class="nc" id="L424">      return wasSet;</span>
+    }
+
+<span class="fc" id="L427">    com.olp.model.assignment.Assignment existingAssignment = assignment;</span>
+<span class="fc" id="L428">    assignment = aAssignment;</span>
+<span class="pc bpc" id="L429" title="3 of 4 branches missed.">    if (existingAssignment != null &amp;&amp; !existingAssignment.equals(aAssignment))</span>
+    {
+<span class="nc" id="L431">      existingAssignment.removeAssignmentSubmission(this);</span>
+    }
+<span class="fc" id="L433">    assignment.addAssignmentSubmission(this);</span>
+<span class="fc" id="L434">    wasSet = true;</span>
+<span class="fc" id="L435">    return wasSet;</span>
+  }
+
+  public void delete()
+  {
+<span class="nc" id="L440">    com.olp.model.assignment.Grade existingSubmissionGrade = submissionGrade;</span>
+<span class="nc" id="L441">    submissionGrade = null;</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">    if (existingSubmissionGrade != null)</span>
+    {
+<span class="nc" id="L444">      existingSubmissionGrade.setSubmission(null);</span>
+    }
+<span class="nc" id="L446">    com.olp.model.user.Student placeholderStudent = student;</span>
+<span class="nc" id="L447">    this.student = null;</span>
+<span class="nc bnc" id="L448" title="All 2 branches missed.">    if(placeholderStudent != null)</span>
+    {
+<span class="nc" id="L450">      placeholderStudent.removeStudentSubmission(this);</span>
+    }
+<span class="nc" id="L452">    com.olp.model.assignment.Assignment placeholderAssignment = assignment;</span>
+<span class="nc" id="L453">    this.assignment = null;</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">    if(placeholderAssignment != null)</span>
+    {
+<span class="nc" id="L456">      placeholderAssignment.removeAssignmentSubmission(this);</span>
+    }
+<span class="nc" id="L458">  }</span>
+
+  // line 161 &quot;model.ump&quot;
+  /**
+   * Task 3.4: 修改 isBeforeDeadline() 方法
+   * 检查当前时间是否在截止时间之前
+   */
+  public Boolean isBeforeDeadline(){
+<span class="nc bnc" id="L466" title="All 4 branches missed.">    if (assignment == null || assignment.getDeadline() == null) {</span>
+<span class="nc" id="L467">      return false;</span>
+    }
+<span class="nc" id="L469">    Date currentTime = Utils.getCurrentTime();</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">    return Utils.compareDates(currentTime, assignment.getDeadline()) &lt;= 0;</span>
+  }
+
+  /**
+   * Task 5.4: 实现 SubmissionBeforeDeadline 约束验证
+   * OCL 约束：提交时间不能超过截止时间
+   * @return true 如果当前仍在截止时间之前
+   */
+  public boolean validateNotOverdue() {
+<span class="pc bpc" id="L479" title="2 of 4 branches missed.">    if (assignment == null || assignment.getDeadline() == null) {</span>
+<span class="nc" id="L480">      return false;</span>
+    }
+<span class="fc" id="L482">    Date currentTime = Utils.getCurrentTime();</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">    return Utils.compareDates(currentTime, assignment.getDeadline()) &lt;= 0;</span>
+  }
+
+  /**
+   * Task 5.5: 实现 SubmissionVersionMonotonic 约束验证
+   * OCL 约束：同一学生的提交版本号必须单调递增
+   * @return true 如果当前 version 等于该学生已提交次数，否则返回 false
+   */
+  public boolean validateVersionMonotonic() {
+<span class="pc bpc" id="L492" title="2 of 4 branches missed.">    if (assignment == null || student == null) {</span>
+<span class="nc" id="L493">      return false;</span>
+    }
+<span class="fc" id="L495">    int submittedCount = 0;</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">    for (int i = 0; i &lt; assignment.numberOfAssignmentSubmissions(); i++) {</span>
+<span class="fc" id="L497">      Submission other = assignment.getAssignmentSubmission(i);</span>
+<span class="pc bpc" id="L498" title="1 of 2 branches missed.">      if (other.getStudent() != null &amp;&amp;</span>
+<span class="fc bfc" id="L499" title="All 2 branches covered.">          other.getStudent().equals(student) &amp;&amp;</span>
+<span class="pc bpc" id="L500" title="1 of 2 branches missed.">          other.getSubmittedAt() != null) {</span>
+<span class="fc" id="L501">        submittedCount++;</span>
+      }
+    }
+<span class="pc bpc" id="L504" title="1 of 2 branches missed.">    return version == submittedCount;</span>
+  }
+
+  /**
+   * Task 5.7: 实现 AtMostOneGradePerSubmission 约束验证
+   * OCL 约束：每个提交最多只能有一个 Grade
+   * @return true 如果提交没有 Grade 或只有一个 Grade
+   */
+  public boolean validateGradeUniqueness() {
+    // submissionGrade 是一对一关系，Umple 已经保证了唯一性
+    // 此方法验证 submissionGrade 要么为 null，要么指向一个有效的 Grade
+<span class="pc bpc" id="L515" title="2 of 4 branches missed.">    return submissionGrade == null || submissionGrade.getSubmission() == this;</span>
+  }
+
+  // line 165 &quot;model.ump&quot;
+  public Boolean canResubmit(){
+<span class="nc" id="L520">    return true;</span>
+  }
+
+
+  public String toString()
+  {
+<span class="nc" id="L526">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L527">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;,&quot; +</span>
+<span class="nc" id="L528">            &quot;version&quot; + &quot;:&quot; + getVersion()+ &quot;,&quot; +</span>
+<span class="nc" id="L529">            &quot;checkPassed&quot; + &quot;:&quot; + getCheckPassed()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L530" title="All 4 branches missed.">            &quot;  &quot; + &quot;submittedAt&quot; + &quot;=&quot; + (getSubmittedAt() != null ? !getSubmittedAt().equals(this)  ? getSubmittedAt().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">            &quot;  &quot; + &quot;submissionGrade = &quot;+(getSubmissionGrade()!=null?Integer.toHexString(System.identityHashCode(getSubmissionGrade())):&quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L532" title="All 2 branches missed.">            &quot;  &quot; + &quot;student = &quot;+(getStudent()!=null?Integer.toHexString(System.identityHashCode(getStudent())):&quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L533" title="All 2 branches missed.">            &quot;  &quot; + &quot;assignment = &quot;+(getAssignment()!=null?Integer.toHexString(System.identityHashCode(getAssignment())):&quot;null&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

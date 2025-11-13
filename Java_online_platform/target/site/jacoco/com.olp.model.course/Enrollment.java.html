@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Enrollment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.course</a> &gt; <span class="el_source">Enrollment.java</span></div><h1>Enrollment.java</h1><pre class="source lang-java linenums">package com.olp.model.course;
+
+import java.sql.Date;
+import javax.persistence.*;
+import com.olp.model.user.Student;
+
+// line 90 &quot;model.ump&quot;
+// line 250 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;enrollments&quot;)
+public class Enrollment
+{
+
+  //------------------------
+  // ENUMERATIONS
+  //------------------------
+
+<span class="fc" id="L18">  public enum EnrollmentStatus { Active, Waitlisted, Dropped }</span>
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Enrollment Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;status&quot;, length = 20, nullable = false)
+  private EnrollmentStatus status;
+  
+  @Column(name = &quot;enrolled_at&quot;, nullable = false)
+  private Date enrolledAt;
+
+  //Enrollment Associations
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;student_id&quot;, nullable = false)
+  private Student student;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;course_id&quot;, nullable = false)
+  private Course course;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Enrollment()
+<span class="nc" id="L53">  {</span>
+<span class="nc" id="L54">    status = EnrollmentStatus.Active;</span>
+<span class="nc" id="L55">  }</span>
+
+  public Enrollment(String aId, EnrollmentStatus aStatus, Date aEnrolledAt, Student aStudent, Course aCourse)
+<span class="fc" id="L58">  {</span>
+    // Task 2.4: 添加构造函数验证
+<span class="fc bfc" id="L60" title="All 2 branches covered.">    if (aEnrolledAt == null) {</span>
+<span class="fc" id="L61">      throw new IllegalArgumentException(&quot;Enrollment enrolledAt cannot be null&quot;);</span>
+    }
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    if (aStudent == null) {</span>
+<span class="fc" id="L64">      throw new IllegalArgumentException(&quot;Enrollment student cannot be null&quot;);</span>
+    }
+<span class="fc bfc" id="L66" title="All 2 branches covered.">    if (aCourse == null) {</span>
+<span class="fc" id="L67">      throw new IllegalArgumentException(&quot;Enrollment course cannot be null&quot;);</span>
+    }
+    
+    // Task 5.2: 实现 EnrollmentOnlyAfterPublish 约束验证
+    // OCL 约束：self.course.status ≠ CourseStatus::Draft
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    if (aCourse.getStatus() == Course.Status.Draft) {</span>
+<span class="fc" id="L73">      throw new IllegalArgumentException(&quot;Enrollment can only be created for non-Draft courses, but course status is: &quot; + aCourse.getStatus());</span>
+    }
+    
+<span class="fc" id="L76">    id = aId;</span>
+<span class="fc" id="L77">    status = aStatus;</span>
+<span class="fc" id="L78">    enrolledAt = aEnrolledAt;</span>
+<span class="fc" id="L79">    boolean didAddStudent = setStudent(aStudent);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">    if (!didAddStudent)</span>
+    {
+<span class="nc" id="L82">      throw new RuntimeException(&quot;Unable to create studentEnrollment due to student. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L84">    boolean didAddCourse = setCourse(aCourse);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (!didAddCourse)</span>
+    {
+<span class="nc" id="L87">      throw new RuntimeException(&quot;Unable to create courseEnrollment due to course. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L89">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L97">    boolean wasSet = false;</span>
+<span class="nc" id="L98">    id = aId;</span>
+<span class="nc" id="L99">    wasSet = true;</span>
+<span class="nc" id="L100">    return wasSet;</span>
+  }
+
+  public boolean setStatus(EnrollmentStatus aStatus)
+  {
+<span class="nc" id="L105">    boolean wasSet = false;</span>
+<span class="nc" id="L106">    status = aStatus;</span>
+<span class="nc" id="L107">    wasSet = true;</span>
+<span class="nc" id="L108">    return wasSet;</span>
+  }
+
+  public boolean setEnrolledAt(Date aEnrolledAt)
+  {
+<span class="nc" id="L113">    boolean wasSet = false;</span>
+<span class="nc" id="L114">    enrolledAt = aEnrolledAt;</span>
+<span class="nc" id="L115">    wasSet = true;</span>
+<span class="nc" id="L116">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L121">    return id;</span>
+  }
+
+  public EnrollmentStatus getStatus()
+  {
+<span class="fc" id="L126">    return status;</span>
+  }
+
+  public Date getEnrolledAt()
+  {
+<span class="fc" id="L131">    return enrolledAt;</span>
+  }
+  /* Code from template association_GetOne */
+  public Student getStudent()
+  {
+<span class="fc" id="L136">    return student;</span>
+  }
+  /* Code from template association_GetOne */
+  public Course getCourse()
+  {
+<span class="fc" id="L141">    return course;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setStudent(Student aStudent)
+  {
+<span class="fc" id="L146">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">    if (aStudent == null)</span>
+    {
+<span class="nc" id="L149">      return wasSet;</span>
+    }
+
+<span class="fc" id="L152">    Student existingStudent = student;</span>
+<span class="fc" id="L153">    student = aStudent;</span>
+<span class="pc bpc" id="L154" title="3 of 4 branches missed.">    if (existingStudent != null &amp;&amp; !existingStudent.equals(aStudent))</span>
+    {
+<span class="nc" id="L156">      existingStudent.removeStudentEnrollment(this);</span>
+    }
+<span class="fc" id="L158">    student.addStudentEnrollment(this);</span>
+<span class="fc" id="L159">    wasSet = true;</span>
+<span class="fc" id="L160">    return wasSet;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setCourse(Course aCourse)
+  {
+<span class="fc" id="L165">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">    if (aCourse == null)</span>
+    {
+<span class="nc" id="L168">      return wasSet;</span>
+    }
+
+<span class="fc" id="L171">    Course existingCourse = course;</span>
+<span class="fc" id="L172">    course = aCourse;</span>
+<span class="pc bpc" id="L173" title="3 of 4 branches missed.">    if (existingCourse != null &amp;&amp; !existingCourse.equals(aCourse))</span>
+    {
+<span class="nc" id="L175">      existingCourse.removeCourseEnrollment(this);</span>
+    }
+<span class="fc" id="L177">    course.addCourseEnrollment(this);</span>
+<span class="fc" id="L178">    wasSet = true;</span>
+<span class="fc" id="L179">    return wasSet;</span>
+  }
+
+  //------------------------
+  // Business Methods (Task 2.4)
+  //------------------------
+  
+  /**
+   * 从 Active 或 Waitlisted 转换为 Dropped
+   * Task 2.4: 实现状态转换方法
+   * @return true 如果状态转换成功，false 如果当前状态不允许转换
+   */
+  public boolean dropCourse()
+  {
+<span class="fc bfc" id="L193" title="All 4 branches covered.">    if (status == EnrollmentStatus.Active || status == EnrollmentStatus.Waitlisted) {</span>
+<span class="fc" id="L194">      status = EnrollmentStatus.Dropped;</span>
+<span class="fc" id="L195">      return true;</span>
+    }
+<span class="fc" id="L197">    return false;</span>
+  }
+
+  public void delete()
+  {
+<span class="fc" id="L202">    Student placeholderStudent = student;</span>
+<span class="fc" id="L203">    this.student = null;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if(placeholderStudent != null)</span>
+    {
+<span class="fc" id="L206">      placeholderStudent.removeStudentEnrollment(this);</span>
+    }
+<span class="fc" id="L208">    Course placeholderCourse = course;</span>
+<span class="fc" id="L209">    this.course = null;</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">    if(placeholderCourse != null)</span>
+    {
+<span class="fc" id="L212">      placeholderCourse.removeCourseEnrollment(this);</span>
+    }
+<span class="fc" id="L214">  }</span>
+
+
+  public String toString()
+  {
+<span class="nc" id="L219">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L220">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L221" title="All 4 branches missed.">            &quot;  &quot; + &quot;status&quot; + &quot;=&quot; + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L222" title="All 4 branches missed.">            &quot;  &quot; + &quot;enrolledAt&quot; + &quot;=&quot; + (getEnrolledAt() != null ? !getEnrolledAt().equals(this)  ? getEnrolledAt().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            &quot;  &quot; + &quot;student = &quot;+(getStudent()!=null?Integer.toHexString(System.identityHashCode(getStudent())):&quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">            &quot;  &quot; + &quot;course = &quot;+(getCourse()!=null?Integer.toHexString(System.identityHashCode(getCourse())):&quot;null&quot;);</span>
+  }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -30,6 +30,14 @@ public class CourseCategory
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected CourseCategory()
+  {
+    courses = new ArrayList<Course>();
+  }
+
   public CourseCategory(String aId, String aName)
   {
     // Task 2.1: 添加构造函数验证

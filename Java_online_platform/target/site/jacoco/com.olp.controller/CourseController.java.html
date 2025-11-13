@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.controller</a> &gt; <span class="el_source">CourseController.java</span></div><h1>CourseController.java</h1><pre class="source lang-java linenums">package com.olp.controller;
+
+import com.olp.model.course.Course;
+import com.olp.model.course.Enrollment;
+import com.olp.service.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Task 6.5: CourseController REST API
+ * 处理课程相关的 HTTP 请求
+ */
+@RestController
+@RequestMapping(&quot;/api/courses&quot;)
+@CrossOrigin(origins = &quot;*&quot;)
+<span class="nc" id="L21">public class CourseController {</span>
+    
+    @Autowired
+    private CourseService courseService;
+    
+    /**
+     * 获取所有课程
+     * GET /api/courses
+     */
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Course&gt;&gt; getAllCourses() {
+<span class="nc" id="L32">        List&lt;Course&gt; courses = courseService.getAllCourses();</span>
+<span class="nc" id="L33">        return ResponseEntity.ok(courses);</span>
+    }
+    
+    /**
+     * 获取课程详情
+     * GET /api/courses/{id}
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Course&gt; getCourseById(@PathVariable String id) {
+<span class="nc" id="L42">        return courseService.findCourseById(id)</span>
+<span class="nc" id="L43">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L44">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+    
+    /**
+     * 通过教师 ID 获取课程
+     * GET /api/courses/instructor/{instructorId}
+     */
+    @GetMapping(&quot;/instructor/{instructorId}&quot;)
+    public ResponseEntity&lt;List&lt;Course&gt;&gt; getCoursesByInstructor(@PathVariable String instructorId) {
+<span class="nc" id="L53">        List&lt;Course&gt; courses = courseService.findCoursesByInstructor(instructorId);</span>
+<span class="nc" id="L54">        return ResponseEntity.ok(courses);</span>
+    }
+    
+    /**
+     * 通过状态获取课程
+     * GET /api/courses/status/{status}
+     */
+    @GetMapping(&quot;/status/{status}&quot;)
+    public ResponseEntity&lt;List&lt;Course&gt;&gt; getCoursesByStatus(@PathVariable String status) {
+        try {
+<span class="nc" id="L64">            Course.Status courseStatus = Course.Status.valueOf(status);</span>
+<span class="nc" id="L65">            List&lt;Course&gt; courses = courseService.findCoursesByStatus(courseStatus);</span>
+<span class="nc" id="L66">            return ResponseEntity.ok(courses);</span>
+<span class="nc" id="L67">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L68">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 创建课程
+     * POST /api/courses
+     * Body: {&quot;id&quot;: &quot;C001&quot;, &quot;title&quot;: &quot;Java Programming&quot;, &quot;capacity&quot;: 50, &quot;instructorId&quot;: &quot;I001&quot;}
+     */
+    @PostMapping
+    public ResponseEntity&lt;Course&gt; createCourse(@RequestBody Map&lt;String, Object&gt; request) {
+        try {
+<span class="nc" id="L80">            String id = (String) request.get(&quot;id&quot;);</span>
+<span class="nc" id="L81">            String title = (String) request.get(&quot;title&quot;);</span>
+<span class="nc" id="L82">            int capacity = (Integer) request.get(&quot;capacity&quot;);</span>
+<span class="nc" id="L83">            String instructorId = (String) request.get(&quot;instructorId&quot;);</span>
+            
+<span class="nc" id="L85">            Course course = courseService.createCourse(id, title, capacity, instructorId);</span>
+<span class="nc" id="L86">            return ResponseEntity.status(HttpStatus.CREATED).body(course);</span>
+<span class="nc" id="L87">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L88">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 发布课程
+     * POST /api/courses/{id}/publish
+     */
+    @PostMapping(&quot;/{id}/publish&quot;)
+    public ResponseEntity&lt;Course&gt; publishCourse(@PathVariable String id) {
+        try {
+<span class="nc" id="L99">            Course course = courseService.publishCourse(id);</span>
+<span class="nc" id="L100">            return ResponseEntity.ok(course);</span>
+<span class="nc" id="L101">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L102">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L103">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L104">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 开放选课
+     * POST /api/courses/{id}/open-enrollment
+     */
+    @PostMapping(&quot;/{id}/open-enrollment&quot;)
+    public ResponseEntity&lt;Course&gt; openEnrollment(@PathVariable String id) {
+        try {
+<span class="nc" id="L115">            Course course = courseService.openEnrollment(id);</span>
+<span class="nc" id="L116">            return ResponseEntity.ok(course);</span>
+<span class="nc" id="L117">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L118">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L119">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L120">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 学生选课
+     * POST /api/courses/{id}/enroll
+     * Body: {&quot;studentId&quot;: &quot;S001&quot;}
+     */
+    @PostMapping(&quot;/{id}/enroll&quot;)
+    public ResponseEntity&lt;Enrollment&gt; enrollStudent(@PathVariable String id, @RequestBody Map&lt;String, String&gt; request) {
+        try {
+<span class="nc" id="L132">            String studentId = request.get(&quot;studentId&quot;);</span>
+<span class="nc" id="L133">            Enrollment enrollment = courseService.enrollStudent(id, studentId);</span>
+<span class="nc" id="L134">            return ResponseEntity.status(HttpStatus.CREATED).body(enrollment);</span>
+<span class="nc" id="L135">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L136">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L137">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L138">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 开始课程
+     * POST /api/courses/{id}/start
+     */
+    @PostMapping(&quot;/{id}/start&quot;)
+    public ResponseEntity&lt;Course&gt; startCourse(@PathVariable String id) {
+        try {
+<span class="nc" id="L149">            Course course = courseService.startCourse(id);</span>
+<span class="nc" id="L150">            return ResponseEntity.ok(course);</span>
+<span class="nc" id="L151">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L152">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L153">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L154">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 完成课程
+     * POST /api/courses/{id}/complete
+     */
+    @PostMapping(&quot;/{id}/complete&quot;)
+    public ResponseEntity&lt;Course&gt; completeCourse(@PathVariable String id) {
+        try {
+<span class="nc" id="L165">            Course course = courseService.completeCourse(id);</span>
+<span class="nc" id="L166">            return ResponseEntity.ok(course);</span>
+<span class="nc" id="L167">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L168">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L169">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L170">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 取消课程
+     * POST /api/courses/{id}/cancel
+     * Body: {&quot;reason&quot;: &quot;Insufficient enrollment&quot;}
+     */
+    @PostMapping(&quot;/{id}/cancel&quot;)
+    public ResponseEntity&lt;Course&gt; cancelCourse(@PathVariable String id, @RequestBody Map&lt;String, String&gt; request) {
+        try {
+<span class="nc" id="L182">            String reason = request.get(&quot;reason&quot;);</span>
+<span class="nc" id="L183">            Course course = courseService.cancelCourse(id, reason);</span>
+<span class="nc" id="L184">            return ResponseEntity.ok(course);</span>
+<span class="nc" id="L185">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L186">            return ResponseEntity.notFound().build();</span>
+<span class="nc" id="L187">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L188">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -61,6 +61,15 @@ public class Subscription
   //------------------------
 
   /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Subscription()
+  {
+    subscriptionPayments = new ArrayList<Payment>();
+    status = Status.Trial;
+  }
+
+  /**
    * Task 4.1: 添加构造函数验证
    */
   public Subscription(String aId, PlanType aPlan, Date aStartAt, Date aNextBillingAt)
@@ -371,6 +380,18 @@ public class Subscription
       wasAdded = addSubscriptionPaymentAt(aSubscriptionPayment, index);
     }
     return wasAdded;
+  }
+
+  /**
+   * Task 5.10: 实现 SubscriptionBillingConsistency 约束验证
+   * OCL 约束：Active 状态的订阅，nextBillingAt 必须大于 startAt
+   * @return true 如果计费时间一致，否则返回 false
+   */
+  public boolean validateBillingConsistency() {
+    if (status == Status.Active && nextBillingAt != null && startAt != null) {
+      return Utils.compareDates(nextBillingAt, startAt) > 0;
+    }
+    return true; // 非 Active 状态或时间为 null 时不检查
   }
 
   public void delete()

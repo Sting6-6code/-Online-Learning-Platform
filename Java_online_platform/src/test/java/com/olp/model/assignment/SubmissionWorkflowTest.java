@@ -1,7 +1,6 @@
 package com.olp.model.assignment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.course.Course;
@@ -13,7 +12,6 @@ import java.sql.Date;
  * Task 3.10: 提交工作流集成测试
  * 测试完整的提交工作流程和失败流程
  */
-@SpringBootTest
 public class SubmissionWorkflowTest {
 
     @Test

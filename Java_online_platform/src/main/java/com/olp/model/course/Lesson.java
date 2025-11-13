@@ -37,6 +37,14 @@ public class Lesson
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Lesson()
+  {
+    lessonVideos = new ArrayList<VideoContent>();
+  }
+
   public Lesson(String aId, String aTitle, int aOrderIndex, Course aCourse)
   {
     // Task 2.3: 添加构造函数验证

@@ -38,22 +38,23 @@ public class Grade
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Grade()
+  {
+  }
+
   public Grade(String aId, double aScore, String aFeedback, com.olp.model.assignment.Submission aSubmission)
   {
     // Task 3.2: 添加构造函数验证
     if (aSubmission == null) {
       throw new IllegalArgumentException("Grade submission cannot be null");
     }
-    if (aScore < 0) {
-      throw new IllegalArgumentException("Grade score cannot be negative");
-    }
     if (aSubmission.getAssignment() == null) {
       throw new IllegalArgumentException("Grade submission must have an assignment");
     }
-    int maxScore = aSubmission.getAssignment().getMaxScore();
-    if (aScore > maxScore) {
-      throw new IllegalArgumentException("Grade score (" + aScore + ") cannot exceed assignment maxScore (" + maxScore + ")");
-    }
+    validateScoreWithinSubmission(aScore, aSubmission);
     
     id = aId;
     score = aScore;
@@ -84,6 +85,7 @@ public class Grade
   public boolean setScore(double aScore)
   {
     boolean wasSet = false;
+    validateScoreWithinSubmission(aScore, submission);
     score = aScore;
     wasSet = true;
     return wasSet;
@@ -126,6 +128,10 @@ public class Grade
   public boolean setSubmission(com.olp.model.assignment.Submission aNewSubmission)
   {
     boolean wasSet = false;
+    if (aNewSubmission != null)
+    {
+      validateScoreWithinSubmission(score, aNewSubmission);
+    }
     if (submission != null && !submission.equals(aNewSubmission) && equals(submission.getSubmissionGrade()))
     {
       //Unable to setSubmission, as existing submission would become an orphan
@@ -148,6 +154,28 @@ public class Grade
     }
     wasSet = true;
     return wasSet;
+  }
+  
+  /**
+   * Task 5.6: 验证成绩范围
+   * 确保 0 <= score <= assignment.maxScore
+   */
+  private void validateScoreWithinSubmission(double candidateScore, com.olp.model.assignment.Submission targetSubmission)
+  {
+    if (candidateScore < 0) {
+      throw new IllegalArgumentException("Grade score cannot be negative");
+    }
+    if (targetSubmission == null) {
+      throw new IllegalArgumentException("Grade submission cannot be null when validating score");
+    }
+    if (targetSubmission.getAssignment() == null) {
+      // 提交尚未关联作业，暂时跳过最大值验证
+      return;
+    }
+    int maxScore = targetSubmission.getAssignment().getMaxScore();
+    if (candidateScore > maxScore) {
+      throw new IllegalArgumentException("Grade score (" + candidateScore + ") cannot exceed assignment maxScore (" + maxScore + ")");
+    }
   }
 
   //------------------------

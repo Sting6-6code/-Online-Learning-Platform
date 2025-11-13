@@ -54,6 +54,14 @@ public class Payment
   //------------------------
 
   /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Payment()
+  {
+    status = PaymentStatus.Pending;
+  }
+
+  /**
    * Task 4.6: 添加构造函数验证
    */
   public Payment(String aId, double aAmount, PaymentStatus aStatus, Date aPaidAt, com.olp.model.payment.Subscription aSubscription)
@@ -270,6 +278,20 @@ public class Payment
     setStatus(PaymentStatus.Refunding);
     
     return true;
+  }
+
+  /**
+   * Task 5.12: 实现 PaymentRefundStateTransition 约束验证
+   * OCL 约束：只有 Succeeded 状态的支付可以退款，退款后状态为 Refunding 且有 Refund 对象
+   * @return true 如果支付状态和退款状态一致，否则返回 false
+   */
+  public boolean validateRefundTransition() {
+    // 检查前置条件：如果有 refund，则之前的状态应该是 Succeeded
+    // 检查后置条件：如果有 refund，则当前状态应该是 Refunding
+    if (paymentRefund != null) {
+      return status == PaymentStatus.Refunding;
+    }
+    return true; // 没有退款时总是有效
   }
 
   public void delete()

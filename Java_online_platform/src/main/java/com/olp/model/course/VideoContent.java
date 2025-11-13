@@ -33,6 +33,13 @@ public class VideoContent
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected VideoContent()
+  {
+  }
+
   public VideoContent(String aId, String aUrl, int aDurationSec, Lesson aLesson)
   {
     // Task 2.2: 添加构造函数验证

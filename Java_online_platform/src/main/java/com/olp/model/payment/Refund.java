@@ -42,6 +42,13 @@ public class Refund
   //------------------------
 
   /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Refund()
+  {
+  }
+
+  /**
    * Task 4.9: 修改构造函数，添加验证
    */
   public Refund(String aId, double aAmount, Date aRequestedAt, Date aProcessedAt, com.olp.model.payment.Payment aPayment)

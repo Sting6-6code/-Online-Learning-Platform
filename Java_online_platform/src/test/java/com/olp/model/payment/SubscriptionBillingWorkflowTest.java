@@ -1,7 +1,6 @@
 package com.olp.model.payment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
@@ -10,7 +9,6 @@ import java.sql.Date;
  * Task 4.10: 订阅计费工作流集成测试
  * 测试完整的订阅计费流程和退款流程
  */
-@SpringBootTest
 public class SubscriptionBillingWorkflowTest {
 
     @Test

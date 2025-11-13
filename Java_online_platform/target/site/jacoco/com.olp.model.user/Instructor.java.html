@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Instructor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.user</a> &gt; <span class="el_source">Instructor.java</span></div><h1>Instructor.java</h1><pre class="source lang-java linenums">package com.olp.model.user;
+
+import java.util.*;
+import javax.persistence.*;
+import com.olp.model.course.Course;
+
+// line 24 &quot;model.ump&quot;
+// line 235 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;instructors&quot;)
+public class Instructor extends User
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Instructor Associations
+  @OneToMany(mappedBy = &quot;instructor&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;Course&gt; taughtCourses;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Instructor()
+  {
+<span class="nc" id="L31">    super();</span>
+<span class="nc" id="L32">    taughtCourses = new ArrayList&lt;Course&gt;();</span>
+<span class="nc" id="L33">  }</span>
+
+  public Instructor(String aId, String aName, String aEmail)
+  {
+<span class="fc" id="L37">    super(aId, aName, aEmail);</span>
+<span class="fc" id="L38">    taughtCourses = new ArrayList&lt;Course&gt;();</span>
+<span class="fc" id="L39">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+  /* Code from template association_GetMany */
+  public Course getTaughtCourse(int index)
+  {
+<span class="fc" id="L47">    Course aTaughtCourse = taughtCourses.get(index);</span>
+<span class="fc" id="L48">    return aTaughtCourse;</span>
+  }
+
+  public List&lt;Course&gt; getTaughtCourses()
+  {
+<span class="nc" id="L53">    List&lt;Course&gt; newTaughtCourses = Collections.unmodifiableList(taughtCourses);</span>
+<span class="nc" id="L54">    return newTaughtCourses;</span>
+  }
+
+  public int numberOfTaughtCourses()
+  {
+<span class="fc" id="L59">    int number = taughtCourses.size();</span>
+<span class="fc" id="L60">    return number;</span>
+  }
+
+  public boolean hasTaughtCourses()
+  {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    boolean has = taughtCourses.size() &gt; 0;</span>
+<span class="fc" id="L66">    return has;</span>
+  }
+
+  public int indexOfTaughtCourse(Course aTaughtCourse)
+  {
+<span class="nc" id="L71">    int index = taughtCourses.indexOf(aTaughtCourse);</span>
+<span class="nc" id="L72">    return index;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfTaughtCourses()
+  {
+<span class="nc" id="L77">    return 0;</span>
+  }
+  /* Code from template association_AddManyToOne */
+  public Course addTaughtCourse(String aId, String aTitle, int aCapacity)
+  {
+<span class="fc" id="L82">    return new Course(aId, aTitle, aCapacity, this);</span>
+  }
+
+  public boolean addTaughtCourse(Course aTaughtCourse)
+  {
+<span class="fc" id="L87">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if (taughtCourses.contains(aTaughtCourse)) { return false; }</span>
+<span class="fc" id="L89">    Instructor existingInstructor = aTaughtCourse.getInstructor();</span>
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">    boolean isNewInstructor = existingInstructor != null &amp;&amp; !this.equals(existingInstructor);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    if (isNewInstructor)</span>
+    {
+<span class="nc" id="L93">      aTaughtCourse.setInstructor(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L97">      taughtCourses.add(aTaughtCourse);</span>
+    }
+<span class="fc" id="L99">    wasAdded = true;</span>
+<span class="fc" id="L100">    return wasAdded;</span>
+  }
+
+  public boolean removeTaughtCourse(Course aTaughtCourse)
+  {
+<span class="fc" id="L105">    boolean wasRemoved = false;</span>
+    //Unable to remove aTaughtCourse, as it must always have a instructor
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">    if (!this.equals(aTaughtCourse.getInstructor()))</span>
+    {
+<span class="nc" id="L109">      taughtCourses.remove(aTaughtCourse);</span>
+<span class="nc" id="L110">      wasRemoved = true;</span>
+    }
+<span class="fc" id="L112">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addTaughtCourseAt(Course aTaughtCourse, int index)
+  {  
+<span class="nc" id="L117">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">    if(addTaughtCourse(aTaughtCourse))</span>
+    {
+<span class="nc bnc" id="L120" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">      if(index &gt; numberOfTaughtCourses()) { index = numberOfTaughtCourses() - 1; }</span>
+<span class="nc" id="L122">      taughtCourses.remove(aTaughtCourse);</span>
+<span class="nc" id="L123">      taughtCourses.add(index, aTaughtCourse);</span>
+<span class="nc" id="L124">      wasAdded = true;</span>
+    }
+<span class="nc" id="L126">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveTaughtCourseAt(Course aTaughtCourse, int index)
+  {
+<span class="nc" id="L131">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">    if(taughtCourses.contains(aTaughtCourse))</span>
+    {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">      if(index &gt; numberOfTaughtCourses()) { index = numberOfTaughtCourses() - 1; }</span>
+<span class="nc" id="L136">      taughtCourses.remove(aTaughtCourse);</span>
+<span class="nc" id="L137">      taughtCourses.add(index, aTaughtCourse);</span>
+<span class="nc" id="L138">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L142">      wasAdded = addTaughtCourseAt(aTaughtCourse, index);</span>
+    }
+<span class="nc" id="L144">    return wasAdded;</span>
+  }
+
+  //------------------------
+  // Convenience Methods (Task 1.3)
+  //------------------------
+  
+  /**
+   * 统计状态不是 Cancelled 和 Completed 的课程数
+   * Task 1.3: 添加便捷方法
+   */
+  public int getActiveCourseCount()
+  {
+<span class="fc" id="L157">    int count = 0;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">    for (Course course : taughtCourses) {</span>
+<span class="fc" id="L159">      Course.Status status = course.getStatus();</span>
+<span class="pc bpc" id="L160" title="1 of 4 branches missed.">      if (status != Course.Status.Cancelled &amp;&amp; status != Course.Status.Completed) {</span>
+<span class="fc" id="L161">        count++;</span>
+      }
+<span class="fc" id="L163">    }</span>
+<span class="fc" id="L164">    return count;</span>
+  }
+
+  /**
+   * 返回状态为 InProgress 的课程列表
+   * Task 1.3: 添加便捷方法
+   */
+  public List&lt;Course&gt; getCoursesInProgress()
+  {
+<span class="fc" id="L173">    List&lt;Course&gt; result = new ArrayList&lt;Course&gt;();</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">    for (Course course : taughtCourses) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">      if (course.getStatus() == Course.Status.InProgress) {</span>
+<span class="fc" id="L176">        result.add(course);</span>
+      }
+<span class="fc" id="L178">    }</span>
+<span class="fc" id="L179">    return result;</span>
+  }
+
+  public void delete()
+  {
+<span class="nc bnc" id="L184" title="All 2 branches missed.">    for(int i=taughtCourses.size(); i &gt; 0; i--)</span>
+    {
+<span class="nc" id="L186">      Course aTaughtCourse = taughtCourses.get(i - 1);</span>
+<span class="nc" id="L187">      aTaughtCourse.delete();</span>
+    }
+<span class="nc" id="L189">    super.delete();</span>
+<span class="nc" id="L190">  }</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

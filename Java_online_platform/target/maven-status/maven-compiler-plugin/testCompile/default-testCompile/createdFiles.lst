@@ -14,6 +14,7 @@ com/olp/model/payment/RefundTest.class
 com/olp/model/payment/PaymentTest.class
 com/olp/model/payment/SubscriptionBillingWorkflowTest.class
 com/olp/model/assignment/SubmissionWorkflowTest.class
+com/olp/TestConfiguration.class
 com/olp/model/course/LessonTest.class
 com/olp/model/user/InstructorTest.class
 com/olp/model/user/UserTest.class

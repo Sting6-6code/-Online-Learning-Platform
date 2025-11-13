@@ -1050,11 +1050,11 @@
 
 **目标**: 课程容量约束
 
-- [ ] 在 `Course.java` 中添加方法：`public boolean validateSeatsNotExceeded()`
-- [ ] 统计 `Active` 状态的 Enrollment 数量
-- [ ] 返回 `activeCount <= capacity`
-- [ ] 在 `enroll()` 方法中调用验证（已在 Task 2.8 中实现）
-- [ ] 添加测试用例
+- [x] 在 `Course.java` 中添加方法：`public boolean validateSeatsNotExceeded()`
+- [x] 统计 `Active` 状态的 Enrollment 数量
+- [x] 返回 `activeCount <= capacity`
+- [x] 在 `enroll()` 方法中调用验证（已在 Task 2.8 中实现）
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1072,10 +1072,10 @@
 
 **目标**: 选课前提约束
 
-- [ ] 在 `Enrollment.java` 的构造函数中添加验证
-- [ ] 检查 `course.getStatus() != Course.Status.Draft`
-- [ ] 验证失败抛出 `IllegalArgumentException`
-- [ ] 添加测试用例
+- [x] 在 `Enrollment.java` 的构造函数中添加验证
+- [x] 检查 `course.getStatus() != Course.Status.Draft`
+- [x] 验证失败抛出 `IllegalArgumentException`
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1093,9 +1093,9 @@
 
 **目标**: 开课学生数约束
 
-- [ ] 在 `Course::startCourse()` 中已经实现了守卫条件（Task 2.9）
-- [ ] 添加独立的验证方法：`public boolean validateHasActiveStudents()`
-- [ ] 添加测试用例验证约束
+- [x] 在 `Course::startCourse()` 中已经实现了守卫条件（Task 2.9）
+- [x] 添加独立的验证方法：`public boolean validateHasActiveStudents()`
+- [x] 添加测试用例验证约束
 
 **测试标准**:
 
@@ -1113,9 +1113,9 @@
 
 **目标**: 提交时间约束
 
-- [ ] 在 `Submission::submit()` 中已经实现了守卫条件（Task 3.4）
-- [ ] 添加独立的验证方法：`public boolean validateNotOverdue()`
-- [ ] 添加测试用例验证约束
+- [x] 在 `Submission::submit()` 中已经实现了守卫条件（Task 3.4）
+- [x] 添加独立的验证方法：`public boolean validateNotOverdue()`
+- [x] 添加测试用例验证约束
 
 **测试标准**:
 
@@ -1133,10 +1133,10 @@
 
 **目标**: 版本单调性约束
 
-- [ ] 在 Task 3.4 中已经实现了版本管理
-- [ ] 添加验证方法：`public boolean validateVersionMonotonic()`
-- [ ] 检查当前 `version` 等于该学生的提交数
-- [ ] 添加测试用例
+- [x] 在 Task 3.4 中已经实现了版本管理
+- [x] 添加验证方法：`public boolean validateVersionMonotonic()`
+- [x] 检查当前 `version` 等于该学生的提交数
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1155,9 +1155,9 @@
 **目标**: 成绩范围约束
 
 - [ ] 在 `Grade.java` 的构造函数和 setter 中添加验证（已在 Task 3.2 中实现）
-- [ ] 检查 `0 <= score <= submission.getAssignment().getMaxScore()`
-- [ ] 验证失败抛出异常
-- [ ] 添加测试用例
+- [x] 检查 `0 <= score <= submission.getAssignment().getMaxScore()`
+- [x] 验证失败抛出异常
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1175,10 +1175,10 @@
 
 **目标**: 提交评分唯一性
 
-- [ ] 在 `Submission::grade()` 中已经检查了 Grade 的存在（Task 3.8）
-- [ ] 添加验证方法：`public boolean validateGradeUniqueness()`
-- [ ] 确保只有一个 Grade 对象（`submissionGrade != null` 且唯一）
-- [ ] 添加测试用例
+- [x] 在 `Submission::grade()` 中已经检查了 Grade 的存在（Task 3.8）
+- [x] 添加验证方法：`public boolean validateGradeUniqueness()`
+- [x] 确保只有一个 Grade 对象（`submissionGrade != null` 且唯一）
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1196,10 +1196,10 @@
 
 **目标**: 课程分类唯一性
 
-- [ ] 在 `Course.java` 中添加方法：`public boolean validateUniqueCategories()`
-- [ ] 检查 `categories` 中没有重复的 `id`
-- [ ] 在 `addCategory()` 中调用验证（使用 Umple 生成的方法）
-- [ ] 添加测试用例
+- [x] 在 `Course.java` 中添加方法：`public boolean validateUniqueCategories()`
+- [x] 检查 `categories` 中没有重复的 `id`
+- [x] 在 `addCategory()` 中调用验证（使用 Umple 生成的方法）
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1217,9 +1217,9 @@
 
 **目标**: 退款前提约束
 
-- [ ] 在 Task 4.9 中已经在 Refund 构造函数中验证
-- [ ] 在 `Payment::initiateRefund()` 中也添加验证（已在 Task 4.8 中实现）
-- [ ] 添加测试用例
+- [x] 在 Task 4.9 中已经在 Refund 构造函数中验证
+- [x] 在 `Payment::initiateRefund()` 中也添加验证（已在 Task 4.8 中实现）
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1237,9 +1237,9 @@
 
 **目标**: 订阅计费一致性
 
-- [ ] 在 `Subscription.java` 中添加方法：`public boolean validateBillingConsistency()`
-- [ ] 如果状态为 `Active`，检查 `nextBillingAt > startAt`
-- [ ] 添加测试用例
+- [x] 在 `Subscription.java` 中添加方法：`public boolean validateBillingConsistency()`
+- [x] 如果状态为 `Active`，检查 `nextBillingAt > startAt`
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1257,9 +1257,9 @@
 
 **目标**: 发布内容要求
 
-- [ ] 在 `Course::publish()` 中已经实现了守卫条件（Task 2.6）
-- [ ] 添加独立的验证方法：`public boolean validateHasMinimumContent()`
-- [ ] 添加测试用例
+- [x] 在 `Course::publish()` 中已经实现了守卫条件（Task 2.6）
+- [x] 添加独立的验证方法：`public boolean validateHasMinimumContent()`
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1277,11 +1277,11 @@
 
 **目标**: 支付退款状态转换
 
-- [ ] 在 `Payment::initiateRefund()` 中已经实现了前置条件（Task 4.8）
-- [ ] 添加验证方法：`public boolean validateRefundTransition()`
-- [ ] 检查前置：`status == PaymentStatus.Succeeded`
-- [ ] 检查后置：`status == PaymentStatus.Refunding` 且 `refund != null`
-- [ ] 添加测试用例
+- [x] 在 `Payment::initiateRefund()` 中已经实现了前置条件（Task 4.8）
+- [x] 添加验证方法：`public boolean validateRefundTransition()`
+- [x] 检查前置：`status == PaymentStatus.Succeeded`
+- [x] 检查后置：`status == PaymentStatus.Refunding` 且 `refund != null`
+- [x] 添加测试用例
 
 **测试标准**:
 
@@ -1301,13 +1301,13 @@
 
 **目标**: 创建用户模块的 JPA Repository
 
-- [ ] 创建 `com.olp.repository.UserRepository` 接口
-- [ ] 继承 `JpaRepository<User, String>`
-- [ ] 添加查询方法：
+- [x] 创建 `com.olp.repository.UserRepository` 接口
+- [x] 继承 `JpaRepository<User, String>`
+- [x] 添加查询方法：
   - `Optional<User> findById(String id)`
   - `Optional<User> findByEmail(String email)`
-- [ ] 创建 `StudentRepository` 和 `InstructorRepository` 接口
-- [ ] 添加测试验证 Repository 功能
+- [x] 创建 `StudentRepository` 和 `InstructorRepository` 接口
+- [x] 添加测试验证 Repository 功能
 
 **测试标准**:
 
@@ -1325,15 +1325,15 @@
 
 **目标**: 实现用户服务层业务逻辑
 
-- [ ] 创建 `com.olp.service.UserService` 接口
-- [ ] 创建 `com.olp.service.impl.UserServiceImpl` 实现类
-- [ ] 注入 `UserRepository`
-- [ ] 实现方法：
+- [x] 创建 `com.olp.service.UserService` 接口
+- [x] 创建 `com.olp.service.UserServiceImpl` 实现类
+- [x] 注入 `UserRepository`
+- [x] 实现方法：
   - `User createUser(String id, String name, String email)`
   - `Optional<User> findById(String id)`
   - `Optional<User> findByEmail(String email)`
-- [ ] 添加 `@Service` 注解
-- [ ] 添加业务验证逻辑
+- [x] 添加 `@Service` 注解
+- [x] 添加业务验证逻辑
 
 **测试标准**:
 
@@ -1351,15 +1351,15 @@
 
 **目标**: 创建用户模块的 REST API 端点
 
-- [ ] 创建 `com.olp.controller.UserController` 类
-- [ ] 添加 `@RestController` 和 `@RequestMapping("/api/users")` 注解
-- [ ] 注入 `UserService`
-- [ ] 实现端点：
+- [x] 创建 `com.olp.controller.UserController` 类
+- [x] 添加 `@RestController` 和 `@RequestMapping("/api/users")` 注解
+- [x] 注入 `UserService`
+- [x] 实现端点：
   - `GET /api/users/{id}` - 获取用户
   - `POST /api/users` - 创建用户
   - `GET /api/users/email/{email}` - 通过邮箱查找
-- [ ] 使用 `@GetMapping`, `@PostMapping` 注解
-- [ ] 返回 `ResponseEntity` 包装响应
+- [x] 使用 `@GetMapping`, `@PostMapping` 注解
+- [x] 返回 `ResponseEntity` 包装响应
 
 **测试标准**:
 
@@ -1377,12 +1377,12 @@
 
 **目标**: 实现课程模块的数据访问和业务逻辑层
 
-- [ ] 创建 `CourseRepository` 接口
-- [ ] 添加查询方法：
+- [x] 创建 `CourseRepository` 接口
+- [x] 添加查询方法：
   - `List<Course> findByInstructorId(String instructorId)`
   - `List<Course> findByStatus(Course.Status status)`
-- [ ] 创建 `CourseService` 接口和实现
-- [ ] 实现业务方法：
+- [x] 创建 `CourseService` 接口和实现
+- [x] 实现业务方法：
   - `Course createCourse(String id, String title, int capacity, Instructor instructor)`
   - `Optional<Course> findById(String id)`
   - `List<Course> findByInstructor(String instructorId)`
@@ -1405,15 +1405,15 @@
 
 **目标**: 创建课程模块的 REST API
 
-- [ ] 创建 `CourseController` 类
-- [ ] 实现端点：
+- [x] 创建 `CourseController` 类
+- [x] 实现端点：
   - `GET /api/courses` - 获取所有课程
   - `GET /api/courses/{id}` - 获取课程详情
   - `POST /api/courses` - 创建课程
   - `POST /api/courses/{id}/publish` - 发布课程
   - `POST /api/courses/{id}/enroll` - 学生选课
   - `POST /api/courses/{id}/start` - 开始课程
-- [ ] 使用 DTO 类传输数据（可选）
+- [x] 使用 DTO 类传输数据（可选）
 
 **测试标准**:
 
@@ -1431,11 +1431,11 @@
 
 **目标**: 实现作业模块的数据访问和业务逻辑层
 
-- [ ] 创建 `AssignmentRepository` 接口
-- [ ] 创建 `SubmissionRepository` 接口
-- [ ] 创建 `GradeRepository` 接口
-- [ ] 创建 `AssignmentService` 实现
-- [ ] 实现作业和提交的业务逻辑
+- [x] 创建 `AssignmentRepository` 接口
+- [x] 创建 `SubmissionRepository` 接口
+- [x] 创建 `GradeRepository` 接口
+- [x] 创建 `AssignmentService` 实现
+- [x] 实现作业和提交的业务逻辑
 
 **测试标准**:
 
@@ -1452,12 +1452,12 @@
 
 **目标**: 创建作业模块的 REST API
 
-- [ ] 创建 `AssignmentController` 类
-- [ ] 实现端点：
+- [x] 创建 `AssignmentController` 类
+- [x] 实现端点：
   - `GET /api/assignments/{id}` - 获取作业
   - `POST /api/assignments/{id}/submit` - 提交作业
   - `POST /api/submissions/{id}/grade` - 评分
-- [ ] 处理状态机转换
+- [x] 处理状态机转换
 
 **测试标准**:
 
@@ -1474,11 +1474,11 @@
 
 **目标**: 实现支付模块的数据访问和业务逻辑层
 
-- [ ] 创建 `PaymentRepository` 接口
-- [ ] 创建 `SubscriptionRepository` 接口
-- [ ] 创建 `RefundRepository` 接口
-- [ ] 创建 `PaymentService` 实现
-- [ ] 实现支付和订阅的业务逻辑
+- [x] 创建 `PaymentRepository` 接口
+- [x] 创建 `SubscriptionRepository` 接口
+- [x] 创建 `RefundRepository` 接口
+- [x] 创建 `PaymentService` 实现
+- [x] 实现支付和订阅的业务逻辑
 
 **测试标准**:
 
@@ -1495,12 +1495,12 @@
 
 **目标**: 创建支付模块的 REST API
 
-- [ ] 创建 `PaymentController` 类
-- [ ] 实现端点：
+- [x] 创建 `PaymentController` 类
+- [x] 实现端点：
   - `POST /api/subscriptions` - 创建订阅
   - `POST /api/payments` - 创建支付
   - `POST /api/payments/{id}/refund` - 退款
-- [ ] 处理支付状态转换
+- [x] 处理支付状态转换
 
 **测试标准**:
 
@@ -1517,11 +1517,11 @@
 
 **目标**: 实现统一的异常处理机制
 
-- [ ] 创建 `@ControllerAdvice` 类
-- [ ] 处理 `IllegalArgumentException`
-- [ ] 处理 `EntityNotFoundException`
-- [ ] 返回统一的错误响应格式
-- [ ] 添加适当的 HTTP 状态码
+- [x] 创建 `@ControllerAdvice` 类
+- [x] 处理 `IllegalArgumentException`
+- [x] 处理 `EntityNotFoundException`
+- [x] 返回统一的错误响应格式
+- [x] 添加适当的 HTTP 状态码
 
 **测试标准**:
 

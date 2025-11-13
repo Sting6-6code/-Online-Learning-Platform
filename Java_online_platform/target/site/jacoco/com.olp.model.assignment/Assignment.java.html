@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Assignment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.assignment</a> &gt; <span class="el_source">Assignment.java</span></div><h1>Assignment.java</h1><pre class="source lang-java linenums">/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+
+
+package com.olp.model.assignment;
+
+import java.sql.Date;
+import java.util.*;
+import javax.persistence.*;
+import com.olp.model.course.Course;
+import com.olp.model.user.Student;
+import com.olp.util.Utils;
+
+/**
+ * ===== ????????? =====
+ * Task 0.7: 添加 JPA 注解
+ */
+// line 116 &quot;model.ump&quot;
+// line 270 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;assignments&quot;)
+public class Assignment
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Assignment Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Column(name = &quot;title&quot;, length = 200, nullable = false)
+  private String title;
+  
+  @Column(name = &quot;deadline&quot;, nullable = false)
+  private Date deadline;
+  
+  @Column(name = &quot;max_score&quot;, nullable = false)
+  private int maxScore;
+
+  //Assignment Associations
+  @OneToMany(mappedBy = &quot;assignment&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;Submission&gt; assignmentSubmissions;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;course_id&quot;, nullable = false)
+  private com.olp.model.course.Course course;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Assignment()
+<span class="nc" id="L59">  {</span>
+<span class="nc" id="L60">    assignmentSubmissions = new ArrayList&lt;Submission&gt;();</span>
+<span class="nc" id="L61">  }</span>
+
+  public Assignment(String aId, String aTitle, Date aDeadline, int aMaxScore, com.olp.model.course.Course aCourse)
+<span class="fc" id="L64">  {</span>
+    // Task 3.1: 添加构造函数验证
+<span class="fc bfc" id="L66" title="All 4 branches covered.">    if (aTitle == null || aTitle.trim().isEmpty()) {</span>
+<span class="fc" id="L67">      throw new IllegalArgumentException(&quot;Assignment title cannot be null or empty&quot;);</span>
+    }
+<span class="fc bfc" id="L69" title="All 2 branches covered.">    if (aMaxScore &lt;= 0) {</span>
+<span class="fc" id="L70">      throw new IllegalArgumentException(&quot;Assignment maxScore must be greater than 0&quot;);</span>
+    }
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    if (aDeadline == null) {</span>
+<span class="fc" id="L73">      throw new IllegalArgumentException(&quot;Assignment deadline cannot be null&quot;);</span>
+    }
+<span class="fc bfc" id="L75" title="All 2 branches covered.">    if (aCourse == null) {</span>
+<span class="fc" id="L76">      throw new IllegalArgumentException(&quot;Assignment course cannot be null&quot;);</span>
+    }
+    
+<span class="fc" id="L79">    id = aId;</span>
+<span class="fc" id="L80">    title = aTitle;</span>
+<span class="fc" id="L81">    deadline = aDeadline;</span>
+<span class="fc" id="L82">    maxScore = aMaxScore;</span>
+<span class="fc" id="L83">    assignmentSubmissions = new ArrayList&lt;Submission&gt;();</span>
+<span class="fc" id="L84">    boolean didAddCourse = setCourse(aCourse);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if (!didAddCourse)</span>
+    {
+<span class="nc" id="L87">      throw new RuntimeException(&quot;Unable to create courseAssignment due to course. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L89">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L97">    boolean wasSet = false;</span>
+<span class="nc" id="L98">    id = aId;</span>
+<span class="nc" id="L99">    wasSet = true;</span>
+<span class="nc" id="L100">    return wasSet;</span>
+  }
+
+  public boolean setTitle(String aTitle)
+  {
+<span class="nc" id="L105">    boolean wasSet = false;</span>
+<span class="nc" id="L106">    title = aTitle;</span>
+<span class="nc" id="L107">    wasSet = true;</span>
+<span class="nc" id="L108">    return wasSet;</span>
+  }
+
+  public boolean setDeadline(Date aDeadline)
+  {
+<span class="fc" id="L113">    boolean wasSet = false;</span>
+<span class="fc" id="L114">    deadline = aDeadline;</span>
+<span class="fc" id="L115">    wasSet = true;</span>
+<span class="fc" id="L116">    return wasSet;</span>
+  }
+
+  public boolean setMaxScore(int aMaxScore)
+  {
+<span class="nc" id="L121">    boolean wasSet = false;</span>
+<span class="nc" id="L122">    maxScore = aMaxScore;</span>
+<span class="nc" id="L123">    wasSet = true;</span>
+<span class="nc" id="L124">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L129">    return id;</span>
+  }
+
+  public String getTitle()
+  {
+<span class="fc" id="L134">    return title;</span>
+  }
+
+  public Date getDeadline()
+  {
+<span class="fc" id="L139">    return deadline;</span>
+  }
+
+  public int getMaxScore()
+  {
+<span class="fc" id="L144">    return maxScore;</span>
+  }
+  /* Code from template association_GetMany */
+  public Submission getAssignmentSubmission(int index)
+  {
+<span class="fc" id="L149">    Submission aAssignmentSubmission = assignmentSubmissions.get(index);</span>
+<span class="fc" id="L150">    return aAssignmentSubmission;</span>
+  }
+
+  public List&lt;Submission&gt; getAssignmentSubmissions()
+  {
+<span class="nc" id="L155">    List&lt;Submission&gt; newAssignmentSubmissions = Collections.unmodifiableList(assignmentSubmissions);</span>
+<span class="nc" id="L156">    return newAssignmentSubmissions;</span>
+  }
+
+  public int numberOfAssignmentSubmissions()
+  {
+<span class="fc" id="L161">    int number = assignmentSubmissions.size();</span>
+<span class="fc" id="L162">    return number;</span>
+  }
+
+  public boolean hasAssignmentSubmissions()
+  {
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">    boolean has = assignmentSubmissions.size() &gt; 0;</span>
+<span class="fc" id="L168">    return has;</span>
+  }
+
+  public int indexOfAssignmentSubmission(Submission aAssignmentSubmission)
+  {
+<span class="nc" id="L173">    int index = assignmentSubmissions.indexOf(aAssignmentSubmission);</span>
+<span class="nc" id="L174">    return index;</span>
+  }
+  /* Code from template association_GetOne */
+  public com.olp.model.course.Course getCourse()
+  {
+<span class="fc" id="L179">    return course;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfAssignmentSubmissions()
+  {
+<span class="nc" id="L184">    return 0;</span>
+  }
+  /* Code from template association_AddManyToOne */
+  public Submission addAssignmentSubmission(String aId, Date aSubmittedAt, int aVersion, boolean aCheckPassed, Grade aSubmissionGrade, Student aStudent)
+  {
+<span class="nc" id="L189">    return new Submission(aId, aSubmittedAt, aVersion, aCheckPassed, aSubmissionGrade, aStudent, this);</span>
+  }
+
+  public boolean addAssignmentSubmission(Submission aAssignmentSubmission)
+  {
+<span class="fc" id="L194">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">    if (assignmentSubmissions.contains(aAssignmentSubmission)) { return false; }</span>
+<span class="fc" id="L196">    Assignment existingAssignment = aAssignmentSubmission.getAssignment();</span>
+<span class="pc bpc" id="L197" title="2 of 4 branches missed.">    boolean isNewAssignment = existingAssignment != null &amp;&amp; !this.equals(existingAssignment);</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">    if (isNewAssignment)</span>
+    {
+<span class="nc" id="L200">      aAssignmentSubmission.setAssignment(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L204">      assignmentSubmissions.add(aAssignmentSubmission);</span>
+    }
+<span class="fc" id="L206">    wasAdded = true;</span>
+<span class="fc" id="L207">    return wasAdded;</span>
+  }
+
+  public boolean removeAssignmentSubmission(Submission aAssignmentSubmission)
+  {
+<span class="nc" id="L212">    boolean wasRemoved = false;</span>
+    //Unable to remove aAssignmentSubmission, as it must always have a assignment
+<span class="nc bnc" id="L214" title="All 2 branches missed.">    if (!this.equals(aAssignmentSubmission.getAssignment()))</span>
+    {
+<span class="nc" id="L216">      assignmentSubmissions.remove(aAssignmentSubmission);</span>
+<span class="nc" id="L217">      wasRemoved = true;</span>
+    }
+<span class="nc" id="L219">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addAssignmentSubmissionAt(Submission aAssignmentSubmission, int index)
+  {  
+<span class="nc" id="L224">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">    if(addAssignmentSubmission(aAssignmentSubmission))</span>
+    {
+<span class="nc bnc" id="L227" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">      if(index &gt; numberOfAssignmentSubmissions()) { index = numberOfAssignmentSubmissions() - 1; }</span>
+<span class="nc" id="L229">      assignmentSubmissions.remove(aAssignmentSubmission);</span>
+<span class="nc" id="L230">      assignmentSubmissions.add(index, aAssignmentSubmission);</span>
+<span class="nc" id="L231">      wasAdded = true;</span>
+    }
+<span class="nc" id="L233">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveAssignmentSubmissionAt(Submission aAssignmentSubmission, int index)
+  {
+<span class="nc" id="L238">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">    if(assignmentSubmissions.contains(aAssignmentSubmission))</span>
+    {
+<span class="nc bnc" id="L241" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">      if(index &gt; numberOfAssignmentSubmissions()) { index = numberOfAssignmentSubmissions() - 1; }</span>
+<span class="nc" id="L243">      assignmentSubmissions.remove(aAssignmentSubmission);</span>
+<span class="nc" id="L244">      assignmentSubmissions.add(index, aAssignmentSubmission);</span>
+<span class="nc" id="L245">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L249">      wasAdded = addAssignmentSubmissionAt(aAssignmentSubmission, index);</span>
+    }
+<span class="nc" id="L251">    return wasAdded;</span>
+  }
+  /* Code from template association_SetOneToMandatoryMany */
+  public boolean setCourse(com.olp.model.course.Course aCourse)
+  {
+<span class="fc" id="L256">    boolean wasSet = false;</span>
+    //Must provide course to courseAssignment
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">    if (aCourse == null)</span>
+    {
+<span class="nc" id="L260">      return wasSet;</span>
+    }
+
+<span class="pc bpc" id="L263" title="3 of 4 branches missed.">    if (course != null &amp;&amp; course.numberOfCourseAssignments() &lt;= com.olp.model.course.Course.minimumNumberOfCourseAssignments())</span>
+    {
+<span class="nc" id="L265">      return wasSet;</span>
+    }
+
+<span class="fc" id="L268">    com.olp.model.course.Course existingCourse = course;</span>
+<span class="fc" id="L269">    course = aCourse;</span>
+<span class="pc bpc" id="L270" title="3 of 4 branches missed.">    if (existingCourse != null &amp;&amp; !existingCourse.equals(aCourse))</span>
+    {
+<span class="nc" id="L272">      boolean didRemove = existingCourse.removeCourseAssignment(this);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">      if (!didRemove)</span>
+      {
+<span class="nc" id="L275">        course = existingCourse;</span>
+<span class="nc" id="L276">        return wasSet;</span>
+      }
+    }
+<span class="fc" id="L279">    course.addCourseAssignment(this);</span>
+<span class="fc" id="L280">    wasSet = true;</span>
+<span class="fc" id="L281">    return wasSet;</span>
+  }
+
+  //------------------------
+  // Convenience Methods (Task 3.1)
+  //------------------------
+  
+  /**
+   * 判断作业是否已过期
+   * Task 3.1: 添加便捷方法
+   * @return true 如果当前时间 &gt; deadline，否则返回 false
+   */
+  public boolean isOverdue()
+  {
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">    if (deadline == null) {</span>
+<span class="nc" id="L296">      return false;</span>
+    }
+<span class="fc" id="L298">    Date currentTime = Utils.getCurrentTime();</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">    return Utils.compareDates(currentTime, deadline) &gt; 0;</span>
+  }
+  
+  /**
+   * 获取提交数量
+   * Task 3.1: 添加便捷方法
+   * @return assignmentSubmissions 的大小
+   */
+  public int getSubmissionCount()
+  {
+<span class="fc" id="L309">    return assignmentSubmissions.size();</span>
+  }
+
+  public void delete()
+  {
+<span class="nc bnc" id="L314" title="All 2 branches missed.">    for(int i=assignmentSubmissions.size(); i &gt; 0; i--)</span>
+    {
+<span class="nc" id="L316">      Submission aAssignmentSubmission = assignmentSubmissions.get(i - 1);</span>
+<span class="nc" id="L317">      aAssignmentSubmission.delete();</span>
+    }
+<span class="nc" id="L319">    com.olp.model.course.Course placeholderCourse = course;</span>
+<span class="nc" id="L320">    this.course = null;</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">    if(placeholderCourse != null)</span>
+    {
+<span class="nc" id="L323">      placeholderCourse.removeCourseAssignment(this);</span>
+    }
+<span class="nc" id="L325">  }</span>
+
+
+  public String toString()
+  {
+<span class="nc" id="L330">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L331">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;,&quot; +</span>
+<span class="nc" id="L332">            &quot;title&quot; + &quot;:&quot; + getTitle()+ &quot;,&quot; +</span>
+<span class="nc" id="L333">            &quot;maxScore&quot; + &quot;:&quot; + getMaxScore()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L334" title="All 4 branches missed.">            &quot;  &quot; + &quot;deadline&quot; + &quot;=&quot; + (getDeadline() != null ? !getDeadline().equals(this)  ? getDeadline().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">            &quot;  &quot; + &quot;course = &quot;+(getCourse()!=null?Integer.toHexString(System.identityHashCode(getCourse())):&quot;null&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

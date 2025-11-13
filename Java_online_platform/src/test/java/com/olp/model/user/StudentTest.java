@@ -1,7 +1,6 @@
 package com.olp.model.user;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
@@ -15,7 +14,6 @@ import com.olp.model.assignment.Grade;
  * Task 1.2: Student 类基础功能测试
  * 验证 Student 类的继承关系和基本操作
  */
-@SpringBootTest
 public class StudentTest {
 
     @Test
@@ -46,6 +44,12 @@ public class StudentTest {
         Instructor instructor = new Instructor("I001", "Dr. Smith", "smith@example.com");
         Course course = new Course("C001", "Java Programming", 50, instructor);
         
+        // Task 5.2: 课程需要先发布才能创建 Enrollment
+        // 添加最少内容以便发布
+        new com.olp.model.course.Lesson("L001", "Lesson 1", 1, course);
+        new com.olp.model.assignment.Assignment("A001", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course);
+        course.publish();
+        
         // 创建 Enrollment
         Date enrolledDate = new Date(System.currentTimeMillis());
         Enrollment enrollment = new Enrollment(
@@ -75,6 +79,15 @@ public class StudentTest {
         Instructor instructor = new Instructor("I002", "Dr. Johnson", "johnson@example.com");
         Course course1 = new Course("C002", "Python Basics", 30, instructor);
         Course course2 = new Course("C003", "Web Development", 40, instructor);
+        
+        // Task 5.2: 课程需要先发布才能创建 Enrollment
+        new com.olp.model.course.Lesson("L002", "Lesson 1", 1, course1);
+        new com.olp.model.assignment.Assignment("A002", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course1);
+        course1.publish();
+        
+        new com.olp.model.course.Lesson("L003", "Lesson 1", 1, course2);
+        new com.olp.model.assignment.Assignment("A003", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course2);
+        course2.publish();
         
         // 创建多个 Enrollment，包含不同状态
         Date enrolledDate = new Date(System.currentTimeMillis());
@@ -149,6 +162,19 @@ public class StudentTest {
         Course course1 = new Course("C005", "Math 101", 100, instructor);
         Course course2 = new Course("C006", "Physics 101", 80, instructor);
         Course course3 = new Course("C007", "Chemistry 101", 90, instructor);
+        
+        // Task 5.2: 课程需要先发布才能创建 Enrollment
+        new com.olp.model.course.Lesson("L005", "Lesson 1", 1, course1);
+        new com.olp.model.assignment.Assignment("A005", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course1);
+        course1.publish();
+        
+        new com.olp.model.course.Lesson("L006", "Lesson 1", 1, course2);
+        new com.olp.model.assignment.Assignment("A006", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course2);
+        course2.publish();
+        
+        new com.olp.model.course.Lesson("L007", "Lesson 1", 1, course3);
+        new com.olp.model.assignment.Assignment("A007", "Assignment 1", new Date(System.currentTimeMillis() + 86400000), 100, course3);
+        course3.publish();
         
         Date enrolledDate = new Date(System.currentTimeMillis());
         

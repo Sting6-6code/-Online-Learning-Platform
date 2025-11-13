@@ -1,0 +1,961 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Course.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.course</a> &gt; <span class="el_source">Course.java</span></div><h1>Course.java</h1><pre class="source lang-java linenums">/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+
+package com.olp.model.course;
+
+import java.util.*;
+import java.sql.Date;
+import javax.persistence.*;
+import com.olp.model.user.Instructor;
+import com.olp.model.user.Student;
+import com.olp.model.assignment.Assignment;
+import com.olp.util.Utils;
+
+/**
+ * ===== ????????? =====
+ * Task 0.7: 添加 JPA 注解
+ */
+// line 34 &quot;model.ump&quot;
+// line 245 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;courses&quot;)
+public class Course
+{
+
+  //------------------------
+  // ENUMERATIONS
+  //------------------------
+  // Note: EnrollmentStatus is defined in Enrollment class
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Course Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Column(name = &quot;title&quot;, length = 200, nullable = false)
+  private String title;
+  
+  @Column(name = &quot;capacity&quot;, nullable = false)
+  private int capacity;
+
+  //Course State Machines
+<span class="fc" id="L46">  public enum Status { Draft, Published, EnrollmentOpen, Waitlisted, InProgress, Completed, Cancelled }</span>
+  
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;status&quot;, length = 20, nullable = false)
+  private Status status;
+  
+  // Task 2.10: 添加取消原因字段
+  @Column(name = &quot;cancel_reason&quot;, length = 500)
+  private String cancelReason;
+
+  //Course Associations
+  @OneToMany(mappedBy = &quot;course&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;Lesson&gt; lessons;
+  
+  @OneToMany(mappedBy = &quot;course&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;Enrollment&gt; courseEnrollments;
+  
+  @OneToMany(mappedBy = &quot;course&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;Assignment&gt; courseAssignments;
+  
+  @ManyToMany
+  @JoinTable(
+      name = &quot;course_categories&quot;,
+      joinColumns = @JoinColumn(name = &quot;course_id&quot;),
+      inverseJoinColumns = @JoinColumn(name = &quot;category_id&quot;)
+  )
+  private List&lt;CourseCategory&gt; categories;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;instructor_id&quot;, nullable = false)
+  private Instructor instructor;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Course()
+<span class="nc" id="L86">  {</span>
+<span class="nc" id="L87">    lessons = new ArrayList&lt;Lesson&gt;();</span>
+<span class="nc" id="L88">    courseEnrollments = new ArrayList&lt;Enrollment&gt;();</span>
+<span class="nc" id="L89">    courseAssignments = new ArrayList&lt;Assignment&gt;();</span>
+<span class="nc" id="L90">    categories = new ArrayList&lt;CourseCategory&gt;();</span>
+<span class="nc" id="L91">    status = Status.Draft;</span>
+<span class="nc" id="L92">  }</span>
+
+  public Course(String aId, String aTitle, int aCapacity, Instructor aInstructor)
+<span class="fc" id="L95">  {</span>
+    // Task 2.5: 添加构造函数验证
+<span class="fc bfc" id="L97" title="All 4 branches covered.">    if (aTitle == null || aTitle.trim().isEmpty()) {</span>
+<span class="fc" id="L98">      throw new IllegalArgumentException(&quot;Course title cannot be null or empty&quot;);</span>
+    }
+<span class="fc bfc" id="L100" title="All 2 branches covered.">    if (aCapacity &lt;= 0) {</span>
+<span class="fc" id="L101">      throw new IllegalArgumentException(&quot;Course capacity must be greater than 0&quot;);</span>
+    }
+<span class="fc bfc" id="L103" title="All 2 branches covered.">    if (aInstructor == null) {</span>
+<span class="fc" id="L104">      throw new IllegalArgumentException(&quot;Course instructor cannot be null&quot;);</span>
+    }
+    
+<span class="fc" id="L107">    id = aId;</span>
+<span class="fc" id="L108">    title = aTitle;</span>
+<span class="fc" id="L109">    capacity = aCapacity;</span>
+<span class="fc" id="L110">    lessons = new ArrayList&lt;Lesson&gt;();</span>
+<span class="fc" id="L111">    courseEnrollments = new ArrayList&lt;Enrollment&gt;();</span>
+<span class="fc" id="L112">    courseAssignments = new ArrayList&lt;Assignment&gt;();</span>
+<span class="fc" id="L113">    categories = new ArrayList&lt;CourseCategory&gt;();</span>
+<span class="fc" id="L114">    boolean didAddInstructor = setInstructor(aInstructor);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">    if (!didAddInstructor)</span>
+    {
+<span class="nc" id="L117">      throw new RuntimeException(&quot;Unable to create taughtCourse due to instructor. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L119">    setStatus(Status.Draft);</span>
+<span class="fc" id="L120">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L128">    boolean wasSet = false;</span>
+<span class="nc" id="L129">    id = aId;</span>
+<span class="nc" id="L130">    wasSet = true;</span>
+<span class="nc" id="L131">    return wasSet;</span>
+  }
+
+  public boolean setTitle(String aTitle)
+  {
+<span class="nc" id="L136">    boolean wasSet = false;</span>
+<span class="nc" id="L137">    title = aTitle;</span>
+<span class="nc" id="L138">    wasSet = true;</span>
+<span class="nc" id="L139">    return wasSet;</span>
+  }
+
+  public boolean setCapacity(int aCapacity)
+  {
+<span class="nc" id="L144">    boolean wasSet = false;</span>
+<span class="nc" id="L145">    capacity = aCapacity;</span>
+<span class="nc" id="L146">    wasSet = true;</span>
+<span class="nc" id="L147">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L152">    return id;</span>
+  }
+
+  public String getTitle()
+  {
+<span class="fc" id="L157">    return title;</span>
+  }
+
+  public int getCapacity()
+  {
+<span class="fc" id="L162">    return capacity;</span>
+  }
+
+  public String getStatusFullName()
+  {
+<span class="nc" id="L167">    String answer = status.toString();</span>
+<span class="nc" id="L168">    return answer;</span>
+  }
+
+  public Status getStatus()
+  {
+<span class="fc" id="L173">    return status;</span>
+  }
+
+  public boolean publish()
+  {
+<span class="fc" id="L178">    boolean wasEventProcessed = false;</span>
+    
+<span class="fc" id="L180">    Status aStatus = status;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">    switch (aStatus)</span>
+    {
+      case Draft:
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (hasMinimumContent())</span>
+        {
+<span class="fc" id="L186">          setStatus(Status.Published);</span>
+<span class="fc" id="L187">          wasEventProcessed = true;</span>
+<span class="fc" id="L188">          break;</span>
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+<span class="fc" id="L195">    return wasEventProcessed;</span>
+  }
+
+  public boolean openEnrollment()
+  {
+<span class="fc" id="L200">    boolean wasEventProcessed = false;</span>
+    
+<span class="fc" id="L202">    Status aStatus = status;</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">    switch (aStatus)</span>
+    {
+      case Published:
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (hasCapacity())</span>
+        {
+<span class="fc" id="L208">          setStatus(Status.EnrollmentOpen);</span>
+<span class="fc" id="L209">          wasEventProcessed = true;</span>
+<span class="fc" id="L210">          break;</span>
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+<span class="fc" id="L217">    return wasEventProcessed;</span>
+  }
+
+  /**
+   * Task 2.10: 修改 cancel() 方法，接受 reason 参数
+   * 可以从任意状态取消（除了 Completed）
+   */
+  public boolean cancel(String reason)
+  {
+    // 不能从 Completed 状态取消
+<span class="fc bfc" id="L227" title="All 2 branches covered.">    if (status == Status.Completed) {</span>
+<span class="fc" id="L228">      return false;</span>
+    }
+    
+    // 记录取消原因
+<span class="fc" id="L232">    this.cancelReason = reason;</span>
+    
+    // 状态转换
+<span class="fc" id="L235">    setStatus(Status.Cancelled);</span>
+<span class="fc" id="L236">    return true;</span>
+  }
+  
+  // 保留无参方法以兼容现有代码（调用新方法）
+  public boolean cancel()
+  {
+<span class="fc" id="L242">    return cancel(&quot;No reason provided&quot;);</span>
+  }
+  
+  // Task 2.10: 添加 getter 方法
+  public String getCancelReason()
+  {
+<span class="fc" id="L248">    return cancelReason;</span>
+  }
+
+  public boolean startCourse()
+  {
+<span class="fc" id="L253">    boolean wasEventProcessed = false;</span>
+    
+<span class="fc" id="L255">    Status aStatus = status;</span>
+<span class="fc bfc" id="L256" title="All 3 branches covered.">    switch (aStatus)</span>
+    {
+      case EnrollmentOpen:
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (validateHasActiveStudents())</span>
+        {
+<span class="fc" id="L261">          setStatus(Status.InProgress);</span>
+<span class="fc" id="L262">          wasEventProcessed = true;</span>
+<span class="fc" id="L263">          break;</span>
+        }
+        break;
+      case Waitlisted:
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (validateHasActiveStudents())</span>
+        {
+<span class="fc" id="L269">          setStatus(Status.InProgress);</span>
+<span class="fc" id="L270">          wasEventProcessed = true;</span>
+<span class="fc" id="L271">          break;</span>
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+<span class="fc" id="L278">    return wasEventProcessed;</span>
+  }
+
+  public boolean complete()
+  {
+<span class="fc" id="L283">    boolean wasEventProcessed = false;</span>
+    
+<span class="fc" id="L285">    Status aStatus = status;</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">    switch (aStatus)</span>
+    {
+      case InProgress:
+<span class="fc" id="L289">        setStatus(Status.Completed);</span>
+<span class="fc" id="L290">        wasEventProcessed = true;</span>
+<span class="fc" id="L291">        break;</span>
+      default:
+        // Other states do respond to this event
+    }
+
+<span class="fc" id="L296">    return wasEventProcessed;</span>
+  }
+
+  private void setStatus(Status aStatus)
+  {
+<span class="fc" id="L301">    status = aStatus;</span>
+<span class="fc" id="L302">  }</span>
+  /* Code from template association_GetMany */
+  public Lesson getLesson(int index)
+  {
+<span class="nc" id="L306">    Lesson aLesson = lessons.get(index);</span>
+<span class="nc" id="L307">    return aLesson;</span>
+  }
+
+  /**
+   * ????????????
+   */
+  public List&lt;Lesson&gt; getLessons()
+  {
+<span class="nc" id="L315">    List&lt;Lesson&gt; newLessons = Collections.unmodifiableList(lessons);</span>
+<span class="nc" id="L316">    return newLessons;</span>
+  }
+
+  public int numberOfLessons()
+  {
+<span class="fc" id="L321">    int number = lessons.size();</span>
+<span class="fc" id="L322">    return number;</span>
+  }
+
+  public boolean hasLessons()
+  {
+<span class="nc bnc" id="L327" title="All 2 branches missed.">    boolean has = lessons.size() &gt; 0;</span>
+<span class="nc" id="L328">    return has;</span>
+  }
+
+  public int indexOfLesson(Lesson aLesson)
+  {
+<span class="nc" id="L333">    int index = lessons.indexOf(aLesson);</span>
+<span class="nc" id="L334">    return index;</span>
+  }
+  /* Code from template association_GetMany */
+  public Enrollment getCourseEnrollment(int index)
+  {
+<span class="fc" id="L339">    Enrollment aCourseEnrollment = courseEnrollments.get(index);</span>
+<span class="fc" id="L340">    return aCourseEnrollment;</span>
+  }
+
+  /**
+   * ????????????
+   */
+  public List&lt;Enrollment&gt; getCourseEnrollments()
+  {
+<span class="nc" id="L348">    List&lt;Enrollment&gt; newCourseEnrollments = Collections.unmodifiableList(courseEnrollments);</span>
+<span class="nc" id="L349">    return newCourseEnrollments;</span>
+  }
+
+  public int numberOfCourseEnrollments()
+  {
+<span class="fc" id="L354">    int number = courseEnrollments.size();</span>
+<span class="fc" id="L355">    return number;</span>
+  }
+
+  public boolean hasCourseEnrollments()
+  {
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">    boolean has = courseEnrollments.size() &gt; 0;</span>
+<span class="fc" id="L361">    return has;</span>
+  }
+
+  public int indexOfCourseEnrollment(Enrollment aCourseEnrollment)
+  {
+<span class="nc" id="L366">    int index = courseEnrollments.indexOf(aCourseEnrollment);</span>
+<span class="nc" id="L367">    return index;</span>
+  }
+  /* Code from template association_GetMany */
+  public Assignment getCourseAssignment(int index)
+  {
+<span class="fc" id="L372">    Assignment aCourseAssignment = courseAssignments.get(index);</span>
+<span class="fc" id="L373">    return aCourseAssignment;</span>
+  }
+
+  public List&lt;Assignment&gt; getCourseAssignments()
+  {
+<span class="nc" id="L378">    List&lt;Assignment&gt; newCourseAssignments = Collections.unmodifiableList(courseAssignments);</span>
+<span class="nc" id="L379">    return newCourseAssignments;</span>
+  }
+
+  public int numberOfCourseAssignments()
+  {
+<span class="fc" id="L384">    int number = courseAssignments.size();</span>
+<span class="fc" id="L385">    return number;</span>
+  }
+
+  public boolean hasCourseAssignments()
+  {
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">    boolean has = courseAssignments.size() &gt; 0;</span>
+<span class="fc" id="L391">    return has;</span>
+  }
+
+  public int indexOfCourseAssignment(Assignment aCourseAssignment)
+  {
+<span class="nc" id="L396">    int index = courseAssignments.indexOf(aCourseAssignment);</span>
+<span class="nc" id="L397">    return index;</span>
+  }
+  /* Code from template association_GetMany */
+  public CourseCategory getCategory(int index)
+  {
+<span class="nc" id="L402">    CourseCategory aCategory = categories.get(index);</span>
+<span class="nc" id="L403">    return aCategory;</span>
+  }
+
+  public List&lt;CourseCategory&gt; getCategories()
+  {
+<span class="nc" id="L408">    List&lt;CourseCategory&gt; newCategories = Collections.unmodifiableList(categories);</span>
+<span class="nc" id="L409">    return newCategories;</span>
+  }
+
+  public int numberOfCategories()
+  {
+<span class="fc" id="L414">    int number = categories.size();</span>
+<span class="fc" id="L415">    return number;</span>
+  }
+
+  public boolean hasCategories()
+  {
+<span class="fc bfc" id="L420" title="All 2 branches covered.">    boolean has = categories.size() &gt; 0;</span>
+<span class="fc" id="L421">    return has;</span>
+  }
+
+  public int indexOfCategory(CourseCategory aCategory)
+  {
+<span class="fc" id="L426">    int index = categories.indexOf(aCategory);</span>
+<span class="fc" id="L427">    return index;</span>
+  }
+  /* Code from template association_GetOne */
+  public Instructor getInstructor()
+  {
+<span class="fc" id="L432">    return instructor;</span>
+  }
+  /* Code from template association_IsNumberOfValidMethod */
+  public boolean isNumberOfLessonsValid()
+  {
+<span class="nc bnc" id="L437" title="All 2 branches missed.">    boolean isValid = numberOfLessons() &gt;= minimumNumberOfLessons();</span>
+<span class="nc" id="L438">    return isValid;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfLessons()
+  {
+<span class="nc" id="L443">    return 1;</span>
+  }
+  /* Code from template association_AddMandatoryManyToOne */
+  public Lesson addLesson(String aId, String aTitle, int aOrderIndex)
+  {
+<span class="fc" id="L448">    Lesson aNewLesson = new Lesson(aId, aTitle, aOrderIndex, this);</span>
+<span class="fc" id="L449">    return aNewLesson;</span>
+  }
+
+  public boolean addLesson(Lesson aLesson)
+  {
+<span class="fc" id="L454">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">    if (lessons.contains(aLesson)) { return false; }</span>
+<span class="fc" id="L456">    Course existingCourse = aLesson.getCourse();</span>
+<span class="pc bpc" id="L457" title="2 of 4 branches missed.">    boolean isNewCourse = existingCourse != null &amp;&amp; !this.equals(existingCourse);</span>
+
+<span class="pc bpc" id="L459" title="3 of 4 branches missed.">    if (isNewCourse &amp;&amp; existingCourse.numberOfLessons() &lt;= minimumNumberOfLessons())</span>
+    {
+<span class="nc" id="L461">      return wasAdded;</span>
+    }
+<span class="pc bpc" id="L463" title="1 of 2 branches missed.">    if (isNewCourse)</span>
+    {
+<span class="nc" id="L465">      aLesson.setCourse(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L469">      lessons.add(aLesson);</span>
+    }
+<span class="fc" id="L471">    wasAdded = true;</span>
+<span class="fc" id="L472">    return wasAdded;</span>
+  }
+
+  public boolean removeLesson(Lesson aLesson)
+  {
+<span class="nc" id="L477">    boolean wasRemoved = false;</span>
+    //Unable to remove aLesson, as it must always have a course
+<span class="nc bnc" id="L479" title="All 2 branches missed.">    if (this.equals(aLesson.getCourse()))</span>
+    {
+<span class="nc" id="L481">      return wasRemoved;</span>
+    }
+
+    //course already at minimum (1)
+<span class="nc bnc" id="L485" title="All 2 branches missed.">    if (numberOfLessons() &lt;= minimumNumberOfLessons())</span>
+    {
+<span class="nc" id="L487">      return wasRemoved;</span>
+    }
+
+<span class="nc" id="L490">    lessons.remove(aLesson);</span>
+<span class="nc" id="L491">    wasRemoved = true;</span>
+<span class="nc" id="L492">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addLessonAt(Lesson aLesson, int index)
+  {  
+<span class="nc" id="L497">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L498" title="All 2 branches missed.">    if(addLesson(aLesson))</span>
+    {
+<span class="nc bnc" id="L500" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L501" title="All 2 branches missed.">      if(index &gt; numberOfLessons()) { index = numberOfLessons() - 1; }</span>
+<span class="nc" id="L502">      lessons.remove(aLesson);</span>
+<span class="nc" id="L503">      lessons.add(index, aLesson);</span>
+<span class="nc" id="L504">      wasAdded = true;</span>
+    }
+<span class="nc" id="L506">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveLessonAt(Lesson aLesson, int index)
+  {
+<span class="nc" id="L511">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L512" title="All 2 branches missed.">    if(lessons.contains(aLesson))</span>
+    {
+<span class="nc bnc" id="L514" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">      if(index &gt; numberOfLessons()) { index = numberOfLessons() - 1; }</span>
+<span class="nc" id="L516">      lessons.remove(aLesson);</span>
+<span class="nc" id="L517">      lessons.add(index, aLesson);</span>
+<span class="nc" id="L518">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L522">      wasAdded = addLessonAt(aLesson, index);</span>
+    }
+<span class="nc" id="L524">    return wasAdded;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfCourseEnrollments()
+  {
+<span class="nc" id="L529">    return 0;</span>
+  }
+  /* Code from template association_AddManyToOne */
+  public Enrollment addCourseEnrollment(String aId, Enrollment.EnrollmentStatus aStatus, Date aEnrolledAt, Student aStudent)
+  {
+<span class="nc" id="L534">    return new Enrollment(aId, aStatus, aEnrolledAt, aStudent, this);</span>
+  }
+
+  public boolean addCourseEnrollment(Enrollment aCourseEnrollment)
+  {
+<span class="fc" id="L539">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L540" title="1 of 2 branches missed.">    if (courseEnrollments.contains(aCourseEnrollment)) { return false; }</span>
+<span class="fc" id="L541">    Course existingCourse = aCourseEnrollment.getCourse();</span>
+<span class="pc bpc" id="L542" title="2 of 4 branches missed.">    boolean isNewCourse = existingCourse != null &amp;&amp; !this.equals(existingCourse);</span>
+<span class="pc bpc" id="L543" title="1 of 2 branches missed.">    if (isNewCourse)</span>
+    {
+<span class="nc" id="L545">      aCourseEnrollment.setCourse(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L549">      courseEnrollments.add(aCourseEnrollment);</span>
+    }
+<span class="fc" id="L551">    wasAdded = true;</span>
+<span class="fc" id="L552">    return wasAdded;</span>
+  }
+
+  public boolean removeCourseEnrollment(Enrollment aCourseEnrollment)
+  {
+<span class="fc" id="L557">    boolean wasRemoved = false;</span>
+    //Unable to remove aCourseEnrollment, as it must always have a course
+<span class="pc bpc" id="L559" title="1 of 2 branches missed.">    if (!this.equals(aCourseEnrollment.getCourse()))</span>
+    {
+<span class="fc" id="L561">      courseEnrollments.remove(aCourseEnrollment);</span>
+<span class="fc" id="L562">      wasRemoved = true;</span>
+    }
+<span class="fc" id="L564">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addCourseEnrollmentAt(Enrollment aCourseEnrollment, int index)
+  {  
+<span class="nc" id="L569">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L570" title="All 2 branches missed.">    if(addCourseEnrollment(aCourseEnrollment))</span>
+    {
+<span class="nc bnc" id="L572" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">      if(index &gt; numberOfCourseEnrollments()) { index = numberOfCourseEnrollments() - 1; }</span>
+<span class="nc" id="L574">      courseEnrollments.remove(aCourseEnrollment);</span>
+<span class="nc" id="L575">      courseEnrollments.add(index, aCourseEnrollment);</span>
+<span class="nc" id="L576">      wasAdded = true;</span>
+    }
+<span class="nc" id="L578">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveCourseEnrollmentAt(Enrollment aCourseEnrollment, int index)
+  {
+<span class="nc" id="L583">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L584" title="All 2 branches missed.">    if(courseEnrollments.contains(aCourseEnrollment))</span>
+    {
+<span class="nc bnc" id="L586" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L587" title="All 2 branches missed.">      if(index &gt; numberOfCourseEnrollments()) { index = numberOfCourseEnrollments() - 1; }</span>
+<span class="nc" id="L588">      courseEnrollments.remove(aCourseEnrollment);</span>
+<span class="nc" id="L589">      courseEnrollments.add(index, aCourseEnrollment);</span>
+<span class="nc" id="L590">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L594">      wasAdded = addCourseEnrollmentAt(aCourseEnrollment, index);</span>
+    }
+<span class="nc" id="L596">    return wasAdded;</span>
+  }
+  /* Code from template association_IsNumberOfValidMethod */
+  public boolean isNumberOfCourseAssignmentsValid()
+  {
+<span class="nc bnc" id="L601" title="All 2 branches missed.">    boolean isValid = numberOfCourseAssignments() &gt;= minimumNumberOfCourseAssignments();</span>
+<span class="nc" id="L602">    return isValid;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfCourseAssignments()
+  {
+<span class="nc" id="L607">    return 1;</span>
+  }
+  /* Code from template association_AddMandatoryManyToOne */
+  public Assignment addCourseAssignment(String aId, String aTitle, Date aDeadline, int aMaxScore)
+  {
+<span class="fc" id="L612">    Assignment aNewCourseAssignment = new Assignment(aId, aTitle, aDeadline, aMaxScore, this);</span>
+<span class="fc" id="L613">    return aNewCourseAssignment;</span>
+  }
+
+  public boolean addCourseAssignment(Assignment aCourseAssignment)
+  {
+<span class="fc" id="L618">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L619" title="1 of 2 branches missed.">    if (courseAssignments.contains(aCourseAssignment)) { return false; }</span>
+<span class="fc" id="L620">    Course existingCourse = aCourseAssignment.getCourse();</span>
+<span class="pc bpc" id="L621" title="2 of 4 branches missed.">    boolean isNewCourse = existingCourse != null &amp;&amp; !this.equals(existingCourse);</span>
+
+<span class="pc bpc" id="L623" title="3 of 4 branches missed.">    if (isNewCourse &amp;&amp; existingCourse.numberOfCourseAssignments() &lt;= minimumNumberOfCourseAssignments())</span>
+    {
+<span class="nc" id="L625">      return wasAdded;</span>
+    }
+<span class="pc bpc" id="L627" title="1 of 2 branches missed.">    if (isNewCourse)</span>
+    {
+<span class="nc" id="L629">      aCourseAssignment.setCourse(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L633">      courseAssignments.add(aCourseAssignment);</span>
+    }
+<span class="fc" id="L635">    wasAdded = true;</span>
+<span class="fc" id="L636">    return wasAdded;</span>
+  }
+
+  public boolean removeCourseAssignment(Assignment aCourseAssignment)
+  {
+<span class="nc" id="L641">    boolean wasRemoved = false;</span>
+    //Unable to remove aCourseAssignment, as it must always have a course
+<span class="nc bnc" id="L643" title="All 2 branches missed.">    if (this.equals(aCourseAssignment.getCourse()))</span>
+    {
+<span class="nc" id="L645">      return wasRemoved;</span>
+    }
+
+    //course already at minimum (1)
+<span class="nc bnc" id="L649" title="All 2 branches missed.">    if (numberOfCourseAssignments() &lt;= minimumNumberOfCourseAssignments())</span>
+    {
+<span class="nc" id="L651">      return wasRemoved;</span>
+    }
+
+<span class="nc" id="L654">    courseAssignments.remove(aCourseAssignment);</span>
+<span class="nc" id="L655">    wasRemoved = true;</span>
+<span class="nc" id="L656">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addCourseAssignmentAt(Assignment aCourseAssignment, int index)
+  {  
+<span class="nc" id="L661">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L662" title="All 2 branches missed.">    if(addCourseAssignment(aCourseAssignment))</span>
+    {
+<span class="nc bnc" id="L664" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L665" title="All 2 branches missed.">      if(index &gt; numberOfCourseAssignments()) { index = numberOfCourseAssignments() - 1; }</span>
+<span class="nc" id="L666">      courseAssignments.remove(aCourseAssignment);</span>
+<span class="nc" id="L667">      courseAssignments.add(index, aCourseAssignment);</span>
+<span class="nc" id="L668">      wasAdded = true;</span>
+    }
+<span class="nc" id="L670">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveCourseAssignmentAt(Assignment aCourseAssignment, int index)
+  {
+<span class="nc" id="L675">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L676" title="All 2 branches missed.">    if(courseAssignments.contains(aCourseAssignment))</span>
+    {
+<span class="nc bnc" id="L678" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L679" title="All 2 branches missed.">      if(index &gt; numberOfCourseAssignments()) { index = numberOfCourseAssignments() - 1; }</span>
+<span class="nc" id="L680">      courseAssignments.remove(aCourseAssignment);</span>
+<span class="nc" id="L681">      courseAssignments.add(index, aCourseAssignment);</span>
+<span class="nc" id="L682">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L686">      wasAdded = addCourseAssignmentAt(aCourseAssignment, index);</span>
+    }
+<span class="nc" id="L688">    return wasAdded;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfCategories()
+  {
+<span class="nc" id="L693">    return 0;</span>
+  }
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addCategory(CourseCategory aCategory)
+  {
+<span class="fc" id="L698">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L699" title="1 of 2 branches missed.">    if (categories.contains(aCategory)) { return false; }</span>
+<span class="fc" id="L700">    categories.add(aCategory);</span>
+<span class="pc bpc" id="L701" title="1 of 2 branches missed.">    if (aCategory.indexOfCourse(this) != -1)</span>
+    {
+<span class="fc" id="L703">      wasAdded = true;</span>
+    }
+    else
+    {
+<span class="nc" id="L707">      wasAdded = aCategory.addCourse(this);</span>
+<span class="nc bnc" id="L708" title="All 2 branches missed.">      if (!wasAdded)</span>
+      {
+<span class="nc" id="L710">        categories.remove(aCategory);</span>
+      }
+    }
+<span class="fc" id="L713">    return wasAdded;</span>
+  }
+  /* Code from template association_RemoveMany */
+  public boolean removeCategory(CourseCategory aCategory)
+  {
+<span class="fc" id="L718">    boolean wasRemoved = false;</span>
+<span class="pc bpc" id="L719" title="1 of 2 branches missed.">    if (!categories.contains(aCategory))</span>
+    {
+<span class="nc" id="L721">      return wasRemoved;</span>
+    }
+
+<span class="fc" id="L724">    int oldIndex = categories.indexOf(aCategory);</span>
+<span class="fc" id="L725">    categories.remove(oldIndex);</span>
+<span class="pc bpc" id="L726" title="1 of 2 branches missed.">    if (aCategory.indexOfCourse(this) == -1)</span>
+    {
+<span class="fc" id="L728">      wasRemoved = true;</span>
+    }
+    else
+    {
+<span class="nc" id="L732">      wasRemoved = aCategory.removeCourse(this);</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">      if (!wasRemoved)</span>
+      {
+<span class="nc" id="L735">        categories.add(oldIndex,aCategory);</span>
+      }
+    }
+<span class="fc" id="L738">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addCategoryAt(CourseCategory aCategory, int index)
+  {  
+<span class="nc" id="L743">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L744" title="All 2 branches missed.">    if(addCategory(aCategory))</span>
+    {
+<span class="nc bnc" id="L746" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L747" title="All 2 branches missed.">      if(index &gt; numberOfCategories()) { index = numberOfCategories() - 1; }</span>
+<span class="nc" id="L748">      categories.remove(aCategory);</span>
+<span class="nc" id="L749">      categories.add(index, aCategory);</span>
+<span class="nc" id="L750">      wasAdded = true;</span>
+    }
+<span class="nc" id="L752">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveCategoryAt(CourseCategory aCategory, int index)
+  {
+<span class="nc" id="L757">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L758" title="All 2 branches missed.">    if(categories.contains(aCategory))</span>
+    {
+<span class="nc bnc" id="L760" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L761" title="All 2 branches missed.">      if(index &gt; numberOfCategories()) { index = numberOfCategories() - 1; }</span>
+<span class="nc" id="L762">      categories.remove(aCategory);</span>
+<span class="nc" id="L763">      categories.add(index, aCategory);</span>
+<span class="nc" id="L764">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L768">      wasAdded = addCategoryAt(aCategory, index);</span>
+    }
+<span class="nc" id="L770">    return wasAdded;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setInstructor(Instructor aInstructor)
+  {
+<span class="fc" id="L775">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L776" title="1 of 2 branches missed.">    if (aInstructor == null)</span>
+    {
+<span class="nc" id="L778">      return wasSet;</span>
+    }
+
+<span class="fc" id="L781">    Instructor existingInstructor = instructor;</span>
+<span class="fc" id="L782">    instructor = aInstructor;</span>
+<span class="pc bpc" id="L783" title="3 of 4 branches missed.">    if (existingInstructor != null &amp;&amp; !existingInstructor.equals(aInstructor))</span>
+    {
+<span class="nc" id="L785">      existingInstructor.removeTaughtCourse(this);</span>
+    }
+<span class="fc" id="L787">    instructor.addTaughtCourse(this);</span>
+<span class="fc" id="L788">    wasSet = true;</span>
+<span class="fc" id="L789">    return wasSet;</span>
+  }
+
+  public void delete()
+  {
+<span class="nc bnc" id="L794" title="All 2 branches missed.">    while (lessons.size() &gt; 0)</span>
+    {
+<span class="nc" id="L796">      Lesson aLesson = lessons.get(lessons.size() - 1);</span>
+<span class="nc" id="L797">      aLesson.delete();</span>
+<span class="nc" id="L798">      lessons.remove(aLesson);</span>
+<span class="nc" id="L799">    }</span>
+    
+<span class="nc bnc" id="L801" title="All 2 branches missed.">    for(int i=courseEnrollments.size(); i &gt; 0; i--)</span>
+    {
+<span class="nc" id="L803">      Enrollment aCourseEnrollment = courseEnrollments.get(i - 1);</span>
+<span class="nc" id="L804">      aCourseEnrollment.delete();</span>
+    }
+<span class="nc bnc" id="L806" title="All 2 branches missed.">    for(int i=courseAssignments.size(); i &gt; 0; i--)</span>
+    {
+<span class="nc" id="L808">      Assignment aCourseAssignment = courseAssignments.get(i - 1);</span>
+<span class="nc" id="L809">      aCourseAssignment.delete();</span>
+    }
+<span class="nc" id="L811">    ArrayList&lt;CourseCategory&gt; copyOfCategories = new ArrayList&lt;CourseCategory&gt;(categories);</span>
+<span class="nc" id="L812">    categories.clear();</span>
+<span class="nc bnc" id="L813" title="All 2 branches missed.">    for(CourseCategory aCategory : copyOfCategories)</span>
+    {
+<span class="nc" id="L815">      aCategory.removeCourse(this);</span>
+<span class="nc" id="L816">    }</span>
+<span class="nc" id="L817">    Instructor placeholderInstructor = instructor;</span>
+<span class="nc" id="L818">    this.instructor = null;</span>
+<span class="nc bnc" id="L819" title="All 2 branches missed.">    if(placeholderInstructor != null)</span>
+    {
+<span class="nc" id="L821">      placeholderInstructor.removeTaughtCourse(this);</span>
+    }
+<span class="nc" id="L823">  }</span>
+
+  // line 73 &quot;model.ump&quot;
+  public Boolean hasMinimumContent(){
+<span class="fc bfc" id="L827" title="All 4 branches covered.">    return numberOfLessons() &gt;= 1 &amp;&amp; numberOfCourseAssignments() &gt;= 1;</span>
+  }
+
+  // line 77 &quot;model.ump&quot;
+  public Boolean hasCapacity(){
+<span class="pc bpc" id="L832" title="1 of 2 branches missed.">    return capacity &gt; 0;</span>
+  }
+
+  // line 81 &quot;model.ump&quot;
+  public Boolean hasActiveEnrollments(){
+<span class="fc bfc" id="L837" title="All 2 branches covered.">    for(Enrollment e : courseEnrollments) {</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">      if(e.getStatus() == Enrollment.EnrollmentStatus.Active) {</span>
+<span class="fc" id="L839">        return true;</span>
+      }
+<span class="fc" id="L841">    }</span>
+<span class="fc" id="L842">    return false;</span>
+  }
+
+  /**
+   * Task 5.3: 实现 CourseStartRequiresStudent 约束验证
+   * OCL 约束：课程开课前必须至少有一个 Active 状态的学生
+   * @return true 如果存在至少一个 Active Enrollment，否则返回 false
+   */
+  public boolean validateHasActiveStudents() {
+<span class="fc" id="L851">    return hasActiveEnrollments();</span>
+  }
+
+  /**
+   * Task 5.8: 实现 UniqueCourseCategories 约束验证
+   * OCL 约束：课程的分类列表中不能有重复的分类
+   * @return true 如果所有分类唯一，否则返回 false
+   */
+  public boolean validateUniqueCategories() {
+<span class="nc" id="L860">    java.util.Set&lt;String&gt; categoryIds = new java.util.HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L861" title="All 2 branches missed.">    for (CourseCategory category : categories) {</span>
+<span class="nc bnc" id="L862" title="All 2 branches missed.">      if (!categoryIds.add(category.getId())) {</span>
+<span class="nc" id="L863">        return false; // 发现重复</span>
+      }
+<span class="nc" id="L865">    }</span>
+<span class="nc" id="L866">    return true;</span>
+  }
+
+  /**
+   * Task 5.11: 实现 PublishRequiresContent 约束验证
+   * OCL 约束：课程发布前必须有最少的内容（至少1个Lesson和1个Assignment）
+   * @return true 如果有最少内容，否则返回 false
+   */
+  public boolean validateHasMinimumContent() {
+<span class="nc" id="L875">    return hasMinimumContent();</span>
+  }
+
+  //------------------------
+  // Business Methods (Task 2.8)
+  //------------------------
+  
+  /**
+   * Task 5.1: 实现 SeatsNotExceeded 约束验证
+   * OCL 约束：enrollments 中 status=Active 的计数 ≤ capacity
+   * @return true 如果 Active 报名数 &lt;= capacity，否则返回 false
+   */
+  public boolean validateSeatsNotExceeded() {
+    // 统计 Active 状态的 Enrollment 数量
+<span class="fc" id="L889">    int activeCount = 0;</span>
+<span class="fc bfc" id="L890" title="All 2 branches covered.">    for (Enrollment enrollment : courseEnrollments) {</span>
+<span class="fc bfc" id="L891" title="All 2 branches covered.">      if (enrollment.getStatus() == Enrollment.EnrollmentStatus.Active) {</span>
+<span class="fc" id="L892">        activeCount++;</span>
+      }
+<span class="fc" id="L894">    }</span>
+    
+    // 返回 activeCount &lt;= capacity
+<span class="pc bpc" id="L897" title="1 of 2 branches missed.">    return activeCount &lt;= capacity;</span>
+  }
+
+  /**
+   * 学生选课核心逻辑
+   * Task 2.8: 实现 enroll() 方法
+   * @param student 要选课的学生
+   * @return 创建的 Enrollment 对象，如果选课失败返回 null
+   */
+  public Enrollment enroll(Student student) {
+    // 检查课程状态（必须是 EnrollmentOpen 或 Waitlisted）
+<span class="fc bfc" id="L908" title="All 4 branches covered.">    if (status != Status.EnrollmentOpen &amp;&amp; status != Status.Waitlisted) {</span>
+<span class="fc" id="L909">      return null;</span>
+    }
+    
+    // 检查学生是否已报名（避免重复）
+<span class="fc bfc" id="L913" title="All 2 branches covered.">    for (Enrollment enrollment : courseEnrollments) {</span>
+<span class="fc bfc" id="L914" title="All 2 branches covered.">      if (enrollment.getStudent().equals(student)) {</span>
+        // 学生已经报名，返回 null 表示失败
+<span class="fc" id="L916">        return null;</span>
+      }
+<span class="fc" id="L918">    }</span>
+    
+    // 统计当前 Active 报名数
+<span class="fc" id="L921">    int activeCount = 0;</span>
+<span class="fc bfc" id="L922" title="All 2 branches covered.">    for (Enrollment enrollment : courseEnrollments) {</span>
+<span class="fc bfc" id="L923" title="All 2 branches covered.">      if (enrollment.getStatus() == Enrollment.EnrollmentStatus.Active) {</span>
+<span class="fc" id="L924">        activeCount++;</span>
+      }
+<span class="fc" id="L926">    }</span>
+    
+    // 创建 Enrollment
+    Enrollment.EnrollmentStatus enrollmentStatus;
+<span class="fc bfc" id="L930" title="All 2 branches covered.">    if (activeCount &lt; capacity) {</span>
+      // 未满员，创建 Active 状态
+<span class="fc" id="L932">      enrollmentStatus = Enrollment.EnrollmentStatus.Active;</span>
+    } else {
+      // 已满员，创建 Waitlisted 状态
+<span class="fc" id="L935">      enrollmentStatus = Enrollment.EnrollmentStatus.Waitlisted;</span>
+      // 如果当前是 EnrollmentOpen，切换到 Waitlisted
+<span class="fc bfc" id="L937" title="All 2 branches covered.">      if (status == Status.EnrollmentOpen) {</span>
+<span class="fc" id="L938">        setStatus(Status.Waitlisted);</span>
+      }
+    }
+    
+    // 使用 Utils 生成 ID 和时间
+<span class="fc" id="L943">    String enrollmentId = Utils.generateId(&quot;ENR&quot;);</span>
+<span class="fc" id="L944">    Date enrolledAt = Utils.getCurrentTime();</span>
+    
+    // 创建并添加 Enrollment
+<span class="fc" id="L947">    Enrollment enrollment = new Enrollment(enrollmentId, enrollmentStatus, enrolledAt, student, this);</span>
+<span class="fc" id="L948">    return enrollment;</span>
+  }
+
+
+  public String toString()
+  {
+<span class="nc" id="L954">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L955">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;,&quot; +</span>
+<span class="nc" id="L956">            &quot;title&quot; + &quot;:&quot; + getTitle()+ &quot;,&quot; +</span>
+<span class="nc" id="L957">            &quot;capacity&quot; + &quot;:&quot; + getCapacity()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L958" title="All 2 branches missed.">            &quot;  &quot; + &quot;instructor = &quot;+(getInstructor()!=null?Integer.toHexString(System.identityHashCode(getInstructor())):&quot;null&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

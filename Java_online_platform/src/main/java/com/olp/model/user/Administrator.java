@@ -17,6 +17,14 @@ public class Administrator extends User
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Administrator()
+  {
+    super();
+  }
+
   public Administrator(String aId, String aName, String aEmail)
   {
     super(aId, aName, aEmail);

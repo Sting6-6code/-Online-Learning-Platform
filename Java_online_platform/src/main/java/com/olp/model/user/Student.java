@@ -36,6 +36,16 @@ public class Student extends User
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Student()
+  {
+    super();
+    studentEnrollments = new ArrayList<Enrollment>();
+    studentSubmissions = new ArrayList<Submission>();
+  }
+
   public Student(String aId, String aName, String aEmail)
   {
     super(aId, aName, aEmail);

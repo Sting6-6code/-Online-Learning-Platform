@@ -23,6 +23,15 @@ public class Instructor extends User
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Instructor()
+  {
+    super();
+    taughtCourses = new ArrayList<Course>();
+  }
+
   public Instructor(String aId, String aName, String aEmail)
   {
     super(aId, aName, aEmail);

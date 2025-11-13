@@ -1,14 +1,12 @@
 package com.olp.model.user;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Task 1.4: Administrator 类基础功能测试
  * 验证 Administrator 类的继承关系和基本操作
  */
-@SpringBootTest
 public class AdministratorTest {
 
     @Test

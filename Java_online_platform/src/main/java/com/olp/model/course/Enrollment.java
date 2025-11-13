@@ -46,6 +46,14 @@ public class Enrollment
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Enrollment()
+  {
+    status = EnrollmentStatus.Active;
+  }
+
   public Enrollment(String aId, EnrollmentStatus aStatus, Date aEnrolledAt, Student aStudent, Course aCourse)
   {
     // Task 2.4: 添加构造函数验证
@@ -57,6 +65,12 @@ public class Enrollment
     }
     if (aCourse == null) {
       throw new IllegalArgumentException("Enrollment course cannot be null");
+    }
+    
+    // Task 5.2: 实现 EnrollmentOnlyAfterPublish 约束验证
+    // OCL 约束：self.course.status ≠ CourseStatus::Draft
+    if (aCourse.getStatus() == Course.Status.Draft) {
+      throw new IllegalArgumentException("Enrollment can only be created for non-Draft courses, but course status is: " + aCourse.getStatus());
     }
     
     id = aId;

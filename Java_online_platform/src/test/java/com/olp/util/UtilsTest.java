@@ -1,7 +1,6 @@
 package com.olp.util;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
@@ -10,8 +9,9 @@ import java.util.Calendar;
 /**
  * Task 0.6: 工具类测试
  * 验证所有工具方法的正确性
+ * 
+ * 注意：这是纯单元测试，不需要 Spring 上下文
  */
-@SpringBootTest
 public class UtilsTest {
 
     @Test

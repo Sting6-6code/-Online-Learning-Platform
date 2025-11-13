@@ -1,7 +1,6 @@
 package com.olp.model.course;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.user.Instructor;
@@ -13,7 +12,6 @@ import java.sql.Date;
  * Task 2.5-2.6: Course 类构造函数验证和 publish() 方法测试
  * 验证 Course 类的基本验证、初始状态和发布功能
  */
-@SpringBootTest
 public class CourseTest {
 
     @Test
@@ -601,6 +599,50 @@ public class CourseTest {
         System.out.println("✅ Waitlisted 状态且有 Active 学生可以开课");
     }
 
+    // Task 5.3: validateHasActiveStudents() 方法测试
+    @Test
+    public void testValidateHasActiveStudentsTrueWhenActiveEnrollmentExists() {
+        Instructor instructor = new Instructor("I041", "Dr. Silver", "silver@example.com");
+        Course course = new Course("C041", "Serverless Architecture", 3, instructor);
+
+        Lesson lesson = new Lesson("L041", "Intro", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A041", "Assignment", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+
+        Student student = new Student("S041", "Student Active", "active@example.com");
+        course.enroll(student);
+
+        assertTrue(course.validateHasActiveStudents(), "存在 Active 学生时验证应通过");
+        System.out.println("✅ validateHasActiveStudents 在有 Active 学生时返回 true");
+    }
+
+    @Test
+    public void testValidateHasActiveStudentsFalseWhenNoActiveEnrollment() {
+        Instructor instructor = new Instructor("I042", "Dr. Bronze", "bronze@example.com");
+        Course course = new Course("C042", "Event-Driven Systems", 2, instructor);
+
+        Lesson lesson = new Lesson("L042", "Intro", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A042", "Assignment", deadline, 100, course);
+        course.publish();
+        course.openEnrollment();
+
+        assertFalse(course.validateHasActiveStudents(), "没有 Active 学生时验证应失败");
+
+        Student student = new Student("S042", "Student Waitlisted", "waitlisted@example.com");
+        Enrollment waitlisted = course.enroll(student);
+        assertNotNull(waitlisted);
+        assertEquals(Enrollment.EnrollmentStatus.Active, waitlisted.getStatus());
+
+        waitlisted.dropCourse();
+        assertEquals(Enrollment.EnrollmentStatus.Dropped, waitlisted.getStatus());
+        assertFalse(course.validateHasActiveStudents(), "只有 Dropped 或候补学生时验证应失败");
+
+        System.out.println("✅ validateHasActiveStudents 在没有 Active 学生时返回 false");
+    }
+
     // Task 2.10: complete() 和 cancel() 方法测试
     @Test
     public void testCompleteFromInProgress() {
@@ -748,6 +790,112 @@ public class CourseTest {
         assertEquals("No reason provided", course.getCancelReason());
         
         System.out.println("✅ 无参 cancel() 方法正常工作");
+    }
+
+    // Task 5.1: SeatsNotExceeded 约束验证测试
+    @Test
+    public void testValidateSeatsNotExceededWhenNotFull() {
+        Instructor instructor = new Instructor("I024", "Dr. Amber", "amber@example.com");
+        Course course = new Course("C027", "Docker & Kubernetes", 5, instructor);
+        
+        // 添加课程内容以便发布
+        Lesson lesson = new Lesson("L001", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A001", "Assignment 1", deadline, 100, course);
+        
+        course.publish();
+        course.openEnrollment();
+        
+        // 添加 3 个 Active Enrollment（未满员）
+        Student student1 = new Student("S001", "Student 1", "s1@example.com");
+        Student student2 = new Student("S002", "Student 2", "s2@example.com");
+        Student student3 = new Student("S003", "Student 3", "s3@example.com");
+        
+        course.enroll(student1);
+        course.enroll(student2);
+        course.enroll(student3);
+        
+        // 验证约束（3 <= 5）
+        assertTrue(course.validateSeatsNotExceeded(), "未满员课程验证应该成功");
+        
+        System.out.println("✅ 未满员课程验证成功");
+    }
+
+    @Test
+    public void testValidateSeatsNotExceededWhenFull() {
+        Instructor instructor = new Instructor("I025", "Dr. Jade", "jade@example.com");
+        Course course = new Course("C028", "Microservices Architecture", 2, instructor); // 容量为 2
+        
+        // 添加课程内容以便发布
+        Lesson lesson = new Lesson("L002", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A002", "Assignment 1", deadline, 100, course);
+        
+        course.publish();
+        course.openEnrollment();
+        
+        // 添加 2 个 Active Enrollment（满员）
+        Student student1 = new Student("S004", "Student 4", "s4@example.com");
+        Student student2 = new Student("S005", "Student 5", "s5@example.com");
+        
+        course.enroll(student1);
+        course.enroll(student2);
+        
+        // 验证约束（2 <= 2）
+        assertTrue(course.validateSeatsNotExceeded(), "满员课程验证应该成功（等于容量）");
+        
+        // 尝试添加第 3 个学生（应该创建 Waitlisted）
+        Student student3 = new Student("S006", "Student 6", "s6@example.com");
+        Enrollment enrollment3 = course.enroll(student3);
+        assertNotNull(enrollment3, "应该可以创建 Waitlisted Enrollment");
+        assertEquals(Enrollment.EnrollmentStatus.Waitlisted, enrollment3.getStatus());
+        
+        // 验证约束仍然满足（2 Active <= 2 capacity）
+        assertTrue(course.validateSeatsNotExceeded(), "满员后添加 Waitlisted 学生，约束仍然满足");
+        
+        System.out.println("✅ 满员课程验证成功");
+    }
+
+    @Test
+    public void testValidateSeatsNotExceededWithDroppedEnrollments() {
+        Instructor instructor = new Instructor("I026", "Dr. Emerald", "emerald@example.com");
+        Course course = new Course("C029", "Cloud Computing", 2, instructor);
+        
+        // 添加课程内容以便发布
+        Lesson lesson = new Lesson("L003", "Lesson 1", 1, course);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A003", "Assignment 1", deadline, 100, course);
+        
+        course.publish();
+        course.openEnrollment();
+        
+        // 添加 2 个 Active Enrollment（满员）
+        Student student1 = new Student("S007", "Student 7", "s7@example.com");
+        Student student2 = new Student("S008", "Student 8", "s8@example.com");
+        
+        Enrollment enrollment1 = course.enroll(student1);
+        Enrollment enrollment2 = course.enroll(student2);
+        
+        // 验证满员
+        assertTrue(course.validateSeatsNotExceeded(), "满员时约束应该满足");
+        
+        // 学生1退课
+        enrollment1.dropCourse();
+        assertEquals(Enrollment.EnrollmentStatus.Dropped, enrollment1.getStatus());
+        
+        // 验证约束仍然满足（1 Active <= 2 capacity）
+        assertTrue(course.validateSeatsNotExceeded(), "退课后约束仍然满足");
+        
+        // 现在可以添加新的 Active Enrollment
+        Student student3 = new Student("S009", "Student 9", "s9@example.com");
+        Enrollment enrollment3 = course.enroll(student3);
+        assertNotNull(enrollment3);
+        assertEquals(Enrollment.EnrollmentStatus.Active, enrollment3.getStatus());
+        
+        // 验证约束仍然满足（2 Active <= 2 capacity）
+        assertTrue(course.validateSeatsNotExceeded(), "添加新学生后约束仍然满足");
+        
+        System.out.println("✅ 退课后的约束验证成功");
     }
 }
 

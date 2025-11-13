@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Lesson.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.course</a> &gt; <span class="el_source">Lesson.java</span></div><h1>Lesson.java</h1><pre class="source lang-java linenums">package com.olp.model.course;
+
+import java.util.*;
+import javax.persistence.*;
+
+// line 96 &quot;model.ump&quot;
+// line 255 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;lessons&quot;)
+public class Lesson
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Lesson Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Column(name = &quot;title&quot;, length = 200, nullable = false)
+  private String title;
+  
+  @Column(name = &quot;order_index&quot;, nullable = false)
+  private int orderIndex;
+
+  //Lesson Associations
+  @OneToMany(mappedBy = &quot;lesson&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List&lt;VideoContent&gt; lessonVideos;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;course_id&quot;, nullable = false)
+  private Course course;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Lesson()
+<span class="nc" id="L44">  {</span>
+<span class="nc" id="L45">    lessonVideos = new ArrayList&lt;VideoContent&gt;();</span>
+<span class="nc" id="L46">  }</span>
+
+  public Lesson(String aId, String aTitle, int aOrderIndex, Course aCourse)
+<span class="fc" id="L49">  {</span>
+    // Task 2.3: 添加构造函数验证
+<span class="fc bfc" id="L51" title="All 4 branches covered.">    if (aTitle == null || aTitle.trim().isEmpty()) {</span>
+<span class="fc" id="L52">      throw new IllegalArgumentException(&quot;Lesson title cannot be null or empty&quot;);</span>
+    }
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    if (aOrderIndex &lt; 0) {</span>
+<span class="fc" id="L55">      throw new IllegalArgumentException(&quot;Lesson orderIndex must be &gt;= 0&quot;);</span>
+    }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (aCourse == null) {</span>
+<span class="fc" id="L58">      throw new IllegalArgumentException(&quot;Lesson course cannot be null&quot;);</span>
+    }
+    
+<span class="fc" id="L61">    id = aId;</span>
+<span class="fc" id="L62">    title = aTitle;</span>
+<span class="fc" id="L63">    orderIndex = aOrderIndex;</span>
+<span class="fc" id="L64">    lessonVideos = new ArrayList&lt;VideoContent&gt;();</span>
+<span class="fc" id="L65">    boolean didAddCourse = setCourse(aCourse);</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">    if (!didAddCourse)</span>
+    {
+<span class="nc" id="L68">      throw new RuntimeException(&quot;Unable to create lesson due to course. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L70">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L78">    boolean wasSet = false;</span>
+<span class="nc" id="L79">    id = aId;</span>
+<span class="nc" id="L80">    wasSet = true;</span>
+<span class="nc" id="L81">    return wasSet;</span>
+  }
+
+  public boolean setTitle(String aTitle)
+  {
+<span class="nc" id="L86">    boolean wasSet = false;</span>
+<span class="nc" id="L87">    title = aTitle;</span>
+<span class="nc" id="L88">    wasSet = true;</span>
+<span class="nc" id="L89">    return wasSet;</span>
+  }
+
+  public boolean setOrderIndex(int aOrderIndex)
+  {
+<span class="nc" id="L94">    boolean wasSet = false;</span>
+<span class="nc" id="L95">    orderIndex = aOrderIndex;</span>
+<span class="nc" id="L96">    wasSet = true;</span>
+<span class="nc" id="L97">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L102">    return id;</span>
+  }
+
+  public String getTitle()
+  {
+<span class="fc" id="L107">    return title;</span>
+  }
+
+  public int getOrderIndex()
+  {
+<span class="fc" id="L112">    return orderIndex;</span>
+  }
+  /* Code from template association_GetMany */
+  public VideoContent getLessonVideo(int index)
+  {
+<span class="fc" id="L117">    VideoContent aLessonVideo = lessonVideos.get(index);</span>
+<span class="fc" id="L118">    return aLessonVideo;</span>
+  }
+
+  public List&lt;VideoContent&gt; getLessonVideos()
+  {
+<span class="nc" id="L123">    List&lt;VideoContent&gt; newLessonVideos = Collections.unmodifiableList(lessonVideos);</span>
+<span class="nc" id="L124">    return newLessonVideos;</span>
+  }
+
+  public int numberOfLessonVideos()
+  {
+<span class="fc" id="L129">    int number = lessonVideos.size();</span>
+<span class="fc" id="L130">    return number;</span>
+  }
+
+  public boolean hasLessonVideos()
+  {
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">    boolean has = lessonVideos.size() &gt; 0;</span>
+<span class="fc" id="L136">    return has;</span>
+  }
+
+  public int indexOfLessonVideo(VideoContent aLessonVideo)
+  {
+<span class="nc" id="L141">    int index = lessonVideos.indexOf(aLessonVideo);</span>
+<span class="nc" id="L142">    return index;</span>
+  }
+  /* Code from template association_GetOne */
+  public Course getCourse()
+  {
+<span class="fc" id="L147">    return course;</span>
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfLessonVideos()
+  {
+<span class="nc" id="L152">    return 0;</span>
+  }
+  /* Code from template association_AddManyToOne */
+  public VideoContent addLessonVideo(String aId, String aUrl, int aDurationSec)
+  {
+<span class="fc" id="L157">    return new VideoContent(aId, aUrl, aDurationSec, this);</span>
+  }
+
+  public boolean addLessonVideo(VideoContent aLessonVideo)
+  {
+<span class="fc" id="L162">    boolean wasAdded = false;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">    if (lessonVideos.contains(aLessonVideo)) { return false; }</span>
+<span class="fc" id="L164">    Lesson existingLesson = aLessonVideo.getLesson();</span>
+<span class="pc bpc" id="L165" title="2 of 4 branches missed.">    boolean isNewLesson = existingLesson != null &amp;&amp; !this.equals(existingLesson);</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">    if (isNewLesson)</span>
+    {
+<span class="nc" id="L168">      aLessonVideo.setLesson(this);</span>
+    }
+    else
+    {
+<span class="fc" id="L172">      lessonVideos.add(aLessonVideo);</span>
+    }
+<span class="fc" id="L174">    wasAdded = true;</span>
+<span class="fc" id="L175">    return wasAdded;</span>
+  }
+
+  public boolean removeLessonVideo(VideoContent aLessonVideo)
+  {
+<span class="nc" id="L180">    boolean wasRemoved = false;</span>
+    //Unable to remove aLessonVideo, as it must always have a lesson
+<span class="nc bnc" id="L182" title="All 2 branches missed.">    if (!this.equals(aLessonVideo.getLesson()))</span>
+    {
+<span class="nc" id="L184">      lessonVideos.remove(aLessonVideo);</span>
+<span class="nc" id="L185">      wasRemoved = true;</span>
+    }
+<span class="nc" id="L187">    return wasRemoved;</span>
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addLessonVideoAt(VideoContent aLessonVideo, int index)
+  {  
+<span class="nc" id="L192">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">    if(addLessonVideo(aLessonVideo))</span>
+    {
+<span class="nc bnc" id="L195" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">      if(index &gt; numberOfLessonVideos()) { index = numberOfLessonVideos() - 1; }</span>
+<span class="nc" id="L197">      lessonVideos.remove(aLessonVideo);</span>
+<span class="nc" id="L198">      lessonVideos.add(index, aLessonVideo);</span>
+<span class="nc" id="L199">      wasAdded = true;</span>
+    }
+<span class="nc" id="L201">    return wasAdded;</span>
+  }
+
+  public boolean addOrMoveLessonVideoAt(VideoContent aLessonVideo, int index)
+  {
+<span class="nc" id="L206">    boolean wasAdded = false;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">    if(lessonVideos.contains(aLessonVideo))</span>
+    {
+<span class="nc bnc" id="L209" title="All 2 branches missed.">      if(index &lt; 0 ) { index = 0; }</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">      if(index &gt; numberOfLessonVideos()) { index = numberOfLessonVideos() - 1; }</span>
+<span class="nc" id="L211">      lessonVideos.remove(aLessonVideo);</span>
+<span class="nc" id="L212">      lessonVideos.add(index, aLessonVideo);</span>
+<span class="nc" id="L213">      wasAdded = true;</span>
+    } 
+    else 
+    {
+<span class="nc" id="L217">      wasAdded = addLessonVideoAt(aLessonVideo, index);</span>
+    }
+<span class="nc" id="L219">    return wasAdded;</span>
+  }
+  /* Code from template association_SetOneToMandatoryMany */
+  public boolean setCourse(Course aCourse)
+  {
+<span class="fc" id="L224">    boolean wasSet = false;</span>
+    //Must provide course to lesson
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">    if (aCourse == null)</span>
+    {
+<span class="nc" id="L228">      return wasSet;</span>
+    }
+
+<span class="pc bpc" id="L231" title="3 of 4 branches missed.">    if (course != null &amp;&amp; course.numberOfLessons() &lt;= Course.minimumNumberOfLessons())</span>
+    {
+<span class="nc" id="L233">      return wasSet;</span>
+    }
+
+<span class="fc" id="L236">    Course existingCourse = course;</span>
+<span class="fc" id="L237">    course = aCourse;</span>
+<span class="pc bpc" id="L238" title="3 of 4 branches missed.">    if (existingCourse != null &amp;&amp; !existingCourse.equals(aCourse))</span>
+    {
+<span class="nc" id="L240">      boolean didRemove = existingCourse.removeLesson(this);</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">      if (!didRemove)</span>
+      {
+<span class="nc" id="L243">        course = existingCourse;</span>
+<span class="nc" id="L244">        return wasSet;</span>
+      }
+    }
+<span class="fc" id="L247">    course.addLesson(this);</span>
+<span class="fc" id="L248">    wasSet = true;</span>
+<span class="fc" id="L249">    return wasSet;</span>
+  }
+
+  //------------------------
+  // Convenience Methods (Task 2.3)
+  //------------------------
+  
+  /**
+   * 计算所有关联的 VideoContent 的 durationSec 之和
+   * Task 2.3: 添加便捷方法
+   */
+  public int getTotalDuration()
+  {
+<span class="fc" id="L262">    int total = 0;</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">    for (VideoContent video : lessonVideos) {</span>
+<span class="fc" id="L264">      total += video.getDurationSec();</span>
+<span class="fc" id="L265">    }</span>
+<span class="fc" id="L266">    return total;</span>
+  }
+
+  public void delete()
+  {
+<span class="nc bnc" id="L271" title="All 2 branches missed.">    while (lessonVideos.size() &gt; 0)</span>
+    {
+<span class="nc" id="L273">      VideoContent aLessonVideo = lessonVideos.get(lessonVideos.size() - 1);</span>
+<span class="nc" id="L274">      aLessonVideo.delete();</span>
+<span class="nc" id="L275">      lessonVideos.remove(aLessonVideo);</span>
+<span class="nc" id="L276">    }</span>
+    
+<span class="nc" id="L278">    Course placeholderCourse = course;</span>
+<span class="nc" id="L279">    this.course = null;</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">    if(placeholderCourse != null)</span>
+    {
+<span class="nc" id="L282">      placeholderCourse.removeLesson(this);</span>
+    }
+<span class="nc" id="L284">  }</span>
+
+
+  public String toString()
+  {
+<span class="nc" id="L289">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L290">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;,&quot; +</span>
+<span class="nc" id="L291">            &quot;title&quot; + &quot;:&quot; + getTitle()+ &quot;,&quot; +</span>
+<span class="nc" id="L292">            &quot;orderIndex&quot; + &quot;:&quot; + getOrderIndex()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            &quot;  &quot; + &quot;course = &quot;+(getCourse()!=null?Integer.toHexString(System.identityHashCode(getCourse())):&quot;null&quot;);</span>
+  }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,7 +1,6 @@
 package com.olp.model.user;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import com.olp.model.course.Course;
  * Task 1.3: Instructor 类基础功能测试
  * 验证 Instructor 类的继承关系和基本操作
  */
-@SpringBootTest
 public class InstructorTest {
 
     @Test

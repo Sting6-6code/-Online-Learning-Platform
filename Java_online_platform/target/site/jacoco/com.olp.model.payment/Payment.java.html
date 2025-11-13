@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Payment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.model.payment</a> &gt; <span class="el_source">Payment.java</span></div><h1>Payment.java</h1><pre class="source lang-java linenums">/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+
+
+package com.olp.model.payment;
+
+import java.sql.Date;
+import javax.persistence.*;
+import com.olp.util.Utils;
+
+// line 206 &quot;model.ump&quot;
+// line 290 &quot;model.ump&quot;
+@Entity
+@Table(name = &quot;payments&quot;)
+public class Payment
+{
+
+  //------------------------
+  // ENUMERATIONS
+  //------------------------
+
+  // Task 4.7: 添加 Pending 状态
+<span class="fc" id="L23">  public enum PaymentStatus { Pending, Succeeded, Failed, Refunding, Refunded }</span>
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Payment Attributes
+  @Id
+  @Column(name = &quot;id&quot;, length = 50)
+  private String id;
+  
+  @Column(name = &quot;amount&quot;, nullable = false)
+  private double amount;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(name = &quot;status&quot;, length = 20, nullable = false)
+  private PaymentStatus status;
+  
+  @Column(name = &quot;paid_at&quot;, nullable = false)
+  private Date paidAt;
+
+  //Payment Associations
+  @OneToOne(mappedBy = &quot;payment&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+  private com.olp.model.payment.Refund paymentRefund;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;subscription_id&quot;, nullable = false)
+  private com.olp.model.payment.Subscription subscription;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Payment()
+<span class="nc" id="L60">  {</span>
+<span class="nc" id="L61">    status = PaymentStatus.Pending;</span>
+<span class="nc" id="L62">  }</span>
+
+  /**
+   * Task 4.6: 添加构造函数验证
+   */
+  public Payment(String aId, double aAmount, PaymentStatus aStatus, Date aPaidAt, com.olp.model.payment.Subscription aSubscription)
+<span class="fc" id="L68">  {</span>
+    // Task 4.6: 验证 amount &gt; 0
+<span class="fc bfc" id="L70" title="All 2 branches covered.">    if (aAmount &lt;= 0) {</span>
+<span class="fc" id="L71">      throw new IllegalArgumentException(&quot;Payment amount must be greater than 0&quot;);</span>
+    }
+    
+    // Task 4.6: 验证 subscription 不为 null
+<span class="fc bfc" id="L75" title="All 2 branches covered.">    if (aSubscription == null) {</span>
+<span class="fc" id="L76">      throw new IllegalArgumentException(&quot;Payment subscription cannot be null&quot;);</span>
+    }
+    
+<span class="fc" id="L79">    id = aId;</span>
+<span class="fc" id="L80">    amount = aAmount;</span>
+<span class="fc" id="L81">    status = aStatus; // Task 4.6: 初始状态为构造函数参数值</span>
+<span class="fc" id="L82">    paidAt = aPaidAt;</span>
+<span class="fc" id="L83">    boolean didAddSubscription = setSubscription(aSubscription);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">    if (!didAddSubscription)</span>
+    {
+<span class="nc" id="L86">      throw new RuntimeException(&quot;Unable to create subscriptionPayment due to subscription. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html&quot;);</span>
+    }
+<span class="fc" id="L88">  }</span>
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setId(String aId)
+  {
+<span class="nc" id="L96">    boolean wasSet = false;</span>
+<span class="nc" id="L97">    id = aId;</span>
+<span class="nc" id="L98">    wasSet = true;</span>
+<span class="nc" id="L99">    return wasSet;</span>
+  }
+
+  public boolean setAmount(double aAmount)
+  {
+<span class="nc" id="L104">    boolean wasSet = false;</span>
+<span class="nc" id="L105">    amount = aAmount;</span>
+<span class="nc" id="L106">    wasSet = true;</span>
+<span class="nc" id="L107">    return wasSet;</span>
+  }
+
+  public boolean setStatus(PaymentStatus aStatus)
+  {
+<span class="fc" id="L112">    boolean wasSet = false;</span>
+<span class="fc" id="L113">    status = aStatus;</span>
+<span class="fc" id="L114">    wasSet = true;</span>
+<span class="fc" id="L115">    return wasSet;</span>
+  }
+
+  public boolean setPaidAt(Date aPaidAt)
+  {
+<span class="fc" id="L120">    boolean wasSet = false;</span>
+<span class="fc" id="L121">    paidAt = aPaidAt;</span>
+<span class="fc" id="L122">    wasSet = true;</span>
+<span class="fc" id="L123">    return wasSet;</span>
+  }
+
+  public String getId()
+  {
+<span class="fc" id="L128">    return id;</span>
+  }
+
+  public double getAmount()
+  {
+<span class="fc" id="L133">    return amount;</span>
+  }
+
+  public PaymentStatus getStatus()
+  {
+<span class="fc" id="L138">    return status;</span>
+  }
+
+  public Date getPaidAt()
+  {
+<span class="fc" id="L143">    return paidAt;</span>
+  }
+  /* Code from template association_GetOne */
+  public com.olp.model.payment.Refund getPaymentRefund()
+  {
+<span class="fc" id="L148">    return paymentRefund;</span>
+  }
+
+  public boolean hasPaymentRefund()
+  {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">    boolean has = paymentRefund != null;</span>
+<span class="nc" id="L154">    return has;</span>
+  }
+  /* Code from template association_GetOne */
+  public com.olp.model.payment.Subscription getSubscription()
+  {
+<span class="fc" id="L159">    return subscription;</span>
+  }
+  /* Code from template association_SetOptionalOneToOptionalOne */
+  public boolean setPaymentRefund(com.olp.model.payment.Refund aNewPaymentRefund)
+  {
+<span class="fc" id="L164">    boolean wasSet = false;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    if (aNewPaymentRefund == null)</span>
+    {
+<span class="fc" id="L167">      com.olp.model.payment.Refund existingPaymentRefund = paymentRefund;</span>
+<span class="fc" id="L168">      paymentRefund = null;</span>
+      
+<span class="pc bpc" id="L170" title="2 of 4 branches missed.">      if (existingPaymentRefund != null &amp;&amp; existingPaymentRefund.getPayment() != null)</span>
+      {
+<span class="nc" id="L172">        existingPaymentRefund.setPayment(null);</span>
+      }
+<span class="fc" id="L174">      wasSet = true;</span>
+<span class="fc" id="L175">      return wasSet;</span>
+    }
+
+<span class="fc" id="L178">    com.olp.model.payment.Refund currentPaymentRefund = getPaymentRefund();</span>
+<span class="fc bfc" id="L179" title="All 4 branches covered.">    if (currentPaymentRefund != null &amp;&amp; !currentPaymentRefund.equals(aNewPaymentRefund))</span>
+    {
+<span class="fc" id="L181">      currentPaymentRefund.setPayment(null);</span>
+    }
+
+<span class="fc" id="L184">    paymentRefund = aNewPaymentRefund;</span>
+<span class="fc" id="L185">    Payment existingPayment = aNewPaymentRefund.getPayment();</span>
+
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">    if (!equals(existingPayment))</span>
+    {
+<span class="nc" id="L189">      aNewPaymentRefund.setPayment(this);</span>
+    }
+<span class="fc" id="L191">    wasSet = true;</span>
+<span class="fc" id="L192">    return wasSet;</span>
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setSubscription(com.olp.model.payment.Subscription aSubscription)
+  {
+<span class="fc" id="L197">    boolean wasSet = false;</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">    if (aSubscription == null)</span>
+    {
+<span class="nc" id="L200">      return wasSet;</span>
+    }
+
+<span class="fc" id="L203">    com.olp.model.payment.Subscription existingSubscription = subscription;</span>
+<span class="fc" id="L204">    subscription = aSubscription;</span>
+<span class="pc bpc" id="L205" title="3 of 4 branches missed.">    if (existingSubscription != null &amp;&amp; !existingSubscription.equals(aSubscription))</span>
+    {
+<span class="nc" id="L207">      existingSubscription.removeSubscriptionPayment(this);</span>
+    }
+<span class="fc" id="L209">    subscription.addSubscriptionPayment(this);</span>
+<span class="fc" id="L210">    wasSet = true;</span>
+<span class="fc" id="L211">    return wasSet;</span>
+  }
+
+  /**
+   * Task 4.7: 实现 markSucceeded() 方法
+   * 标记支付成功：从 Pending 状态转换到 Succeeded 状态
+   */
+  public boolean markSucceeded()
+  {
+    // 守卫条件：当前状态必须是 Pending
+<span class="fc bfc" id="L221" title="All 2 branches covered.">    if (status != PaymentStatus.Pending) {</span>
+<span class="fc" id="L222">      return false;</span>
+    }
+    
+    // 状态转换
+<span class="fc" id="L226">    setStatus(PaymentStatus.Succeeded);</span>
+    
+    // 设置 paidAt := Utils.getCurrentTime()
+<span class="fc" id="L229">    setPaidAt(Utils.getCurrentTime());</span>
+    
+<span class="fc" id="L231">    return true;</span>
+  }
+
+  /**
+   * Task 4.7: 实现 markFailed() 方法
+   * 标记支付失败：从 Pending 状态转换到 Failed 状态
+   */
+  public boolean markFailed()
+  {
+    // 守卫条件：当前状态必须是 Pending
+<span class="fc bfc" id="L241" title="All 2 branches covered.">    if (status != PaymentStatus.Pending) {</span>
+<span class="fc" id="L242">      return false;</span>
+    }
+    
+    // 状态转换
+<span class="fc" id="L246">    setStatus(PaymentStatus.Failed);</span>
+    
+<span class="fc" id="L248">    return true;</span>
+  }
+
+  /**
+   * Task 4.8: 实现 initiateRefund() 方法
+   * 发起退款：从 Succeeded 状态转换到 Refunding 状态，创建 Refund 对象
+   */
+  public boolean initiateRefund(double refundAmount)
+  {
+    // 守卫条件：当前状态必须是 Succeeded
+<span class="fc bfc" id="L258" title="All 2 branches covered.">    if (status != PaymentStatus.Succeeded) {</span>
+<span class="fc" id="L259">      return false;</span>
+    }
+    
+    // 守卫条件：0 &lt; amount &lt;= this.amount
+<span class="fc bfc" id="L263" title="All 4 branches covered.">    if (refundAmount &lt;= 0 || refundAmount &gt; this.amount) {</span>
+<span class="fc" id="L264">      return false;</span>
+    }
+    
+    // 先创建 Refund 对象（此时 Payment 状态还是 Succeeded，满足 Refund 构造函数要求）
+<span class="fc" id="L268">    String refundId = Utils.generateId(&quot;REF&quot;);</span>
+<span class="fc" id="L269">    Date requestedAt = Utils.getCurrentTime();</span>
+<span class="fc" id="L270">    Date processedAt = null; // 初始为 null</span>
+    
+    // Task 4.9: 使用新的构造函数（包含 payment 参数）
+    // 注意：必须在状态转换之前创建 Refund，因为 Refund 构造函数要求 Payment 状态为 Succeeded
+<span class="fc" id="L274">    Refund refund = new Refund(refundId, refundAmount, requestedAt, processedAt, this);</span>
+<span class="fc" id="L275">    setPaymentRefund(refund);</span>
+    
+    // 状态转换（在创建 Refund 之后）
+<span class="fc" id="L278">    setStatus(PaymentStatus.Refunding);</span>
+    
+<span class="fc" id="L280">    return true;</span>
+  }
+
+  /**
+   * Task 5.12: 实现 PaymentRefundStateTransition 约束验证
+   * OCL 约束：只有 Succeeded 状态的支付可以退款，退款后状态为 Refunding 且有 Refund 对象
+   * @return true 如果支付状态和退款状态一致，否则返回 false
+   */
+  public boolean validateRefundTransition() {
+    // 检查前置条件：如果有 refund，则之前的状态应该是 Succeeded
+    // 检查后置条件：如果有 refund，则当前状态应该是 Refunding
+<span class="nc bnc" id="L291" title="All 2 branches missed.">    if (paymentRefund != null) {</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">      return status == PaymentStatus.Refunding;</span>
+    }
+<span class="nc" id="L294">    return true; // 没有退款时总是有效</span>
+  }
+
+  public void delete()
+  {
+<span class="nc bnc" id="L299" title="All 2 branches missed.">    if (paymentRefund != null)</span>
+    {
+<span class="nc" id="L301">      paymentRefund.setPayment(null);</span>
+    }
+<span class="nc" id="L303">    com.olp.model.payment.Subscription placeholderSubscription = subscription;</span>
+<span class="nc" id="L304">    this.subscription = null;</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">    if(placeholderSubscription != null)</span>
+    {
+<span class="nc" id="L307">      placeholderSubscription.removeSubscriptionPayment(this);</span>
+    }
+<span class="nc" id="L309">  }</span>
+
+
+  public String toString()
+  {
+<span class="nc" id="L314">    return super.toString() + &quot;[&quot;+</span>
+<span class="nc" id="L315">            &quot;id&quot; + &quot;:&quot; + getId()+ &quot;,&quot; +</span>
+<span class="nc" id="L316">            &quot;amount&quot; + &quot;:&quot; + getAmount()+ &quot;]&quot; + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L317" title="All 4 branches missed.">            &quot;  &quot; + &quot;status&quot; + &quot;=&quot; + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L318" title="All 4 branches missed.">            &quot;  &quot; + &quot;paidAt&quot; + &quot;=&quot; + (getPaidAt() != null ? !getPaidAt().equals(this)  ? getPaidAt().toString().replaceAll(&quot;  &quot;,&quot;    &quot;) : &quot;this&quot; : &quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">            &quot;  &quot; + &quot;paymentRefund = &quot;+(getPaymentRefund()!=null?Integer.toHexString(System.identityHashCode(getPaymentRefund())):&quot;null&quot;) + System.getProperties().getProperty(&quot;line.separator&quot;) +</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">            &quot;  &quot; + &quot;subscription = &quot;+(getSubscription()!=null?Integer.toHexString(System.identityHashCode(getSubscription())):&quot;null&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

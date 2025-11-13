@@ -6,7 +6,6 @@ package com.olp.model.assignment;
 
 import java.sql.Date;
 import javax.persistence.*;
-import com.olp.model.user.Student;
 import com.olp.util.Utils;
 
 // line 125 "model.ump"
@@ -56,6 +55,14 @@ public class Submission
   //------------------------
   // CONSTRUCTOR
   //------------------------
+
+  /**
+   * Protected no-argument constructor for JPA
+   */
+  protected Submission()
+  {
+    status = Status.Created;
+  }
 
   public Submission(String aId, Date aSubmittedAt, int aVersion, boolean aCheckPassed, com.olp.model.assignment.Grade aSubmissionGrade, com.olp.model.user.Student aStudent, com.olp.model.assignment.Assignment aAssignment)
   {
@@ -173,16 +180,12 @@ public class Submission
     }
     
     // 守卫条件：当前时间 <= assignment.getDeadline()
-    Date currentTime = Utils.getCurrentTime();
-    if (assignment == null || assignment.getDeadline() == null) {
-      return false;
-    }
-    if (Utils.compareDates(currentTime, assignment.getDeadline()) > 0) {
+    if (!validateNotOverdue()) {
       return false; // 超过截止时间
     }
     
     // 设置 submittedAt
-    setSubmittedAt(currentTime);
+    setSubmittedAt(Utils.getCurrentTime());
     
     // 计算版本号：统计该学生对该作业的已有提交数 + 1
     int existingCount = 0;
@@ -191,7 +194,8 @@ public class Submission
         Submission existingSubmission = assignment.getAssignmentSubmission(i);
         if (existingSubmission.getStudent() != null && 
             existingSubmission.getStudent().equals(student) &&
-            !existingSubmission.equals(this)) {
+            !existingSubmission.equals(this) &&
+            existingSubmission.getSubmittedAt() != null) {
           existingCount++;
         }
       }
@@ -464,6 +468,51 @@ public class Submission
     }
     Date currentTime = Utils.getCurrentTime();
     return Utils.compareDates(currentTime, assignment.getDeadline()) <= 0;
+  }
+
+  /**
+   * Task 5.4: 实现 SubmissionBeforeDeadline 约束验证
+   * OCL 约束：提交时间不能超过截止时间
+   * @return true 如果当前仍在截止时间之前
+   */
+  public boolean validateNotOverdue() {
+    if (assignment == null || assignment.getDeadline() == null) {
+      return false;
+    }
+    Date currentTime = Utils.getCurrentTime();
+    return Utils.compareDates(currentTime, assignment.getDeadline()) <= 0;
+  }
+
+  /**
+   * Task 5.5: 实现 SubmissionVersionMonotonic 约束验证
+   * OCL 约束：同一学生的提交版本号必须单调递增
+   * @return true 如果当前 version 等于该学生已提交次数，否则返回 false
+   */
+  public boolean validateVersionMonotonic() {
+    if (assignment == null || student == null) {
+      return false;
+    }
+    int submittedCount = 0;
+    for (int i = 0; i < assignment.numberOfAssignmentSubmissions(); i++) {
+      Submission other = assignment.getAssignmentSubmission(i);
+      if (other.getStudent() != null &&
+          other.getStudent().equals(student) &&
+          other.getSubmittedAt() != null) {
+        submittedCount++;
+      }
+    }
+    return version == submittedCount;
+  }
+
+  /**
+   * Task 5.7: 实现 AtMostOneGradePerSubmission 约束验证
+   * OCL 约束：每个提交最多只能有一个 Grade
+   * @return true 如果提交没有 Grade 或只有一个 Grade
+   */
+  public boolean validateGradeUniqueness() {
+    // submissionGrade 是一对一关系，Umple 已经保证了唯一性
+    // 此方法验证 submissionGrade 要么为 null，要么指向一个有效的 Grade
+    return submissionGrade == null || submissionGrade.getSubmission() == this;
   }
 
   // line 165 "model.ump"

@@ -1,7 +1,6 @@
 package com.olp.model.assignment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.course.Course;
@@ -13,7 +12,6 @@ import java.sql.Date;
  * Task 3.2: Grade 类基础功能测试
  * 验证 Grade 类的构造函数验证和便捷方法
  */
-@SpringBootTest
 public class GradeTest {
 
     @Test
@@ -185,6 +183,96 @@ public class GradeTest {
         assertEquals(grade, submission.getSubmissionGrade());
         
         System.out.println("✅ Grade-Submission 关联验证正常");
+    }
+
+    // Task 5.6: GradeWithinRange 约束验证
+    @Test
+    public void testSetScoreWithinRange() {
+        Instructor instructor = new Instructor("I008", "Dr. Silver", "silver@example.com");
+        Course course = new Course("C008", "Data Structures", 60, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A009", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S008", "Laura Gray", "laura@example.com");
+        Grade tempGrade = new Grade("TEMP009", 0.0, "");
+        Submission submission = new Submission("SUB009", null, 1, false, tempGrade, student, assignment);
+
+        Grade grade = new Grade("G015", 70.0, "Initial", submission);
+        assertTrue(grade.setScore(60.0));
+        assertEquals(60.0, grade.getScore(), 0.001);
+
+        System.out.println("✅ setScore 可以在合法范围内更新分数");
+    }
+
+    @Test
+    public void testSetScoreBelowZeroThrowsException() {
+        Instructor instructor = new Instructor("I009", "Dr. Bronze", "bronze@example.com");
+        Course course = new Course("C009", "Algorithms", 60, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A010", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S009", "Kevin Blue", "kevin@example.com");
+        Grade tempGrade = new Grade("TEMP010", 0.0, "");
+        Submission submission = new Submission("SUB010", null, 1, false, tempGrade, student, assignment);
+
+        Grade grade = new Grade("G016", 50.0, "Initial", submission);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> grade.setScore(-5.0),
+            "负分更新应该抛出 IllegalArgumentException"
+        );
+        assertTrue(exception.getMessage().contains("cannot be negative"));
+
+        System.out.println("✅ setScore 拒绝小于 0 的分数");
+    }
+
+    @Test
+    public void testSetScoreAboveMaxThrowsException() {
+        Instructor instructor = new Instructor("I010", "Dr. Copper", "copper@example.com");
+        Course course = new Course("C010", "Operating Systems", 60, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A011", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S010", "Mason Indigo", "mason@example.com");
+        Grade tempGrade = new Grade("TEMP011", 0.0, "");
+        Submission submission = new Submission("SUB011", null, 1, false, tempGrade, student, assignment);
+
+        Grade grade = new Grade("G017", 80.0, "Initial", submission);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> grade.setScore(150.0),
+            "超过 maxScore 的更新应该抛出 IllegalArgumentException"
+        );
+        assertTrue(exception.getMessage().contains("cannot exceed assignment maxScore"));
+
+        System.out.println("✅ setScore 拒绝超过 maxScore 的分数");
+    }
+
+    @Test
+    public void testSetSubmissionRejectsIncompatibleAssignment() {
+        Instructor instructor = new Instructor("I011", "Dr. Platinum", "platinum@example.com");
+        Course course = new Course("C011", "Computer Networks", 60, instructor);
+
+        Date deadline1 = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment1 = new Assignment("A012", "Assignment 1", deadline1, 100, course);
+        Student student = new Student("S011", "Nina Violet", "nina@example.com");
+        Grade tempGrade1 = new Grade("TEMP012", 0.0, "");
+        Submission submission1 = new Submission("SUB012", null, 1, false, tempGrade1, student, assignment1);
+
+        Grade grade = new Grade("G018", 90.0, "Initial", submission1);
+
+        Date deadline2 = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment2 = new Assignment("A013", "Assignment 2", deadline2, 80, course);
+        Grade tempGrade2 = new Grade("TEMP013", 0.0, "");
+        Submission submission2 = new Submission("SUB013", null, 1, false, tempGrade2, student, assignment2);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> grade.setSubmission(submission2),
+            "分数高于新作业最大值时不应允许重新关联"
+        );
+        assertTrue(exception.getMessage().contains("cannot exceed assignment maxScore"));
+
+        System.out.println("✅ setSubmission 拒绝与当前分数不兼容的作业");
     }
 }
 

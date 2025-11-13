@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.service</a> &gt; <span class="el_source">PaymentServiceImpl.java</span></div><h1>PaymentServiceImpl.java</h1><pre class="source lang-java linenums">package com.olp.service;
+
+import com.olp.model.payment.Payment;
+import com.olp.model.payment.Subscription;
+import com.olp.repository.PaymentRepository;
+import com.olp.repository.SubscriptionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Task 6.8: PaymentServiceImpl 实现类
+ * 实现支付和订阅服务的业务逻辑
+ */
+@Service
+@Transactional
+<span class="nc" id="L20">public class PaymentServiceImpl implements PaymentService {</span>
+    
+    @Autowired
+    private PaymentRepository paymentRepository;
+    
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;Subscription&gt; findSubscriptionById(String id) {
+<span class="nc" id="L31">        return subscriptionRepository.findById(id);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Subscription&gt; getAllSubscriptions() {
+<span class="nc" id="L37">        return subscriptionRepository.findAll();</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Subscription&gt; findSubscriptionsByStatus(Subscription.Status status) {
+<span class="nc" id="L43">        return subscriptionRepository.findByStatus(status);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;Payment&gt; findPaymentById(String id) {
+<span class="nc" id="L49">        return paymentRepository.findById(id);</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Payment&gt; findPaymentsBySubscription(String subscriptionId) {
+<span class="nc" id="L55">        return paymentRepository.findBySubscriptionId(subscriptionId);</span>
+    }
+    
+    @Override
+    public Payment markPaymentSucceeded(String paymentId) {
+<span class="nc" id="L60">        Payment payment = paymentRepository.findById(paymentId)</span>
+<span class="nc" id="L61">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Payment not found: &quot; + paymentId));</span>
+        
+<span class="nc" id="L63">        boolean succeeded = payment.markSucceeded();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (!succeeded) {</span>
+<span class="nc" id="L65">            throw new IllegalStateException(&quot;Failed to mark payment as succeeded. Payment must be pending.&quot;);</span>
+        }
+        
+<span class="nc" id="L68">        return paymentRepository.save(payment);</span>
+    }
+    
+    @Override
+    public Payment markPaymentFailed(String paymentId) {
+<span class="nc" id="L73">        Payment payment = paymentRepository.findById(paymentId)</span>
+<span class="nc" id="L74">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Payment not found: &quot; + paymentId));</span>
+        
+<span class="nc" id="L76">        boolean failed = payment.markFailed();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (!failed) {</span>
+<span class="nc" id="L78">            throw new IllegalStateException(&quot;Failed to mark payment as failed. Payment must be pending.&quot;);</span>
+        }
+        
+<span class="nc" id="L81">        return paymentRepository.save(payment);</span>
+    }
+    
+    @Override
+    public Payment initiateRefund(String paymentId, double amount) {
+<span class="nc" id="L86">        Payment payment = paymentRepository.findById(paymentId)</span>
+<span class="nc" id="L87">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Payment not found: &quot; + paymentId));</span>
+        
+<span class="nc" id="L89">        boolean initiated = payment.initiateRefund(amount);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (!initiated) {</span>
+<span class="nc" id="L91">            throw new IllegalStateException(&quot;Failed to initiate refund. Check payment status and amount.&quot;);</span>
+        }
+        
+<span class="nc" id="L94">        return paymentRepository.save(payment);</span>
+    }
+    
+    @Override
+    public Subscription chargeSuccess(String subscriptionId) {
+<span class="nc" id="L99">        Subscription subscription = subscriptionRepository.findById(subscriptionId)</span>
+<span class="nc" id="L100">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Subscription not found: &quot; + subscriptionId));</span>
+        
+<span class="nc" id="L102">        boolean charged = subscription.chargeSuccess();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!charged) {</span>
+<span class="nc" id="L104">            throw new IllegalStateException(&quot;Failed to charge subscription. Check subscription status and payment.&quot;);</span>
+        }
+        
+<span class="nc" id="L107">        return subscriptionRepository.save(subscription);</span>
+    }
+    
+    @Override
+    public Subscription chargeFail(String subscriptionId) {
+<span class="nc" id="L112">        Subscription subscription = subscriptionRepository.findById(subscriptionId)</span>
+<span class="nc" id="L113">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Subscription not found: &quot; + subscriptionId));</span>
+        
+<span class="nc" id="L115">        boolean failed = subscription.chargeFail();</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (!failed) {</span>
+<span class="nc" id="L117">            throw new IllegalStateException(&quot;Failed to mark charge as failed. Subscription must be active.&quot;);</span>
+        }
+        
+<span class="nc" id="L120">        return subscriptionRepository.save(subscription);</span>
+    }
+    
+    @Override
+    public Subscription cancelSubscription(String subscriptionId) {
+<span class="nc" id="L125">        Subscription subscription = subscriptionRepository.findById(subscriptionId)</span>
+<span class="nc" id="L126">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Subscription not found: &quot; + subscriptionId));</span>
+        
+<span class="nc" id="L128">        boolean cancelled = subscription.cancel();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (!cancelled) {</span>
+<span class="nc" id="L130">            throw new IllegalStateException(&quot;Failed to cancel subscription.&quot;);</span>
+        }
+        
+<span class="nc" id="L133">        return subscriptionRepository.save(subscription);</span>
+    }
+    
+    @Override
+    public Subscription graceExpire(String subscriptionId) {
+<span class="nc" id="L138">        Subscription subscription = subscriptionRepository.findById(subscriptionId)</span>
+<span class="nc" id="L139">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Subscription not found: &quot; + subscriptionId));</span>
+        
+<span class="nc" id="L141">        boolean expired = subscription.graceExpire();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (!expired) {</span>
+<span class="nc" id="L143">            throw new IllegalStateException(&quot;Failed to expire grace period. Subscription must be past due.&quot;);</span>
+        }
+        
+<span class="nc" id="L146">        return subscriptionRepository.save(subscription);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

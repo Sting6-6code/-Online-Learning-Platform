@@ -1,7 +1,6 @@
 package com.olp.model.payment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
@@ -10,7 +9,6 @@ import java.sql.Date;
  * Task 4.1: Subscription 类构造函数验证测试
  * 验证 Subscription 类的基本验证和初始状态
  */
-@SpringBootTest
 public class SubscriptionTest {
 
     @Test

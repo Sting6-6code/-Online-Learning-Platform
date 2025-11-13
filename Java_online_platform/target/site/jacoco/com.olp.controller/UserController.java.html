@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Online Learning Platform</a> &gt; <a href="index.source.html" class="el_package">com.olp.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.olp.controller;
+
+import com.olp.model.user.Administrator;
+import com.olp.model.user.Instructor;
+import com.olp.model.user.Student;
+import com.olp.model.user.User;
+import com.olp.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Task 6.3: UserController REST API
+ * 处理用户相关的 HTTP 请求
+ */
+@RestController
+@RequestMapping(&quot;/api/users&quot;)
+@CrossOrigin(origins = &quot;*&quot;)
+<span class="nc" id="L23">public class UserController {</span>
+    
+    @Autowired
+    private UserService userService;
+    
+    /**
+     * 获取用户信息
+     * GET /api/users/{id}
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;User&gt; getUserById(@PathVariable String id) {
+<span class="nc" id="L34">        return userService.findUserById(id)</span>
+<span class="nc" id="L35">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L36">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+    
+    /**
+     * 通过邮箱查找用户
+     * GET /api/users/email/{email}
+     */
+    @GetMapping(&quot;/email/{email}&quot;)
+    public ResponseEntity&lt;User&gt; getUserByEmail(@PathVariable String email) {
+<span class="nc" id="L45">        return userService.findUserByEmail(email)</span>
+<span class="nc" id="L46">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L47">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+    
+    /**
+     * 创建学生
+     * POST /api/users/students
+     * Body: {&quot;id&quot;: &quot;S001&quot;, &quot;name&quot;: &quot;John&quot;, &quot;email&quot;: &quot;john@example.com&quot;}
+     */
+    @PostMapping(&quot;/students&quot;)
+    public ResponseEntity&lt;Student&gt; createStudent(@RequestBody Map&lt;String, String&gt; request) {
+        try {
+<span class="nc" id="L58">            String id = request.get(&quot;id&quot;);</span>
+<span class="nc" id="L59">            String name = request.get(&quot;name&quot;);</span>
+<span class="nc" id="L60">            String email = request.get(&quot;email&quot;);</span>
+            
+<span class="nc" id="L62">            Student student = userService.createStudent(id, name, email);</span>
+<span class="nc" id="L63">            return ResponseEntity.status(HttpStatus.CREATED).body(student);</span>
+<span class="nc" id="L64">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L65">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 创建教师
+     * POST /api/users/instructors
+     * Body: {&quot;id&quot;: &quot;I001&quot;, &quot;name&quot;: &quot;Dr. Smith&quot;, &quot;email&quot;: &quot;smith@example.com&quot;}
+     */
+    @PostMapping(&quot;/instructors&quot;)
+    public ResponseEntity&lt;Instructor&gt; createInstructor(@RequestBody Map&lt;String, String&gt; request) {
+        try {
+<span class="nc" id="L77">            String id = request.get(&quot;id&quot;);</span>
+<span class="nc" id="L78">            String name = request.get(&quot;name&quot;);</span>
+<span class="nc" id="L79">            String email = request.get(&quot;email&quot;);</span>
+            
+<span class="nc" id="L81">            Instructor instructor = userService.createInstructor(id, name, email);</span>
+<span class="nc" id="L82">            return ResponseEntity.status(HttpStatus.CREATED).body(instructor);</span>
+<span class="nc" id="L83">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L84">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 创建管理员
+     * POST /api/users/administrators
+     * Body: {&quot;id&quot;: &quot;A001&quot;, &quot;name&quot;: &quot;Admin&quot;, &quot;email&quot;: &quot;admin@example.com&quot;}
+     */
+    @PostMapping(&quot;/administrators&quot;)
+    public ResponseEntity&lt;Administrator&gt; createAdministrator(@RequestBody Map&lt;String, String&gt; request) {
+        try {
+<span class="nc" id="L96">            String id = request.get(&quot;id&quot;);</span>
+<span class="nc" id="L97">            String name = request.get(&quot;name&quot;);</span>
+<span class="nc" id="L98">            String email = request.get(&quot;email&quot;);</span>
+            
+<span class="nc" id="L100">            Administrator administrator = userService.createAdministrator(id, name, email);</span>
+<span class="nc" id="L101">            return ResponseEntity.status(HttpStatus.CREATED).body(administrator);</span>
+<span class="nc" id="L102">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L103">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+    
+    /**
+     * 获取所有学生
+     * GET /api/users/students
+     */
+    @GetMapping(&quot;/students&quot;)
+    public ResponseEntity&lt;List&lt;Student&gt;&gt; getAllStudents() {
+<span class="nc" id="L113">        List&lt;Student&gt; students = userService.getAllStudents();</span>
+<span class="nc" id="L114">        return ResponseEntity.ok(students);</span>
+    }
+    
+    /**
+     * 获取所有教师
+     * GET /api/users/instructors
+     */
+    @GetMapping(&quot;/instructors&quot;)
+    public ResponseEntity&lt;List&lt;Instructor&gt;&gt; getAllInstructors() {
+<span class="nc" id="L123">        List&lt;Instructor&gt; instructors = userService.getAllInstructors();</span>
+<span class="nc" id="L124">        return ResponseEntity.ok(instructors);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

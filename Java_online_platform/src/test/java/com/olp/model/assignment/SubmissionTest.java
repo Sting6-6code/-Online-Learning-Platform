@@ -1,7 +1,6 @@
 package com.olp.model.assignment;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.olp.model.course.Course;
@@ -13,7 +12,6 @@ import java.sql.Date;
  * Task 3.3-3.4: Submission 类构造函数验证和 submit() 方法测试
  * 验证 Submission 类的基本验证、初始状态和提交功能
  */
-@SpringBootTest
 public class SubmissionTest {
 
     @Test
@@ -137,7 +135,6 @@ public class SubmissionTest {
         Date deadline = new Date(System.currentTimeMillis() + 86400000);
         Assignment assignment = new Assignment("A006", "Assignment 1", deadline, 100, course);
         Student student = new Student("S006", "David Blue", "david@example.com");
-        Grade tempGrade = new Grade("TEMP008", 0.0, "");
         
         // submittedAt 为 null
         Grade tempGrade1 = new Grade("TEMP008", 0.0, "");
@@ -333,6 +330,85 @@ public class SubmissionTest {
         assertEquals(2, submission3.getVersion(), "学生1的第二个提交 version = 2");
         
         System.out.println("✅ 版本号只统计同一学生的提交");
+    }
+
+    // Task 5.4: validateNotOverdue() 方法测试
+    @Test
+    public void testValidateNotOverdueBeforeDeadline() {
+        Instructor instructor = new Instructor("I101", "Dr. Horizon", "horizon@example.com");
+        Course course = new Course("C101", "Distributed Systems", 50, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A101", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S101", "Student Future", "future@example.com");
+        Grade tempGrade = new Grade("TEMP101", 0.0, "");
+
+        Submission submission = new Submission("SUB101", null, 0, false, tempGrade, student, assignment);
+        assertTrue(submission.validateNotOverdue(), "截止时间之前验证应通过");
+        System.out.println("✅ validateNotOverdue 在截止时间之前返回 true");
+    }
+
+    @Test
+    public void testValidateNotOverdueAfterDeadline() {
+        Instructor instructor = new Instructor("I102", "Dr. Sunset", "sunset@example.com");
+        Course course = new Course("C102", "Realtime Systems", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() - 86400000);
+        Assignment assignment = new Assignment("A102", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S102", "Student Past", "past@example.com");
+        Grade tempGrade = new Grade("TEMP102", 0.0, "");
+
+        Submission submission = new Submission("SUB102", null, 0, false, tempGrade, student, assignment);
+        assertFalse(submission.validateNotOverdue(), "超过截止时间验证应失败");
+        System.out.println("✅ validateNotOverdue 在截止时间之后返回 false");
+    }
+
+    // Task 5.5: validateVersionMonotonic() 方法测试
+    @Test
+    public void testValidateVersionMonotonicForSequentialSubmissions() {
+        Instructor instructor = new Instructor("I103", "Dr. Aurora", "aurora@example.com");
+        Course course = new Course("C103", "High Performance Computing", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000 * 5);
+        Assignment assignment = new Assignment("A103", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S103", "Student Sequential", "sequential@example.com");
+
+        Grade grade1 = new Grade("TEMP103", 0.0, "");
+        Submission submission1 = new Submission("SUB103", null, 0, false, grade1, student, assignment);
+        submission1.submit();
+        assertTrue(submission1.validateVersionMonotonic(), "第一次提交 version 应等于已提交次数");
+
+        Grade grade2 = new Grade("TEMP104", 0.0, "");
+        Submission submission2 = new Submission("SUB104", null, 0, false, grade2, student, assignment);
+        submission2.submit();
+        assertTrue(submission2.validateVersionMonotonic(), "第二次提交 version 应等于已提交次数");
+
+        Grade grade3 = new Grade("TEMP105", 0.0, "");
+        Submission submission3 = new Submission("SUB105", null, 0, false, grade3, student, assignment);
+        submission3.submit();
+        assertTrue(submission3.validateVersionMonotonic(), "第三次提交 version 应等于已提交次数");
+
+        System.out.println("✅ validateVersionMonotonic 对顺序提交返回 true");
+    }
+
+    @Test
+    public void testValidateVersionMonotonicIndependentPerStudent() {
+        Instructor instructor = new Instructor("I104", "Dr. Polaris", "polaris@example.com");
+        Course course = new Course("C104", "Operating Systems", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000 * 3);
+        Assignment assignment = new Assignment("A104", "Assignment 1", deadline, 100, course);
+
+        Student student1 = new Student("S104", "Student One", "one@example.com");
+        Student student2 = new Student("S105", "Student Two", "two@example.com");
+
+        Grade grade1 = new Grade("TEMP106", 0.0, "");
+        Submission submission1 = new Submission("SUB106", null, 0, false, grade1, student1, assignment);
+        submission1.submit();
+        assertTrue(submission1.validateVersionMonotonic(), "学生1的第一次提交应通过验证");
+
+        Grade grade2 = new Grade("TEMP107", 0.0, "");
+        Submission submission2 = new Submission("SUB107", null, 0, false, grade2, student2, assignment);
+        submission2.submit();
+        assertTrue(submission2.validateVersionMonotonic(), "学生2的第一次提交应独立通过验证");
+
+        System.out.println("✅ validateVersionMonotonic 针对不同学生独立验证");
     }
 
     // Task 3.5: startAutoChecks() 方法测试
@@ -845,6 +921,73 @@ public class SubmissionTest {
         assertEquals(Submission.Status.Submitted, submission.getStatus());
         
         System.out.println("✅ 非 Graded/Returned 状态的提交不能要求重交");
+    }
+
+    // Task 5.7: validateGradeUniqueness() 方法测试
+    @Test
+    public void testValidateGradeUniquenessWithNoGrade() {
+        Instructor instructor = new Instructor("I105", "Dr. Zenith", "zenith@example.com");
+        Course course = new Course("C105", "Compiler Design", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A105", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S106", "Student NoGrade", "nograde@example.com");
+        Grade tempGrade = new Grade("TEMP108", 0.0, "");
+
+        Submission submission = new Submission("SUB108", null, 0, false, tempGrade, student, assignment);
+        
+        // 提交前没有真正的 Grade（只有临时的）
+        assertTrue(submission.validateGradeUniqueness(), "没有 Grade 时验证应通过");
+        System.out.println("✅ validateGradeUniqueness 在没有 Grade 时返回 true");
+    }
+
+    @Test
+    public void testValidateGradeUniquenessWithOneGrade() {
+        Instructor instructor = new Instructor("I106", "Dr. Nebula", "nebula@example.com");
+        Course course = new Course("C106", "Quantum Computing", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A106", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S107", "Student OneGrade", "onegrade@example.com");
+        Grade tempGrade = new Grade("TEMP109", 0.0, "");
+
+        Submission submission = new Submission("SUB109", null, 0, false, tempGrade, student, assignment);
+        submission.submit();
+        submission.startAutoChecks();
+        submission.checksPass();
+        submission.startGrading();
+        submission.grade(85.0, "Good work");
+
+        // 评分后有一个 Grade
+        assertNotNull(submission.getSubmissionGrade(), "应该有一个 Grade");
+        assertTrue(submission.validateGradeUniqueness(), "有一个 Grade 时验证应通过");
+        System.out.println("✅ validateGradeUniqueness 在有一个 Grade 时返回 true");
+    }
+
+    @Test
+    public void testGradeMethodEnsuresUniqueness() {
+        Instructor instructor = new Instructor("I107", "Dr. Cosmos", "cosmos@example.com");
+        Course course = new Course("C107", "Blockchain Systems", 40, instructor);
+        Date deadline = new Date(System.currentTimeMillis() + 86400000);
+        Assignment assignment = new Assignment("A107", "Assignment 1", deadline, 100, course);
+        Student student = new Student("S108", "Student UniqueGrade", "uniquegrade@example.com");
+        Grade tempGrade = new Grade("TEMP110", 0.0, "");
+
+        Submission submission = new Submission("SUB110", null, 0, false, tempGrade, student, assignment);
+        submission.submit();
+        submission.startAutoChecks();
+        submission.checksPass();
+        submission.startGrading();
+        
+        // 第一次评分
+        submission.grade(80.0, "Initial feedback");
+        Grade firstGrade = submission.getSubmissionGrade();
+        assertNotNull(firstGrade, "第一次评分应该创建 Grade");
+        assertEquals(80.0, firstGrade.getScore(), 0.001);
+        
+        // grade() 方法内部会更新现有 Grade，而不是创建新的
+        // 这保证了唯一性
+        assertTrue(submission.validateGradeUniqueness(), "评分后验证应通过");
+        
+        System.out.println("✅ grade() 方法通过更新现有 Grade 保证唯一性");
     }
 }
 

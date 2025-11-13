@@ -1,14 +1,12 @@
 package com.olp.model.user;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Task 1.1: User 基类构造函数验证测试
  * 验证 User 类的属性验证逻辑
  */
-@SpringBootTest
 public class UserTest {
 
     @Test
